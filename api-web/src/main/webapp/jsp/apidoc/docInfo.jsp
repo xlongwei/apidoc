@@ -111,7 +111,7 @@
 				                        </div>
 					                </div>
 					                
-					                <%-- <div class="form-group">
+					                <div class="form-group">
 					                	<label class="control-label col-lg-3">是否公开</label>
 				
 				                        <div class="col-lg-6" data-toggle="popover" data-content="公开后非项目成员也可以访问api文档">
@@ -120,7 +120,7 @@
 									            <option value="false">否</option>
 									        </select>
 				                        </div>
-					                </div> --%>
+					                </div>
 					                
 				                    <div class="form-group">
 				                        <div class="col-lg-1 col-lg-offset-3">

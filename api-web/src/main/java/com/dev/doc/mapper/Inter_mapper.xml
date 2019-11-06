@@ -47,6 +47,7 @@
 			<if test="path != null and '' != path"> path = #{path},</if>
 			<if test="method != null and '' != method"> method = #{method},</if>
 			<if test="scheme != null and '' != scheme"> scheme = #{scheme},</if>
+			<if test="scheme == null or '' == scheme"> scheme = null,</if>
 			<if test="summary != null and '' != summary"> summary = #{summary},</if>
 			<if test="true"> description = #{description},</if>
 			<if test="consume != null and '' != consume"> consume = #{consume},</if>

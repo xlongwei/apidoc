@@ -3,6 +3,7 @@ package com.dev.base.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import com.dev.base.enums.UserRole;
 import com.dev.base.exception.AuthException;
 import com.dev.base.exception.SessionTimeoutException;
 import com.dev.base.util.WebUtil;
+import com.dev.doc.entity.ApiDoc;
+import com.dev.doc.service.ApiDocService;
 import com.dev.user.service.LoginService;
 import com.dev.user.vo.UserInfo;
 
@@ -30,6 +33,8 @@ public class PrivilegeInterceptor extends HandlerInterceptorAdapter {
 
 	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private ApiDocService apiDocService;
 	
 	//需要授权的操作
 	private String[] authOperArray = {"/json/add.htm","/json/update.htm","/json/del.htm"};
@@ -46,6 +51,15 @@ public class PrivilegeInterceptor extends HandlerInterceptorAdapter {
 		
 		//验证是否是httpclient请求爬数据
 		validHttpClient(request);
+		
+		//公开的文档不必再鉴权
+		long docId = NumberUtils.toLong(request.getParameter("docId"));
+		if(docId > 0) {
+			ApiDoc apiDoc = apiDocService.getById(docId);
+			if(apiDoc!=null && apiDoc.isOpen()) {
+				return true;
+			}
+		}
 		
 		//TO-DO 网站稳定后需要屏蔽该功能
 		//管理员可对api文档预览和下载，方便帮用户排错

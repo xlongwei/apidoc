@@ -44,6 +44,7 @@
 			<if test="title != null and '' != title"> title = #{title},</if>
 			<if test="true"> description = #{description},</if>
 			<if test="host != null and '' != host"> host = #{host},</if>
+			<if test="host == null or '' == host"> host = null,</if>
 			<if test="basePath != null and '' != basePath"> base_path = #{basePath},</if>
 			<if test="true"> version = #{version},</if>
 			<if test="pub != null"> pub = #{pub},</if>
@@ -112,7 +113,7 @@
 		on
 			p.id = d.proj_id
 		where
-			pm.user_id = #{userId}
+			(pm.user_id = #{userId} or d.open = 1)
 		and
 			d.pub = 1
 		<if test="title != null">

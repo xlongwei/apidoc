@@ -24,13 +24,13 @@
     	        <div class="row">
         	        <div class="col-lg-12">
                         <div style="text-align: center;">
-                        	<a class="quick-btn" href="auth/apidoc/preview.htm?docId=5" target="_blank"> 
+                        	<a class="quick-btn" href="auth/apidoc/preview.htm?docId=1" target="_blank"> 
 								<i class="fa fa-bolt fa-2x"></i> 
 								<span>打开接口文档</span> 
 								<!-- <span class="label label-success">456</span> -->
 							</a>
 						
-							<%-- <a class="quick-btn" href="${Cfg.ONLINE_HELP_URL }"> 
+							<a class="quick-btn" href="${Cfg.ONLINE_HELP_URL }"> 
 								<i class="fa fa-edit fa-2x"></i>
 								<span> 编辑说明</span> 
 								<!-- <span class="label label-danger">2</span> -->
@@ -42,7 +42,7 @@
 								<!-- <span class="label label-danger">2</span> -->
 							</a> 
 							
-							<a class="quick-btn" href="${Cfg.SWAGGER_UI_DOWNLOAD_URL}" style="width:180px;"> 
+							<%-- <a class="quick-btn" href="${Cfg.SWAGGER_UI_DOWNLOAD_URL}" style="width:180px;"> 
 								<i class="fa fa-cloud-download fa-2x"></i> 
 								<span>SwaggerUI扩展版下载</span> 
 							</a> --%>

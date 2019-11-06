@@ -73,7 +73,8 @@ public class InterServiceImpl extends BaseMybatisServiceImpl<Inter,Long,InterDao
 		result.setName((String)detailMap.get("name"));
 		result.setPath((String)detailMap.get("path"));
 		result.setProduce((String)detailMap.get("produce"));
-		result.setScheme(ReqScheme.valueOf((String)detailMap.get("scheme")));
+		String scheme = (String)detailMap.get("scheme");
+		result.setScheme(StringUtils.isBlank(scheme) ? null : ReqScheme.valueOf(scheme));
 		result.setSummary((String)detailMap.get("summary"));
 		result.setSortWeight(((Number)detailMap.get("sortWeight")).intValue());
 		

@@ -14,13 +14,13 @@ function initSaveDocBtn(){
                     }
                 }
 			},
-			host:{
-                validators: {
-                    notEmpty: {
-                        message: '访问主机不能为空'
-                    }
-                }
-			},
+//			host:{
+//                validators: {
+//                    notEmpty: {
+//                        message: '访问主机不能为空'
+//                    }
+//                }
+//			},
 			basePath:{
                 validators: {
                     notEmpty: {

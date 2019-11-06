@@ -41,7 +41,7 @@ var locales = {
 			"Response Body":"Response Body",
 			"Response Code":"Response Code",
 			"Response Headers":"Response Headers",
-			"CORS Tip":"<br/> <p><hr/><span style='color:red;'>Tip: </span>Maybe it is caused by Ajax CORS.<a target='_blank' href='http://www.sosoapi.com/pass/faq/test.htm'>Click for help.</a></p>"
+			"CORS Tip":"<br/> <p><hr/><span style='color:red;'>Tip: </span>Maybe it is caused by Ajax CORS.<a target='_blank' href='/apidoc/pass/faq/test.htm'>Click for help.</a></p>"
 		},
 		
 		zh_CN : {
@@ -77,7 +77,7 @@ var locales = {
 			"Response Body":"响应内容",
 			"Response Code":"响应码",
 			"Response Headers":"响应头",
-			"CORS Tip":"<br/><p><hr/><span style='color:red;'>提示：</span>可能是因为Ajax跨域请求导致。<a target='_blank' href='http://www.sosoapi.com/pass/faq/test.htm'>查看解决方式。</a>"
+			"CORS Tip":"<br/><p><hr/><span style='color:red;'>提示：</span>可能是因为Ajax跨域请求导致。<a target='_blank' href='/apidoc/pass/faq/test.htm'>查看解决方式。</a>"
 		}
 };
 //当前字符集

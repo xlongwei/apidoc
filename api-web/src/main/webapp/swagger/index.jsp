@@ -56,7 +56,7 @@
 						//字符集设置
 						//en:英文
 						//zh_CN:中文(简体)
-						locale : "en",
+						locale : "zh_CN",
 						onComplete : function(swaggerApi, swaggerUi) {
 							if (typeof initOAuth == "function") {
 								initOAuth({
@@ -145,8 +145,8 @@
 				
 				<div class='input'>
 					<select id="language">
-						<option value="en">English</option>
 						<option value="zh_CN">中文(简体)</option>
+						<option value="en">English</option>
 					</select>
 				</div>
 			</form>
