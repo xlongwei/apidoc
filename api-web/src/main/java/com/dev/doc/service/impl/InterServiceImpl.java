@@ -135,4 +135,25 @@ public class InterServiceImpl extends BaseMybatisServiceImpl<Inter,Long,InterDao
 	public Inter getByDocId(Long docId, Long interId) {
 		return getMybatisDao().getByDocId(docId, interId);
 	}
+
+	@Override
+	public Inter getByMethodPath(String method, String path) {
+		List<Inter> list = getMybatisDao().getByMethodPath(method, path);
+		if(list!=null && list.size()==1){
+			return list.get(0);
+		}else {
+			list = getMybatisDao().getByMethodPath(method, null);
+			if(CollectionUtils.isEmpty(list)) {
+				return null;
+			}else {
+				for(Inter inter : list) {
+					String pattern = StringUtils.replacePattern(inter.getPath(), "\\{[0-9a-zA-Z]+\\}", "[^/]+");
+					if(path.matches(pattern)) {
+						return inter;
+					}
+				}
+				return null;
+			}
+		}
+	}
 }

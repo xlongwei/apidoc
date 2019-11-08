@@ -369,7 +369,7 @@ public class DocBuildUtil {
 	}
 	
 	//组装响应
-	private static Map<String,Response> parseResponse(List<InterResp> respList,Map<Long, String> refSchemaMap){
+	public static Map<String,Response> parseResponse(List<InterResp> respList,Map<Long, String> refSchemaMap){
 		Map<String,Response> result = MapUtils.newMap();
 		Response response = null;
 		Property property = null;

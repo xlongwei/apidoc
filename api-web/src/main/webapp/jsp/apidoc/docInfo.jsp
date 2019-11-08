@@ -71,7 +71,14 @@
 					                <div class="form-group">
 					                    <label class="control-label col-lg-3">访问主机</label>
 					
-					                    <div class="col-lg-6">
+					                    <div class="col-lg-2">
+					                        <select class="form-control" name="scheme" data-initValue="${docInfo.scheme}">
+												<option value=""></option>
+												<option value="HTTP">HTTP</option>
+												<option value="HTTPS">HTTPS</option>
+											</select>
+					                    </div>
+					                    <div class="col-lg-4">
 					                        <input type="text" name="host" value="${docInfo.host}" class="form-control">
 					                    </div>
 					                </div>
@@ -96,22 +103,30 @@
 					                    <label class="control-label col-lg-3">文档说明</label>
 					
 					                    <div class="col-lg-6">
-					                        <textarea name="description" class="form-control" rows="10">${docInfo.description}</textarea>
+					                        <textarea name="description" class="form-control" rows="8">${docInfo.description}</textarea>
 					                    </div>
 					                </div>
 					                
 					                <div class="form-group">
 					                	<label class="control-label col-lg-3">是否发布</label>
 				
-				                        <div class="col-lg-6" data-toggle="popover" data-content="只有发布后才能预览和下载">
+				                        <div class="col-lg-2" data-toggle="popover" data-content="只有发布后才能预览和下载">
 				                            <select name="pub" class="form-control" data-initValue="${docInfo.pub}">
+									            <option value="true">是</option>
+									            <option value="false">否</option>
+									        </select>
+				                        </div>
+					                	<label class="control-label col-lg-2">是否公开</label>
+				
+				                        <div class="col-lg-2" data-toggle="popover" data-content="公开后非项目成员也可以访问api文档">
+				                            <select name="open" class="form-control" data-initValue="${docInfo.open}">
 									            <option value="true">是</option>
 									            <option value="false">否</option>
 									        </select>
 				                        </div>
 					                </div>
 					                
-					                <div class="form-group">
+					                <%-- <div class="form-group">
 					                	<label class="control-label col-lg-3">是否公开</label>
 				
 				                        <div class="col-lg-6" data-toggle="popover" data-content="公开后非项目成员也可以访问api文档">
@@ -120,7 +135,7 @@
 									            <option value="false">否</option>
 									        </select>
 				                        </div>
-					                </div>
+					                </div> --%>
 					                
 				                    <div class="form-group">
 				                        <div class="col-lg-1 col-lg-offset-3">

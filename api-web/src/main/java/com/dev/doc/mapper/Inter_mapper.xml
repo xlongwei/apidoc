@@ -169,6 +169,19 @@
 			method = #{method}
 	</select>
 	
+	<select id="getByMethodPath" resultType="inter">
+		select
+			*
+		from
+			t_inter
+		where
+			method = #{method}
+		<if test="path != null">
+		and
+			path = #{path}
+		</if>
+	</select>
+	
 	<select id="getByDocId" resultType="inter">
 		select
 			*

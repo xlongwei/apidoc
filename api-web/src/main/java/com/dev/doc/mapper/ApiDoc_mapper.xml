@@ -50,6 +50,7 @@
 			<if test="pub != null"> pub = #{pub},</if>
 			<if test="open != null"> open = #{open},</if>
 			<if test="scheme != null and '' != scheme"> scheme = #{scheme},</if>
+			<if test="scheme == null or '' == scheme"> scheme = null,</if>
 			<if test="consume != null and '' != consume"> consume = #{consume},</if>
 			<if test="produce != null and '' != produce"> produce = #{produce},</if>
 		</set>
@@ -103,17 +104,13 @@
 	
 	<sql id="sqlForListByUserId">
 		from
-			t_proj_mem pm
+			t_api_doc d
 		inner join
 			t_proj p
 		on
-			pm.proj_id = p.id
-		inner join
-			t_api_doc d
-		on
 			p.id = d.proj_id
 		where
-			(pm.user_id = #{userId} or d.open = 1)
+			(d.open = 1 or exists (select 1 from t_proj_mem pm where pm.proj_id=d.proj_id and pm.user_id=#{userId}))
 		and
 			d.pub = 1
 		<if test="title != null">

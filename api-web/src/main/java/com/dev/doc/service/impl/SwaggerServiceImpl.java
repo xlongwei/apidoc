@@ -1,12 +1,5 @@
 package com.dev.doc.service.impl;
 
-import io.swagger.models.Info;
-import io.swagger.models.Model;
-import io.swagger.models.Operation;
-import io.swagger.models.Path;
-import io.swagger.models.Swagger;
-import io.swagger.models.Tag;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -34,6 +27,13 @@ import com.dev.doc.service.RespSchemaService;
 import com.dev.doc.service.SwaggerService;
 import com.dev.doc.util.DocBuildUtil;
 import com.dev.doc.util.DocExportUtil;
+
+import io.swagger.models.Info;
+import io.swagger.models.Model;
+import io.swagger.models.Operation;
+import io.swagger.models.Path;
+import io.swagger.models.Swagger;
+import io.swagger.models.Tag;
 
 /**
  * 
@@ -87,7 +87,7 @@ public class SwaggerServiceImpl implements SwaggerService{
 		createTags(swagger,moduleList);
 		
 		//创建方法
-		createPath(swagger,docId,refSchemaMap,moduleMap);
+		createPath(swagger,apiDoc,refSchemaMap,moduleMap);
 		
 		return swagger;
 	}
@@ -136,7 +136,8 @@ public class SwaggerServiceImpl implements SwaggerService{
 	}
 	
 	//创建方法
-	private void createPath(Swagger swagger,Long docId,Map<Long, String> refSchemaMap,Map<Long, String> moduleMap){
+	private void createPath(Swagger swagger,ApiDoc apiDoc,Map<Long, String> refSchemaMap,Map<Long, String> moduleMap){
+		Long docId = apiDoc.getId();
 		List<Inter> interList = interService.listAllByDocId(docId,false);
 		//获取文档所有的接口请求参数信息
 		Map<Long, List<InterParam>> paramInfoMap = getInterParamInfo(docId);
@@ -149,10 +150,9 @@ public class SwaggerServiceImpl implements SwaggerService{
 		Long interId = null;
 		Path path = null;
 		Operation operation = null;
+		ReqScheme scheme = null;
 		for (Inter inter : interList) {
-			if(inter.getScheme()==null) {
-				inter.setScheme(WebUtil.getUrlScheme());
-			}
+			scheme = schemeInter(apiDoc, scheme, inter);
 			interId = inter.getId();
 			reqParamList = paramInfoMap.containsKey(interId) ? paramInfoMap.get(interId) : Collections.EMPTY_LIST;
 			respList = respInfoMap.containsKey(interId) ? respInfoMap.get(interId) : Collections.EMPTY_LIST;
@@ -164,6 +164,22 @@ public class SwaggerServiceImpl implements SwaggerService{
 		}
 
 		swagger.setPaths(pathMap);
+	}
+
+	/**
+	 * 接口请求协议优先顺序：Inter.scheme > ApiDoc.scheme > url
+	 */
+	public static ReqScheme schemeInter(ApiDoc apiDoc, ReqScheme scheme, Inter inter) {
+		if(inter.getScheme()==null) {
+			if(scheme==null) {
+				scheme = WebUtil.getDocScheme(apiDoc.getScheme());
+				if(scheme==null) {
+					scheme = WebUtil.getUrlScheme();
+				}
+			}
+			inter.setScheme(scheme);
+		}
+		return scheme;
 	}
 	
 	//查询文档相关的所有接口请求参数，接口id为key
@@ -228,7 +244,7 @@ public class SwaggerServiceImpl implements SwaggerService{
 		buildBasicInfoTmplData(tmplData,apiDoc);
 		
 		//组装接口信息
-		buildInterTmplData(tmplData,docId);
+		buildInterTmplData(tmplData,apiDoc);
 		
 		return tmplData;
 	}
@@ -246,7 +262,8 @@ public class SwaggerServiceImpl implements SwaggerService{
 	}
 	
 	//组装接口信息
-	private void buildInterTmplData(Map<String, Object> tmplData,Long docId){
+	private void buildInterTmplData(Map<String, Object> tmplData,ApiDoc apiDoc){
+		Long docId = apiDoc.getId();
 		//公共数据列表
 		List<RespSchema> schemaList = respSchemaService.listAllByDocId(docId);
 		
@@ -255,10 +272,9 @@ public class SwaggerServiceImpl implements SwaggerService{
 		
 		//接口列表
 		List<Inter> interList = interService.listAllByDocId(docId,false);
+		ReqScheme scheme = null;
 		for(Inter inter : interList) {
-			if(inter.getScheme()==null) {
-				inter.setScheme(WebUtil.getUrlScheme());
-			}
+			scheme = schemeInter(apiDoc, scheme, inter);
 		}
 		
 		//请求信息列表

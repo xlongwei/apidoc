@@ -68,4 +68,11 @@ public interface InterService extends BaseMybatisService<Inter, Long>{
 			*@CreateDate 2015年9月9日上午11:37:21
 	 */
 	void deleteByDocId(Long docId,Long interId);
+	
+	/**
+	 * 通过路径查询接口
+	 * @param path /user/simple/list.htm
+	 * @return Inter.id=5
+	 */
+	Inter getByMethodPath(String method, String path);
 }

@@ -250,4 +250,15 @@ public class WebUtil {
 		}
 		return ReqScheme.HTTP;
 	}
+	
+	/** ApiDoc.scheme=http,https */
+	public static ReqScheme getDocScheme(String scheme) {
+		if(StringUtils.isEmpty(scheme)) {
+			return null;
+		}else {
+			int p = scheme.indexOf(',');
+			scheme = scheme.substring(0, p);
+			return ReqScheme.valueOf(scheme.toUpperCase());
+		}
+	}
 }
