@@ -8,11 +8,12 @@ api-web/src/main/resources/mail-cfg.properties
 3. 构建项目：mvn install，mvn compile resources:resources war:exploded -f api-web/pom.xml
 4. 部署到tomcat：&lt;Context docBase="H:\works\itecheast\apidoc\api-web\target\apidoc" path="/apidoc" reloadable="true"/&gt;
 5. 访问：http://localhost:8080/apidoc/，登录：admin@qq.com，密码：123456
-6. 线上部署：mvn compile resources:resources war:exploded -P env-aliyun-master -f api-web/pom.xml
+6. 线上部署：sh deploy.sh，mvn compile resources:resources war:exploded -P env-aliyun-master -f api-web/pom.xml
 
 ##### 优化特性
 1. 接口协议优先顺序：接口Inter > 文档ApiDoc > 网址Url
 2. 支持mock请求，响应json结构：修改ApiDoc的接口基路径即可
+3. 支持生成knife4j-front需要的group.json文件，[演示](https://api.xlongwei.com/swagger/doc.html?doc=1)
 
 ##### 在线演示
 演示地址：

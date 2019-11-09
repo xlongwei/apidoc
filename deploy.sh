@@ -1,0 +1,1 @@
+mvn compile resources:resources war:exploded -P env-aliyun-master -f api-web/pom.xml

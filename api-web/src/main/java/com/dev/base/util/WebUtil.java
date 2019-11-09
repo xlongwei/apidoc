@@ -257,7 +257,7 @@ public class WebUtil {
 			return null;
 		}else {
 			int p = scheme.indexOf(',');
-			scheme = scheme.substring(0, p);
+			scheme = p==-1 ? scheme : scheme.substring(0, p);
 			return ReqScheme.valueOf(scheme.toUpperCase());
 		}
 	}
