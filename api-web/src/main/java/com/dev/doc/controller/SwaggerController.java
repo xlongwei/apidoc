@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dev.base.constant.CfgConstants;
@@ -24,6 +26,7 @@ import com.dev.base.controller.BaseController;
 import com.dev.base.exception.code.ErrorCode;
 import com.dev.base.json.JsonUtils;
 import com.dev.base.util.FreeMarkerUtil;
+import com.dev.base.utils.MapUtils;
 import com.dev.base.utils.ValidateUtils;
 import com.dev.doc.entity.ApiDoc;
 import com.dev.doc.service.ApiDocService;
@@ -60,6 +63,26 @@ public class SwaggerController extends BaseController{
 		return swaggerService.buildApiDoc(userId, docId);
 	}
 	
+	/** 响应knife4j接口分组文件 */
+	@RequestMapping("/pass/knife4j/group.htm")
+	public @ResponseBody Object buildGroup(HttpServletRequest request,Long docId) {
+		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
+		ApiDoc apiDoc = apiDocService.getById(docId);
+		Map<Object, Object> map = MapUtils.newMap();
+		map.put("name", apiDoc.getTitle());
+		map.put("swaggerVersion", "2.0");
+		map.put("url", CfgConstants.WEB_BASE_URL + "pass/knife4j/swagger.htm?docId=" + docId);
+		return Collections.singletonList(map);
+	}
+	
+	/** 响应knife4j接口定义文件 */
+	@RequestMapping("/pass/knife4j/swagger.htm")
+	public @ResponseBody Swagger buildSwagger(HttpServletRequest request,Long docId) {
+		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
+		Long userId = getUserId(request);
+		return swaggerService.buildApiDoc(userId, docId);
+	}
+	
 	/**
 	 * 
 			*@name api doc文档预览
@@ -82,8 +105,16 @@ public class SwaggerController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/pass/apidoc/demo.htm")
-	public String previewDemo(HttpServletRequest request,Model model){
-		model.addAttribute("docUrl", DEMO_DOC_URL);
+	public String previewDemo(HttpServletRequest request,Model model,@RequestParam(required=false) String doc){
+		String docUrl = DEMO_DOC_URL;
+		if(StringUtils.hasLength(doc)) {
+			if(doc.matches("^\\d+$")) {
+				docUrl = CfgConstants.WEB_BASE_URL + "pass/knife4j/swagger.htm?docId=" + doc;
+			}else {
+				docUrl = doc;
+			}
+		}
+		model.addAttribute("docUrl", docUrl);
 		
 		return "forward:/swagger/index.jsp";
 	}
