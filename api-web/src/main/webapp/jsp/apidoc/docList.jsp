@@ -67,7 +67,7 @@
 		                                 			<c:forEach items="${pager.list}" var="docInfo" varStatus="status">
 		                                 				<tr>
 				                                        	<td>${status.index + 1}</td>
-				                                        	<td>${docInfo.docTitle}</td>
+				                                        	<td><a href="auth/doc/info.htm?projId=${docInfo.projId}&docId=${docInfo.docId}">${docInfo.docTitle}</a></td>
 				                                         	<td>${docInfo.version}</td>
 				                                         	<td>${docInfo.projCode}</td>
 				                                         	<td>${docInfo.projName}</td>

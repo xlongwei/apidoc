@@ -13,7 +13,6 @@ import com.dev.base.enums.ReqScheme;
 import com.dev.base.exception.code.ErrorCode;
 import com.dev.base.mybatis.service.impl.BaseMybatisServiceImpl;
 import com.dev.base.util.Pager;
-import com.dev.base.util.WebUtil;
 import com.dev.base.utils.FormatUtils;
 import com.dev.base.utils.ValidateUtils;
 import com.dev.doc.dao.InterDao;
@@ -137,12 +136,12 @@ public class InterServiceImpl extends BaseMybatisServiceImpl<Inter,Long,InterDao
 	}
 
 	@Override
-	public Inter getByMethodPath(String method, String path) {
-		List<Inter> list = getMybatisDao().getByMethodPath(method, path);
+	public Inter getByMethodPath(String docId, String method, String path) {
+		List<Inter> list = getMybatisDao().getByMethodPath(docId, method, path);
 		if(list!=null && list.size()==1){
 			return list.get(0);
 		}else {
-			list = getMybatisDao().getByMethodPath(method, null);
+			list = getMybatisDao().getByMethodPath(docId, method, null);
 			if(CollectionUtils.isEmpty(list)) {
 				return null;
 			}else {

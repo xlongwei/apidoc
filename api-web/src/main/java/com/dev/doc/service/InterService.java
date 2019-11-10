@@ -71,8 +71,9 @@ public interface InterService extends BaseMybatisService<Inter, Long>{
 	
 	/**
 	 * 通过路径查询接口
+	 * @param docId 不同的接口文档可以有相同的方法和路径
 	 * @param path /user/simple/list.htm
 	 * @return Inter.id=5
 	 */
-	Inter getByMethodPath(String method, String path);
+	Inter getByMethodPath(String docId, String method, String path);
 }

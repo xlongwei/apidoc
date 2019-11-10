@@ -88,7 +88,7 @@
 		                                 			<c:forEach items="${pager.list}" var="projInfo" varStatus="status">
 		                                 				<tr>
 				                                        	<td>${status.index + 1}</td>
-				                                        	<td>${projInfo.code}</td>
+				                                        	<td><a href="auth/proj/info.htm?projId=${projInfo.projId}">${projInfo.code}</a></td>
 				                                         	<td>${projInfo.name}</td>
 				                                         	<td>${projInfo.status.displayName}</td>
 				                                         	<td>${projInfo.memCount}</td>

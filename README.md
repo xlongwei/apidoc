@@ -2,12 +2,10 @@
 
 ##### 使用方法
 1. 创建数据库：apidoc（字符集utf8mb4或utf8），导入脚本：api-web/db/sosoapi-1.0.0.sql
-2. 修改配置
-api-web/src/main/filters/filter-dev-master.properties
-api-web/src/main/resources/mail-cfg.properties
+2. 修改配置：api-web项目里的 filter-dev-master.properties、mail-cfg.properties
 3. 构建项目：mvn install，mvn compile resources:resources war:exploded -f api-web/pom.xml
-4. 部署到tomcat：&lt;Context docBase="H:\works\itecheast\apidoc\api-web\target\apidoc" path="/apidoc" reloadable="true"/&gt;
-5. 访问：http://localhost:8080/apidoc/，登录：admin@qq.com，密码：123456
+4. 部署到tomcat：&lt;Context docBase="apidoc/api-web/target/apidoc" path="/apidoc" reloadable="true"/&gt;
+5. 访问：[http://localhost:8080/apidoc/](http://localhost:8080/apidoc/)，登录：admin@qq.com，密码：123456
 6. 线上部署：sh deploy.sh，mvn compile resources:resources war:exploded -P env-aliyun-master -f api-web/pom.xml
 
 ##### 优化特性

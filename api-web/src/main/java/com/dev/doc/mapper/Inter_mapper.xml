@@ -180,6 +180,10 @@
 		and
 			path = #{path}
 		</if>
+		<if test="docId != null and docId != ''">
+		and
+			doc_id = #{docId}
+		</if>
 	</select>
 	
 	<select id="getByDocId" resultType="inter">

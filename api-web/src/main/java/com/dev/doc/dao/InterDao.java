@@ -84,5 +84,5 @@ public interface InterDao extends BaseMybatisDao<Inter,Long> {
 					@Param("path")String path,@Param("method")ReqMethod method);
 	
 	/** 根据请求方法和路径查询接口 */
-	List<Inter> getByMethodPath(@Param("method") String method, @Param("path") String path);
+	List<Inter> getByMethodPath(@Param("docId") String docId, @Param("method") String method, @Param("path") String path);
 }

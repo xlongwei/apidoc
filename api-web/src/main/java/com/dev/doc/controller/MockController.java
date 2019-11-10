@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.dev.base.controller.BaseController;
 import com.dev.base.enums.SchemaType;
@@ -48,9 +49,9 @@ public class MockController extends BaseController {
 	@RequestMapping("**")
 	public Object mock(HttpServletRequest request, HttpServletResponse response) {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		String requestURI = request.getRequestURI();
-		String path = requestURI.substring(requestURI.indexOf(MOCK)+MOCK.length());
-		Inter inter = interService.getByMethodPath(request.getMethod(), path);
+		String requestURI = request.getRequestURI(), referer = request.getHeader("referer");
+		String path = requestURI.substring(requestURI.indexOf(MOCK)+MOCK.length()), docId = UriComponentsBuilder.fromUriString(referer).build().getQueryParams().getFirst("doc");
+		Inter inter = interService.getByMethodPath(docId, request.getMethod(), path);
 		if(inter!=null) {
 			List<InterResp> interRespList = interRespService.listAllByInterId(inter.getDocId(), inter.getId());
 			if(!CollectionUtils.isEmpty(interRespList)) {
