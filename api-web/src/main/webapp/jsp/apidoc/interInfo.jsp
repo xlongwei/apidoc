@@ -76,6 +76,9 @@
                             <li class="">
                             	<a id="respInfoTab" href="#respInfo" data-toggle="tab">响应信息</a>
                            	</li>
+                            <li class="">
+                            	<a id="mockInfoTab" href="#mockInfo" data-toggle="tab">接口模拟</a>
+                           	</li>
                      	</ul>
                             
                       	<div class="tab-content">
@@ -89,6 +92,10 @@
                             
                            	<div class="tab-pane fade" id="respInfo">
                             	<jsp:include page="/jsp/apidoc/inter/respInfo.jsp"/>
+                           	</div>
+                            
+                           	<div class="tab-pane fade" id="mockInfo">
+                            	<jsp:include page="/jsp/apidoc/inter/mockInfo.jsp"/>
                            	</div>
                     	</div>
                 	</div>
@@ -108,6 +115,7 @@
     <script type="text/javascript" src="js/apidoc/inter/basicInfo.js?version=1.0.1"></script>
     <script type="text/javascript" src="js/apidoc/inter/reqInfo.js?version=1.0.7"></script>
     <script type="text/javascript" src="js/apidoc/inter/respInfo.js?version=1.0.10"></script>
+    <script type="text/javascript" src="js/apidoc/inter/mockInfo.js?version=1.0.1"></script>
     <script type="text/javascript" src="js/apidoc/interInfo.js?version=1.0.2"></script>
 	<!-- END PAGE LEVEL  SCRIPTS -->
 </body>

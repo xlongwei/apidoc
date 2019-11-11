@@ -14,6 +14,7 @@
    		<typeAlias type="com.dev.doc.entity.Inter" alias="inter"/>
    		<typeAlias type="com.dev.doc.entity.InterParam" alias="interParam"/>
    		<typeAlias type="com.dev.doc.entity.InterResp" alias="interResp"/>
+   		<typeAlias type="com.dev.doc.entity.InterMock" alias="interMock"/>
    		<typeAlias type="com.dev.doc.entity.Module" alias="module"/>
    		<typeAlias type="com.dev.doc.entity.RespSchema" alias="respSchema"/>
    		

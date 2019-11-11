@@ -19,4 +19,8 @@ function initTabBtn(){
 	$("#respInfoTab").click(function(){
 		loadRespInfo();
 	});
+	
+	$("#mockInfoTab").click(function(){
+		loadMockInfo();
+	});
 }

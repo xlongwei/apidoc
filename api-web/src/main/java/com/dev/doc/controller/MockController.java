@@ -21,13 +21,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.dev.base.controller.BaseController;
 import com.dev.base.enums.SchemaType;
+import com.dev.base.json.JsonUtils;
 import com.dev.base.utils.MapUtils;
 import com.dev.doc.entity.Inter;
+import com.dev.doc.entity.InterMock;
 import com.dev.doc.entity.InterResp;
 import com.dev.doc.entity.RespSchema;
+import com.dev.doc.service.InterMockService;
 import com.dev.doc.service.InterRespService;
 import com.dev.doc.service.InterService;
 import com.dev.doc.service.RespSchemaService;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import io.swagger.util.Json;
 
@@ -45,6 +49,9 @@ public class MockController extends BaseController {
 	
 	@Autowired
 	RespSchemaService respSchemaService;
+	
+	@Autowired
+	InterMockService interMockService;
 
 	@RequestMapping("**")
 	public Object mock(HttpServletRequest request, HttpServletResponse response) {
@@ -53,29 +60,52 @@ public class MockController extends BaseController {
 		String path = requestURI.substring(requestURI.indexOf(MOCK)+MOCK.length()), docId = UriComponentsBuilder.fromUriString(referer).build().getQueryParams().getFirst("doc");
 		Inter inter = interService.getByMethodPath(docId, request.getMethod(), path);
 		if(inter!=null) {
-			List<InterResp> interRespList = interRespService.listAllByInterId(inter.getDocId(), inter.getId());
-			if(!CollectionUtils.isEmpty(interRespList)) {
-				InterResp interResp = null;//优先顺序：唯一个 > default > 第一个
-				if(interRespList.size()==1) {
-					interResp = interRespList.get(0);
-				}else {
-					for(InterResp resp : interRespList) {
-						if("default".equals(resp.getCode())) {
-							interResp = resp;
-							break;
-						}
-					}
-					if(interResp == null) {
-						interResp = interRespList.get(0);
-					}
-				}
-				Object resp = interResp(interResp);
-				if(resp != null) {
-					return resp;
-				}
+			Object resp = mockResp(request, inter);
+			if(resp == null) {
+				resp = interResp(inter);
+			}
+			if(resp != null) {
+				return resp;
 			}
 		}
 		return Collections.emptyMap();
+	}
+	
+	/** 尝试响应接口模拟信息 */
+	private Object mockResp(HttpServletRequest request, Inter inter) {
+		String json = null;
+		List<InterMock> list = interMockService.listAllByInterId(inter.getId());
+		if(!CollectionUtils.isEmpty(list)) {
+			InterMock interMock = list.get(0);
+			json = interMock.getRespSchema();
+		}
+		return json==null ? null : JsonUtils.toObject(json, JsonNode.class);
+	}
+	
+	/** 尝试响应接口返回信息 */
+	private Object interResp(Inter inter) {
+		List<InterResp> interRespList = interRespService.listAllByInterId(inter.getDocId(), inter.getId());
+		if(!CollectionUtils.isEmpty(interRespList)) {
+			InterResp interResp = null;//优先顺序：唯一个 > default > 第一个
+			if(interRespList.size()==1) {
+				interResp = interRespList.get(0);
+			}else {
+				for(InterResp resp : interRespList) {
+					if("default".equals(resp.getCode())) {
+						interResp = resp;
+						break;
+					}
+				}
+				if(interResp == null) {
+					interResp = interRespList.get(0);
+				}
+			}
+			Object resp = interResp(interResp);
+			if(resp != null) {
+				return resp;
+			}
+		}
+		return null;
 	}
 	
 	/** 返回响应结构体 */

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev.doc.dao.InterMockDao">
+	<insert id="add" parameterType="interMock" useGeneratedKeys="true" keyProperty="id">
+		insert into t_inter_mock
+			(
+				create_date,
+				modify_date,
+				doc_id,
+				inter_id,
+				name,
+				req_schema,
+				resp_schema,
+				sort_weight
+			)
+		values
+			(
+				#{createDate},
+				#{modifyDate},
+				#{docId},
+				#{interId},
+				#{name},
+				#{reqSchema},
+				#{respSchema},
+				#{sortWeight}
+			)	
+	</insert>
+	
+	<update id="update" parameterType="interMock">
+		update t_inter_mock
+		<set>
+			<if test="modifyDate != null and '' != modifyDate"> modify_date = #{modifyDate},</if>
+			<if test="name != null and '' != name"> name = #{name},</if>
+			<if test="reqSchema != null and '' != reqSchema"> req_schema = #{reqSchema},</if>
+			<if test="reqSchema == null or '' == reqSchema"> req_schema = null,</if>
+			<if test="respSchema != null and '' != respSchema"> resp_schema = #{respSchema},</if>
+			<if test="sortWeight != null"> sort_weight = #{sortWeight},</if>
+		</set>
+		where
+			id = #{id}
+	</update>
+	
+	<select id="deleteById" resultType="interMock">
+		delete
+		from
+			t_inter_mock
+		where
+			id = #{id}
+	</select>
+	
+	<select id="getById" resultType="interMock">
+		select
+			*
+		from
+			t_inter_mock
+		where
+			id = #{id}
+	</select>
+	
+	<select id="listAllByInterId" resultType="interMock">
+		select
+			*
+		from
+			t_inter_mock
+		where
+			inter_id = #{interId}
+		order by
+			sort_weight asc,create_date asc
+	</select>
+
+</mapper>
+
