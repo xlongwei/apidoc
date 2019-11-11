@@ -46,7 +46,7 @@
 	
 	<!-- 注解式事务 -->
 	<bean id="springTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="bonecpDataSource" />
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
 	<!-- 编程式事务 -->
