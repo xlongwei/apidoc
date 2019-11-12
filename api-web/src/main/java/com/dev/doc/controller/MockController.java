@@ -3,10 +3,18 @@ package com.dev.doc.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.SimpleBindings;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,14 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.dev.base.controller.BaseController;
+import com.dev.base.enums.ParamPosition;
 import com.dev.base.enums.SchemaType;
 import com.dev.base.json.JsonUtils;
 import com.dev.base.utils.MapUtils;
 import com.dev.doc.entity.Inter;
 import com.dev.doc.entity.InterMock;
+import com.dev.doc.entity.InterParam;
 import com.dev.doc.entity.InterResp;
 import com.dev.doc.entity.RespSchema;
 import com.dev.doc.service.InterMockService;
+import com.dev.doc.service.InterParamService;
 import com.dev.doc.service.InterRespService;
 import com.dev.doc.service.InterService;
 import com.dev.doc.service.RespSchemaService;
@@ -52,6 +63,9 @@ public class MockController extends BaseController {
 	
 	@Autowired
 	InterMockService interMockService;
+	
+	@Autowired
+	InterParamService interParamService;
 
 	@RequestMapping("**")
 	public Object mock(HttpServletRequest request, HttpServletResponse response) {
@@ -60,8 +74,12 @@ public class MockController extends BaseController {
 		String path = requestURI.substring(requestURI.indexOf(MOCK)+MOCK.length()), docId = UriComponentsBuilder.fromUriString(referer).build().getQueryParams().getFirst("doc");
 		Inter inter = interService.getByMethodPath(docId, request.getMethod(), path);
 		if(inter!=null) {
-			Object resp = mockResp(request, inter);
+			Map<String, String> params = params(request, inter);
+			Object resp = mockResp(params, inter);
 			if(resp == null) {
+				if(!CollectionUtils.isEmpty(params)) {
+					response.addHeader("reqSchema", JsonUtils.toJson(params));
+				}
 				resp = interResp(inter);
 			}
 			if(resp != null) {
@@ -72,12 +90,53 @@ public class MockController extends BaseController {
 	}
 	
 	/** 尝试响应接口模拟信息 */
-	private Object mockResp(HttpServletRequest request, Inter inter) {
+	private Object mockResp(Map<String, String> params, Inter inter) {
 		String json = null;
 		List<InterMock> list = interMockService.listAllByInterId(inter.getId());
+		InterMock match = null, blank = null;
 		if(!CollectionUtils.isEmpty(list)) {
-			InterMock interMock = list.get(0);
-			json = interMock.getRespSchema();
+			for(InterMock interMock : list) {
+				String reqSchema = interMock.getReqSchema();
+				boolean isBlank = StringUtils.isBlank(reqSchema);
+				JsonNode jsonNode = isBlank ? null : JsonUtils.toObject(reqSchema, JsonNode.class);
+				if(isBlank || jsonNode==null || jsonNode.size()==0) {
+					if(blank == null) {
+						blank = interMock;
+					}
+				}else if(!CollectionUtils.isEmpty(params)){
+					if(jsonNode.isObject()) {
+						Iterator<String> fieldNames = jsonNode.fieldNames();
+						boolean miss = false;//reqSchema要求的参数都满足时则匹配
+						while(fieldNames.hasNext()) {
+							String fieldName = fieldNames.next();
+							String fieldValue = jsonNode.get(fieldName).asText("");
+							if(!fieldValue.equals(params.get(fieldName))) {
+								miss = true;
+								break;
+							}
+						}
+						if(!miss) {
+							match = interMock;
+							break;
+						}
+					}
+				}
+			}
+			if(match==null && blank!=null) {
+				match = blank;//空的reqSchema匹配所有请求
+			}
+			if(match!=null) {
+				json = match.getRespSchema();
+			}
+			if((json=StringUtils.trimToNull(json))!=null) {
+				char s = json.charAt(0);
+				if('{'==s || '['==s) {
+					//支持json模拟响应
+				}else {
+					//支持js动态模拟，params作为上下文参数req供js使用
+					json = script(params, json);
+				}
+			}
 		}
 		return json==null ? null : JsonUtils.toObject(json, JsonNode.class);
 	}
@@ -106,6 +165,42 @@ public class MockController extends BaseController {
 			}
 		}
 		return null;
+	}
+	
+	private Map<String, String> params(HttpServletRequest request, Inter inter) {
+		Map<String, String> params = new HashMap<>();
+		List<InterParam> interParamList = interParamService.listAllByInterId(inter.getDocId(), inter.getId());
+		if(!CollectionUtils.isEmpty(interParamList)) {
+			for(InterParam interParam : interParamList) {
+				String paramName = interParam.getCode(), paramValue = null;
+				ParamPosition position = interParam.getPosition();
+				if(ParamPosition.query==position || ParamPosition.formData==position) {
+					paramValue = request.getParameter(paramName);
+				}else if(ParamPosition.header==position) {
+					paramValue = request.getHeader(paramName);
+				}else if(ParamPosition.cookie==position) {
+					for(Cookie cookie : request.getCookies()) {
+						if(paramName.equalsIgnoreCase(cookie.getName())) {
+							paramValue = cookie.getValue();
+							break;
+						}
+					}
+				}else if(ParamPosition.path==position) {
+					String path = inter.getPath();
+					if(path.contains("{"+paramName+"}")) {
+						String pattern = StringUtils.replace(path, "{"+paramName+"}", "(.*)");
+						Matcher matcher = Pattern.compile(pattern).matcher(request.getRequestURI());
+						if(matcher.find()) {
+							paramValue = matcher.group(1);
+						}
+					}
+				}else if(ParamPosition.body==position) {
+					//太复杂暂不支持模拟
+				}
+				params.put(paramName, Objects.toString(paramValue, ""));
+			}
+		}
+		return params;
 	}
 	
 	/** 返回响应结构体 */
@@ -180,4 +275,17 @@ public class MockController extends BaseController {
 		return array;
 	}
 
+	//执行js脚本
+	private String script(Map<String, String> params, String json) {
+		Bindings bindings = new SimpleBindings();
+		bindings.put("req", params);
+		try{
+			ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByExtension("js");
+			Object result = scriptEngine.eval(json, bindings);
+			return result.toString();
+		}catch(Exception e) {
+			logger.warn(e.getMessage());
+		}
+		return null;
+	}
 }

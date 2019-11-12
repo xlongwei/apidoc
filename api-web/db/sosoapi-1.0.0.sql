@@ -157,6 +157,21 @@ INSERT INTO `t_inter_resp` VALUES ('9', '2016-10-18 17:00:01', '2016-10-18 17:00
 INSERT INTO `t_inter_resp` VALUES ('10', '2016-10-18 17:00:01', '2016-10-18 17:00:01', '1', '7', 'default', null, '默认响应', 'sys_ref', '2', '0', '0', null, null, '0');
 INSERT INTO `t_inter_resp` VALUES ('11', '2016-10-18 17:00:02', '2016-10-18 17:00:02', '1', '8', 'default', null, '默认响应', 'sys_ref', '1', '0', '0', null, null, '0');
 
+CREATE TABLE `t_inter_mock` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `create_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_date` datetime DEFAULT NULL COMMENT '修改时间',
+  `doc_id` bigint(20) DEFAULT NULL,
+  `inter_id` bigint(20) DEFAULT NULL COMMENT '接口id',
+  `name` varchar(128) DEFAULT NULL,
+  `req_schema` text COMMENT '自定义结构体',
+  `resp_schema` text,
+  `sort_weight` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `idx_inter_id` (`inter_id`) USING BTREE,
+  KEY `idx_doc_id` (`doc_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='接口模拟';
+
 -- ----------------------------
 -- Table structure for t_module
 -- ----------------------------
