@@ -66,7 +66,12 @@
         	</p> -->
         	<ul class="masthead-links">
           		<li>
-            		<a href="pass/apidoc/demo.htm" target="_blank" role="button" >在线demo</a>
+            		<a href="pass/apidoc/demo.htm?doc=1" target="_blank" role="button" >demo1</a>
+            		<a href="pass/apidoc/demo.htm?doc=1&mock=true" target="_blank" role="button" >mock1</a>
+          		</li>
+          		<li>
+            		<a href="/swagger/doc.html?doc=1" target="_blank" role="button" >demo2</a>
+            		<a href="/swagger/doc.html?doc=1&mock=true" target="_blank" role="button" >mock2</a>
           		</li>
         	</ul>
       	</div>

@@ -36,7 +36,7 @@ CREATE TABLE `t_api_doc` (
 -- ----------------------------
 -- Records of t_api_doc
 -- ----------------------------
-INSERT INTO `t_api_doc` VALUES ('1', '2016-10-18 17:00:00', '2016-10-18 17:00:00', '1', 'sosoapi_demo', '该demo主要用于汇集常见的接口编辑事例。\n<br/>\n接口测试过程中如果出现ajax跨域请求问题可参考\"常见问题->线下部署\"中的跨域请求相关资料。\n<br/>\n<br/>\n技术交流群:305629848', '', '/apidoc/demo', '0', '1', '', '', '', '1.0.0');
+INSERT INTO `t_api_doc` VALUES ('1', '2016-10-18 17:00:00', '2016-10-18 17:00:00', '1', 'sosoapi_demo', '该demo主要用于汇集常见的接口编辑事例。\n<br/>\n接口测试过程中如果出现ajax跨域请求问题可参考\"常见问题->线下部署\"中的跨域请求相关资料。\n<br/>\n<br/>\n技术交流群:957806743', '', '/apidoc/demo', '0', '1', '', '', '', '1.0.0');
 
 -- ----------------------------
 -- Table structure for t_inter
@@ -75,6 +75,8 @@ INSERT INTO `t_inter` VALUES ('6', '2016-10-18 17:00:01', '2016-10-18 17:00:01',
 INSERT INTO `t_inter` VALUES ('7', '2016-10-18 17:00:01', '2016-10-18 17:00:01', '1', '1', '查询用户', '/user/simple/{userId}/info.htm', 'GET', null, null, '查询用户信息', 'application/json', 'application/json', '0', '0');
 INSERT INTO `t_inter` VALUES ('8', '2016-10-18 17:00:01', '2016-10-18 17:00:01', '1', '1', '更新用户', '/user/simple/{userId}/update.htm', 'POST', null, null, '更新用户信息', 'application/json', 'application/json', '0', '0');
 INSERT INTO `t_inter` VALUES ('9', '2016-10-18 17:00:02', '2016-10-18 17:00:02', '1', '1', '上传图片', '/user/simple/{userId}/upload.htm', 'POST', null, null, '上传', 'application/json', 'application/json', '0', '0');
+INSERT INTO `t_inter` VALUES ('10', '2019-11-12 10:58:38', '2019-11-12 11:07:00', '1', '1', '查询用户分页', '/user/simple/pager.htm', 'GET', NULL, NULL, '获取用户分页', 'application/json', 'application/json', '0', '0');
+
 
 -- ----------------------------
 -- Table structure for t_inter_param
@@ -116,6 +118,9 @@ INSERT INTO `t_inter_param` VALUES ('8', '2016-10-18 17:00:02', '2016-10-18 17:0
 INSERT INTO `t_inter_param` VALUES ('9', '2016-10-18 17:00:02', '2016-10-18 17:00:02', '1', '8', 'nickName', null, '昵称', 'sys_string', '', 'query', '1', null, null, null, null);
 INSERT INTO `t_inter_param` VALUES ('10', '2016-10-18 17:00:02', '2016-10-18 17:00:02', '1', '9', 'userId', null, '', 'sys_integer_int64', 'int64', 'path', '1', null, null, null, '');
 INSERT INTO `t_inter_param` VALUES ('11', '2016-10-18 17:00:02', '2016-10-18 17:00:02', '1', '9', 'img', null, '', 'sys_file', '', 'formData', '1', null, null, null, '');
+INSERT INTO `t_inter_param` VALUES ('12', '2019-11-12 11:17:23', '2019-11-12 11:17:23', '1', '10', 'pageNumber', NULL, '', 'sys_integer_int32', NULL, 'query', '0', NULL, '', '1', '1');
+INSERT INTO `t_inter_param` VALUES ('13', '2019-11-12 11:17:23', '2019-11-12 11:17:23', '1', '10', 'pageSize', NULL, '', 'sys_integer_int32', NULL, 'query', '0', NULL, '', '1', '10');
+
 
 -- ----------------------------
 -- Table structure for t_inter_resp
@@ -156,6 +161,8 @@ INSERT INTO `t_inter_resp` VALUES ('8', '2016-10-18 17:00:01', '2016-10-18 17:00
 INSERT INTO `t_inter_resp` VALUES ('9', '2016-10-18 17:00:01', '2016-10-18 17:00:01', '1', '6', 'default', null, '默认响应', 'sys_ref', '1', '0', '0', null, null, '0');
 INSERT INTO `t_inter_resp` VALUES ('10', '2016-10-18 17:00:01', '2016-10-18 17:00:01', '1', '7', 'default', null, '默认响应', 'sys_ref', '2', '0', '0', null, null, '0');
 INSERT INTO `t_inter_resp` VALUES ('11', '2016-10-18 17:00:02', '2016-10-18 17:00:02', '1', '8', 'default', null, '默认响应', 'sys_ref', '1', '0', '0', null, null, '0');
+INSERT INTO `t_inter_resp` VALUES ('12', '2019-11-12 10:58:38', '2019-11-12 11:13:00', '1', '10', 'default', NULL, '默认响应', 'sys_object', '1', '0', '0', '[{\"code\":\"totalCount\",\"description\":\"总条数\",\"type\":\"sys_integer_int32\",\"refSchemaId\":\"1\",\"nodeId\":\"13\",\"parentId\":null},{\"code\":\"list\",\"description\":\"分页数据\",\"type\":\"sys_array\",\"refSchemaId\":\"1\",\"nodeId\":\"14\",\"parentId\":null},{\"code\":\"userId\",\"description\":\"用户ID\",\"type\":\"sys_integer_int64\",\"refSchemaId\":\"1\",\"nodeId\":\"1410\",\"parentId\":\"14\"},{\"code\":\"nickName\",\"description\":\"用户昵称\",\"type\":\"sys_string\",\"refSchemaId\":\"1\",\"nodeId\":\"1411\",\"parentId\":\"14\"},{\"code\":\"email\",\"description\":\"用户邮箱\",\"type\":\"sys_string\",\"refSchemaId\":\"1\",\"nodeId\":\"1412\",\"parentId\":\"14\"}]', null, '0');
+
 
 CREATE TABLE `t_inter_mock` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -172,7 +179,8 @@ CREATE TABLE `t_inter_mock` (
   KEY `idx_doc_id` (`doc_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='接口模拟';
 
-INSERT INTO `apidoc`.`t_inter_mock` (`id`, `create_date`, `modify_date`, `doc_id`, `inter_id`, `name`, `req_schema`, `resp_schema`, `sort_weight`) VALUES ('1', '2019-11-12 10:26:39', '2019-11-12 10:40:04', '1', '8', '更新用户', '{\"userId\":1}', 'var obj={};\nobj.nickName=req.nickName;\nobj.userId=req.userId;\nobj.msg=\'更新成功\';\nJSON.stringify(obj);', '0');
+INSERT INTO `t_inter_mock` VALUES ('1', '2019-11-12 10:26:39', '2019-11-12 10:40:04', '1', '8', '更新用户', '{\"userId\":1}', 'var obj={};\nobj.nickName=req.nickName;\nobj.userId=req.userId;\nobj.msg=\'更新成功\';\nJSON.stringify(obj);', '0');
+INSERT INTO `t_inter_mock` VALUES ('2', '2019-11-12 11:23:18', '2019-11-12 11:34:36', '1', '10', '', NULL, 'obj={};\r\nobj.totalCount=123;\r\nobj.pageNumber=req.pageNumber<=0?1:req.pageNumber;\r\nobj.pageSize=Number(req.pageSize<=0?10:req.pageSize);\r\nobj.list=[];\r\nstart=(obj.pageNumber-1)*obj.pageSize;\r\nend=start+obj.pageSize;\r\nif(end>obj.totalCount)end=obj.totalCount;\r\nfor(i=start;i<end;i++){\r\nitem={};\r\nitem.userId=i;\r\nitem.nickName=\'nick-\'+i;\r\nitem.email=\'email-\'+i;\r\nobj.list.push(item);\r\n}\r\nJSON.stringify(obj);', '0');
 
 -- ----------------------------
 -- Table structure for t_module
@@ -216,7 +224,7 @@ CREATE TABLE `t_proj` (
 -- ----------------------------
 -- Records of t_proj
 -- ----------------------------
-INSERT INTO `t_proj` VALUES ('1', '2016-10-18 17:00:00', '2016-10-18 17:00:00', '1', 'sosoapi_demo', null, '该demo主要用于汇集常见的接口编辑事例。\n<br/>\n接口测试过程中如果出现ajax跨域请求问题可参考\"常见问题->线下部署\"中的跨域请求相关资料。\n<br/>\n<br/>\n技术交流群:305629848', 'open');
+INSERT INTO `t_proj` VALUES ('1', '2016-10-18 17:00:00', '2016-10-18 17:00:00', '1', 'sosoapi_demo', null, '该demo主要用于汇集常见的接口编辑事例。\n<br/>\n接口测试过程中如果出现ajax跨域请求问题可参考\"常见问题->线下部署\"中的跨域请求相关资料。\n<br/>\n<br/>\n技术交流群:957806743', 'open');
 
 -- ----------------------------
 -- Table structure for t_proj_log
