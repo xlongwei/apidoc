@@ -48,7 +48,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">接口模拟信息</h4>
+						<h4 class="modal-title">接口模拟</h4>
 					</div>
 					<div class="modal-body">
 						<div class="row">
@@ -83,7 +83,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-3">响应</label> 
 										<div class="col-lg-6">
-											<textarea name="respSchema" class="form-control" rows="6"></textarea>
+											<textarea name="respSchema" class="form-control" rows="12" style="height:auto"></textarea>
 										</div>
 									</div>
 
@@ -119,7 +119,7 @@
 			<input name="reqSchema" type="text" value="" class="form-control" readonly>
 		</td>
 		<td>
-			<textarea rows="3" class="form-control" name="respSchema" readonly></textarea>
+			<textarea rows="6" class="form-control" name="respSchema" readonly></textarea>
 		</td>	
     	<td class="actions">
 			<button type="button" class="btn btn-sm btn-primary oper-update" data-toggle="modal" data-target="#mockSchemaFormModal">

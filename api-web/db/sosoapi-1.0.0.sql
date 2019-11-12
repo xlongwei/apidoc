@@ -172,6 +172,8 @@ CREATE TABLE `t_inter_mock` (
   KEY `idx_doc_id` (`doc_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='接口模拟';
 
+INSERT INTO `apidoc`.`t_inter_mock` (`id`, `create_date`, `modify_date`, `doc_id`, `inter_id`, `name`, `req_schema`, `resp_schema`, `sort_weight`) VALUES ('1', '2019-11-12 10:26:39', '2019-11-12 10:40:04', '1', '8', '更新用户', '{\"userId\":1}', 'var obj={};\nobj.nickName=req.nickName;\nobj.userId=req.userId;\nobj.msg=\'更新成功\';\nJSON.stringify(obj);', '0');
+
 -- ----------------------------
 -- Table structure for t_module
 -- ----------------------------

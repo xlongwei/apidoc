@@ -39,6 +39,7 @@ import com.dev.doc.service.SwaggerService;
 		* <p>CreateDate: 2015年8月13日下午2:20:08</p>
  */
 @Controller
+@SuppressWarnings("unchecked")
 public class SwaggerController extends BaseController{
 	@Autowired
 	private SwaggerService swaggerService;
@@ -56,31 +57,42 @@ public class SwaggerController extends BaseController{
 			*@CreateDate 2015年8月13日下午2:24:29
 	 */
 	@RequestMapping("/auth/apidoc/json/build.htm")
-	public @ResponseBody Swagger buildApiDoc(HttpServletRequest request,Long docId){
+	public @ResponseBody Swagger buildApiDoc(HttpServletRequest request,Long docId,@RequestParam(defaultValue="false") boolean mock){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
-		
 		Long userId = getUserId(request);
-		return swaggerService.buildApiDoc(userId, docId);
+		Swagger swagger = swaggerService.buildApiDoc(userId, docId);
+		if(mock) {
+			swagger.setSchemes(Collections.EMPTY_LIST);
+			swagger.setHost("");
+			swagger.setBasePath("/apidoc/mock");
+		}
+		return swagger;
 	}
 	
 	/** 响应knife4j接口分组文件 */
 	@RequestMapping("/pass/knife4j/group.htm")
-	public @ResponseBody Object buildGroup(HttpServletRequest request,Long docId) {
+	public @ResponseBody Object buildGroup(HttpServletRequest request,Long docId,@RequestParam(defaultValue="false") boolean mock) {
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		ApiDoc apiDoc = apiDocService.getById(docId);
 		Map<Object, Object> map = MapUtils.newMap();
 		map.put("name", apiDoc.getTitle());
 		map.put("swaggerVersion", "2.0");
-		map.put("url", CfgConstants.WEB_BASE_URL + "pass/knife4j/swagger.htm?docId=" + docId);
+		map.put("url", CfgConstants.WEB_BASE_URL + "pass/knife4j/swagger.htm?docId=" + docId+(mock?"&mock=true":""));
 		return Collections.singletonList(map);
 	}
 	
 	/** 响应knife4j接口定义文件 */
 	@RequestMapping("/pass/knife4j/swagger.htm")
-	public @ResponseBody Swagger buildSwagger(HttpServletRequest request,Long docId) {
+	public @ResponseBody Swagger buildSwagger(HttpServletRequest request,Long docId,@RequestParam(defaultValue="false") boolean mock) {
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		Long userId = getUserId(request);
-		return swaggerService.buildApiDoc(userId, docId);
+		Swagger swagger = swaggerService.buildApiDoc(userId, docId);
+		if(mock) {
+			swagger.setSchemes(Collections.EMPTY_LIST);
+			swagger.setHost("");
+			swagger.setBasePath("/apidoc/mock");
+		}
+		return swagger;
 	}
 	
 	/**
@@ -90,11 +102,10 @@ public class SwaggerController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/auth/apidoc/preview.htm")
-	public String preview(HttpServletRequest request,Model model,Long docId){
+	public String preview(HttpServletRequest request,Model model,Long docId,@RequestParam(defaultValue="false") boolean mock){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
-		String docUrl = CfgConstants.WEB_BASE_URL + "auth/apidoc/json/build.htm?docId=" + docId;
+		String docUrl = CfgConstants.WEB_BASE_URL + "auth/apidoc/json/build.htm?docId=" + docId+(mock?"&mock=true":"");
 		model.addAttribute("docUrl", docUrl);
-		
 		return "forward:/swagger/index.jsp";
 	}
 	
@@ -105,17 +116,16 @@ public class SwaggerController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/pass/apidoc/demo.htm")
-	public String previewDemo(HttpServletRequest request,Model model,@RequestParam(required=false) String doc){
+	public String previewDemo(HttpServletRequest request,Model model,@RequestParam(required=false) String doc,@RequestParam(defaultValue="false") boolean mock){
 		String docUrl = DEMO_DOC_URL;
 		if(StringUtils.hasLength(doc)) {
 			if(doc.matches("^\\d+$")) {
-				docUrl = CfgConstants.WEB_BASE_URL + "pass/knife4j/swagger.htm?docId=" + doc;
+				docUrl = CfgConstants.WEB_BASE_URL + "pass/knife4j/swagger.htm?docId=" + doc+(mock?"&mock=true":"");
 			}else {
 				docUrl = doc;
 			}
 		}
 		model.addAttribute("docUrl", docUrl);
-		
 		return "forward:/swagger/index.jsp";
 	}
 	

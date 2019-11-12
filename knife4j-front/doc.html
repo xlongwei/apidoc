@@ -1347,7 +1347,7 @@
             var admin=layui.sbuadmin;
             var url = 'json/group.json', reg = /\?doc=(.*)/, doc = reg.test(location.href) ? reg.exec(location.href)[1] : null;
             if(doc){
-            	if(/^\d+$/.test(doc)){
+            	if(/^\d+/.test(doc)){
             		url = '/apidoc/pass/knife4j/group.htm?docId='+doc;
             	}else{
             		url = doc;

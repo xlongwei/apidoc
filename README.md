@@ -10,7 +10,7 @@
 
 ##### 优化特性
 1. 接口协议优先顺序：接口Inter > 文档ApiDoc > 网址Url
-2. 支持mock请求，响应json结构：修改ApiDoc的接口基路径即可
+2. 支持接口模拟：可以给请求参数指定响应，也可以js代码动态生成响应，[演示](https://api.xlongwei.com/apidoc/pass/apidoc/demo.html?doc=1&mock=true)
 3. 支持生成knife4j-front需要的group.json文件，[演示](https://api.xlongwei.com/swagger/doc.html?doc=1)
 
 ##### 在线演示

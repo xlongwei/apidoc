@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dev.base.controller.BaseController;
 import com.dev.base.json.JsonUtils;
+import com.dev.base.util.Pager;
 import com.dev.base.utils.MapUtils;
 
 /**
@@ -63,6 +64,25 @@ public class DemoController extends BaseController{
 		}
 		
 		return result;
+	}
+	
+	@RequestMapping("/user/simple/pager.htm")
+	public @ResponseBody Pager simplePagerUser(HttpServletRequest request,Integer pageNumber,Integer pageSize,@RequestParam(defaultValue="0") Integer totalCount) {
+		Pager pager = new Pager(pageNumber, pageSize);
+		if(totalCount<=0) pager.setTotalCount(123);
+		int start = pager.getStart();
+		List<Map> result = new ArrayList<Map>();
+		for (int i = 1; i <= pageSize; i++) {
+			int serial = start+i;
+			Map<String, Object> info = MapUtils.newMap();
+			info.put("email", "邮箱" + serial);
+			info.put("nickName", "昵称" + serial);
+			info.put("userId", serial);
+			
+			result.add(info);
+		}
+		pager.setList(result);
+		return pager;
 	}
 	
 	/**
