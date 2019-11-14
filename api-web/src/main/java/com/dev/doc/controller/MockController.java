@@ -147,18 +147,21 @@ public class MockController extends BaseController {
 	private Object interResp(Inter inter) {
 		List<InterResp> interRespList = interRespService.listAllByInterId(inter.getDocId(), inter.getId());
 		if(!CollectionUtils.isEmpty(interRespList)) {
-			InterResp interResp = null;//优先顺序：唯一个 > default > 第一个
+			InterResp interResp = null;//优先顺序：唯一个 > 200 > default > 第一个
 			if(interRespList.size()==1) {
 				interResp = interRespList.get(0);
 			}else {
+				InterResp respDefault = null;
 				for(InterResp resp : interRespList) {
-					if("default".equals(resp.getCode())) {
+					if("200".equals(resp.getCode())) {
 						interResp = resp;
 						break;
+					}else if("default".equals(resp.getCode()) && respDefault==null) {
+						respDefault = resp;
 					}
 				}
 				if(interResp == null) {
-					interResp = interRespList.get(0);
+					interResp = respDefault!=null ? respDefault : interRespList.get(0);
 				}
 			}
 			Object resp = interResp(interResp);

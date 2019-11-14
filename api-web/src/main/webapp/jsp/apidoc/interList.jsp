@@ -114,7 +114,7 @@
 				                            	<tr>
 				                                	<th>#</th>
 				                                    <th>名称</th>
-				                                    <th>描述信息</th>
+				                                    <!-- <th>概要信息</th> -->
 				                                    <th>所属模块</th>
 				                                    <th>排序权重</th>
 				                                    <th>创建时间</th>
@@ -130,13 +130,13 @@
 				                                         	<td class="col-lg-2">
 				                                         		<a href="auth/doc/inter/forwardInfo.htm?projId=${param.projId}&docId=${param.docId}&interId=${interInfo.id}">${interInfo.name}</a>
 				                                         	</td>
-				                                         	<td class="col-lg-2">${interInfo.description}</td>
-				                                         	<td class="col-lg-1 module-name">${interInfo.moduleId}</td>
+				                                         	<%-- <td class="col-lg-2">${interInfo.summary}</td> --%>
+				                                         	<td class="col-lg-2 module-name">${interInfo.moduleId}</td>
 				                                         	<td class="col-lg-1">${interInfo.sortWeight}</td>
 				                                         	<td class="col-lg-2">
 				                                         		<fmt:formatDate value="${interInfo.createDate}" type="both" pattern="yyyy-MM-dd HH:mm:ss "/>
 				                                         	</td>
-				                                         	<td class="col-lg-3 actions">
+				                                         	<td class="col-lg-4 actions">
 				                                         		<button onclick="initCopyOper(${interInfo.id},'${interInfo.name}');" type="button" class="btn btn-sm btn-success">
 			                                                   		<i class="fa fa-plus"></i> 复制
 			                                                   	</button>
@@ -199,13 +199,13 @@
 														               	</div>
 														           	</div>
 																					     
-														 			<!-- <div class="form-group">
+														 			<div class="form-group" style="display:none">
 														                <label class="control-label col-lg-3">概要信息</label>
 														
 														                <div class="col-lg-6">
 														                    <input type="text" class="form-control" name="summary">
 														                </div>
-														            </div> -->
+														            </div>
 																					                           
 														            <div class="form-group">
 														                <label class="control-label col-lg-3">请求url</label>
@@ -228,7 +228,7 @@
 														                </div>
 														            </div>
 																					                
-														            <div class="form-group">
+														            <div class="form-group" style="display:none">
 														                <label class="control-label col-lg-3">请求协议</label>
 														
 														                <div class="col-lg-6">
@@ -240,26 +240,26 @@
 														                </div>
 														            </div>
 																					                
-														            <div class="form-group">
+														            <div class="form-group" style="display:none">
 														                <label class="control-label col-lg-3">请求格式</label>
 														
 														                <div class="col-lg-6">
 														                    <select class="form-control" name="consume">
 																				<option value="application/json">application/json</option>
-																				<!-- <option value="application/xml">application/xml</option> -->
+																				<option value="application/xml">application/xml</option>
 																				<option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
 																				<option value="multipart/form-data">multipart/form-data</option>
 																			</select>
 														                </div>
 														            </div>
 																					                
-														            <div class="form-group">
+														            <div class="form-group" style="display:none">
 														                <label class="control-label col-lg-3">响应格式</label>
 														
 														                <div class="col-lg-6">
 														                    <select class="form-control" name="produce">
 																			<option value="application/json">application/json</option>
-																			<!-- <option value="application/xml">application/xml</option> -->
+																			<option value="application/xml">application/xml</option>
 																		</select>
 														                </div>
 														            </div>
@@ -279,7 +279,7 @@
 														                <label class="control-label col-lg-3">描述信息</label>
 														
 														                <div class="col-lg-6">
-														                    <textarea class="form-control" name="description" rows="10">${interInfo.description}</textarea>
+														                    <textarea class="form-control" name="description" rows="7" style="height:auto">${interInfo.description}</textarea>
 														                </div>
 														            </div>
 																</form>

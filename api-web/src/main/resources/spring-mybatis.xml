@@ -39,9 +39,9 @@
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
 
-		<property name="initialSize" value="1" />
-		<property name="minIdle" value="1" />
-		<property name="maxActive" value="3" />
+		<property name="initialSize" value="${druid.initialSize}" />
+		<property name="minIdle" value="${druid.minIdle}" />
+		<property name="maxActive" value="${druid.maxActive}" />
 
 		<property name="maxWait" value="30000" />
 		<property name="timeBetweenEvictionRunsMillis" value="60000" />
@@ -49,7 +49,7 @@
 
 		<property name="validationQuery" value="SELECT 'x'" />
 		<property name="testWhileIdle" value="true" />
-		<property name="testOnBorrow" value="false" />
+		<property name="testOnBorrow" value="${druid.testOnBorrow}" />
 		<property name="testOnReturn" value="false" />
 
 		<property name="removeAbandoned" value="true" />
