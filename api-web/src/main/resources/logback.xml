@@ -32,6 +32,7 @@
 	</appender> -->
 
 	<logger name="com.jolbox.bonecp" level="off"/>
+	<logger name="com.dev" level="${com.dev.level}"/>
 	<logger name="com.ibatis" level="${com.ibatis.level}"/>
 	<logger name="org.springframework" level="${org.springframework.level}"/>
 	<logger name="org.mybatis.spring" level="${org.mybatis.spring.level}"/>
@@ -41,7 +42,7 @@
 	<logger name="jdbc.resultset" level="${log4jdbc.resultset.level}"/>
 	<logger name="jdbc.audit" level="${log4jdbc.audit.level}"/>
 	<logger name="jdbc.sqlonly" level="${log4jdbc.sqlonly.level}"/>
-	<logger name="jdbc.sqltiming" level="debug"/>
+	<logger name="jdbc.sqltiming" level="warn"/>
 
 	<root level="${logLevel}">
 		<!-- <appender-ref ref="SOCKET" /> -->

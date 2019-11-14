@@ -18,6 +18,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -43,6 +44,7 @@ import com.dev.doc.service.InterRespService;
 import com.dev.doc.service.InterService;
 import com.dev.doc.service.RespSchemaService;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.collect.Iterators;
 
 import io.swagger.util.Json;
 
@@ -195,7 +197,34 @@ public class MockController extends BaseController {
 						}
 					}
 				}else if(ParamPosition.body==position) {
-					//太复杂暂不支持模拟
+					try{
+						String body = IOUtils.toString(request.getInputStream());
+						if(StringUtils.isNotBlank(body) && '{'==body.charAt(0)) {
+							List<String> names = new ArrayList<>();
+							if(SchemaType.cust_json==interParam.getType()) {
+								JsonNode jsonNode = JsonUtils.toObject(interParam.getExtSchema(), JsonNode.class);
+								Iterators.addAll(names, jsonNode.fieldNames());
+							}else if(SchemaType.sys_ref==interParam.getType()) {
+								RespSchema respSchema = respSchemaService.getById(interParam.getRefSchemaId());
+								List<Map<String, Object>> custSchema = custSchema(respSchema.getCustSchema());
+								for(Map<String, Object> map : custSchema) {
+									names.add(map.get("code").toString());
+								}
+							}
+							if(!CollectionUtils.isEmpty(names)) {
+								JsonNode jsonNode = JsonUtils.toObject(body, JsonNode.class);
+								for(String name : names) {
+									JsonNode node = jsonNode.get(name);
+									if(node!=null) {
+										params.put(name, node.asText(""));
+									}
+								}
+							}
+						}
+						logger.info(body);
+					}catch(Exception e) {
+						logger.warn(e.getMessage());
+					}
 				}
 				params.put(paramName, Objects.toString(paramValue, ""));
 			}
@@ -262,6 +291,7 @@ public class MockController extends BaseController {
 		return ret;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private List<Map<String, Object>> custSchema(String custSchema) {
 		List<Map<String, Object>> array = new ArrayList<>();
 		try{

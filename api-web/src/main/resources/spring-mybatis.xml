@@ -49,7 +49,7 @@
 
 		<property name="validationQuery" value="SELECT 'x'" />
 		<property name="testWhileIdle" value="true" />
-		<property name="testOnBorrow" value="true" />
+		<property name="testOnBorrow" value="false" />
 		<property name="testOnReturn" value="false" />
 
 		<property name="removeAbandoned" value="true" />
