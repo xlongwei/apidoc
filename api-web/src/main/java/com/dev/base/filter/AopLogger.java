@@ -8,9 +8,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.dev.base.json.JsonUtils;
+import com.dev.base.util.Pager;
 import com.dev.base.utils.DateUtil;
 
 /**
@@ -18,6 +20,7 @@ import com.dev.base.utils.DateUtil;
  */
 @Aspect
 @Component
+@Order(100)
 public class AopLogger {
 	private static Logger log = LoggerFactory.getLogger(AopLogger.class);
     @Pointcut("within(com.dev.base.mybatis.service.BaseMybatisService+)")
@@ -56,6 +59,9 @@ public class AopLogger {
     		return "null";
     	}else if(Date.class==obj.getClass()) {
     		return DateUtil.formatByLong((Date)obj);
+    	}else if(Pager.class==obj.getClass()){
+    		Pager pager = (Pager)obj;
+    		return new StringBuilder("pager.").append(pager.getPageNumber()).append(',').append(pager.getPageSize()).toString();
     	}else {
     		return obj.toString();
     	}
