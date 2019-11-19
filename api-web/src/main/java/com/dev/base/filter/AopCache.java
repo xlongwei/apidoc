@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
+import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.cache.support.SimpleValueWrapper;
@@ -70,7 +72,7 @@ public class AopCache implements InitializingBean {
 	    			Object ret = null;
 	    			Cache cache = cacheManager.getCache(className);
 	    			Class<?> methodReturn = returnTypes.get(typeKey);
-	    			if(methodReturn!=null && (ret=cache.get(cacheKey, methodReturn))!=null) {
+	    			if(methodReturn!=null && (ret=cachedObject(cache, cacheKey, methodReturn))!=null) {
     					log.info("get from cache {}:{}", className, cacheKey);
     					return ret;
 	    			}
@@ -136,6 +138,18 @@ public class AopCache implements InitializingBean {
     	}
     	return false;
     }
+    
+    private <T> T cachedObject(Cache cache, String key, Class<T> returnType) {
+    	ValueWrapper valueWrapper = cache.get(key);
+    	if(valueWrapper!=null) {
+    		Object object = valueWrapper.get();
+    		//解决GuavaCache取出null时抛异常
+    		if(object!=null && returnType.isInstance(object)) {
+    			return returnType.cast(object);
+    		}
+    	}
+    	return null;
+    }
 
 	private synchronized void initCacheManager() {
     	if(cacheManager==null) {
@@ -167,6 +181,7 @@ public class AopCache implements InitializingBean {
 	    			cacheBuilder.maximumSize(NumberUtils.toInt(CfgConstants.getProperty("guava.maximunSize", "1000")))
 	    						.expireAfterWrite(NumberUtils.toInt(CfgConstants.getProperty("cache.expire", "3600")), TimeUnit.SECONDS);
 	    			guavaCacheManager.setCacheBuilder(cacheBuilder);
+	    			guavaCacheManager.setAllowNullValues(false);
 	    			cacheManager = guavaCacheManager;
 	    		}
     		}else {
@@ -274,7 +289,7 @@ public class AopCache implements InitializingBean {
 			ValueWrapper valueWrapper = get(key);
 			if(valueWrapper!=null) {
 				Object object = valueWrapper.get();
-				if(object!=null && type.isAssignableFrom(object.getClass())) {
+				if(object!=null && type.isInstance(object)) {
 					return type.cast(object);
 				}
 			}
@@ -287,8 +302,10 @@ public class AopCache implements InitializingBean {
 				public String doInJedis(Jedis jedis) {
 					byte[] byteKey = RedisCacheManager.byteKey(name, key.toString());
 					byte[] byteValue = RedisCacheManager.byteValue(value);
-					jedis.set(byteKey, byteValue);
-					jedis.expire(byteKey, redisCacheManager.expire);
+					if(ArrayUtils.isNotEmpty(byteValue)) {
+						jedis.set(byteKey, byteValue);
+						jedis.expire(byteKey, redisCacheManager.expire);
+					}
 					return null;
 				}
 			});

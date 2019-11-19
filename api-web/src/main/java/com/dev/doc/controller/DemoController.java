@@ -67,7 +67,7 @@ public class DemoController extends BaseController{
 	}
 	
 	@RequestMapping("/user/simple/pager.htm")
-	public @ResponseBody Pager simplePagerUser(HttpServletRequest request,Integer pageNumber,Integer pageSize,@RequestParam(defaultValue="0") Integer totalCount) {
+	public @ResponseBody Pager simplePagerUser(HttpServletRequest request,@RequestParam(defaultValue="1") Integer pageNumber,@RequestParam(defaultValue="10") Integer pageSize,@RequestParam(defaultValue="0") Integer totalCount) {
 		Pager pager = new Pager(pageNumber, pageSize);
 		if(totalCount<=0) pager.setTotalCount(123);
 		int start = pager.getStart();
