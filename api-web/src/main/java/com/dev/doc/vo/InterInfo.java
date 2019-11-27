@@ -1,5 +1,7 @@
 package com.dev.doc.vo;
 
+import java.io.Serializable;
+
 import com.dev.base.enums.ReqMethod;
 import com.dev.base.enums.ReqScheme;
 
@@ -9,7 +11,8 @@ import com.dev.base.enums.ReqScheme;
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2015年8月5日下午8:37:33</p>
  */
-public class InterInfo {
+@SuppressWarnings("serial")
+public class InterInfo implements Serializable {
 	/** 接口id */
 	private Long interId;		
 	

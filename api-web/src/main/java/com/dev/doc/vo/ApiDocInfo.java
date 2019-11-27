@@ -1,5 +1,6 @@
 package com.dev.doc.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,8 @@ import java.util.Date;
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2015年8月19日下午3:07:48</p>
  */
-public class ApiDocInfo {
+@SuppressWarnings("serial")
+public class ApiDocInfo implements Serializable {
 	/** 项目id*/
 	private Long projId;
 	

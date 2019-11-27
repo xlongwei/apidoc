@@ -36,7 +36,7 @@
     <listener-class>com.dev.base.listener.SessionListener</listener-class>
   </listener>
   <session-config>
-    <session-timeout>120</session-timeout>
+    <session-timeout>10080</session-timeout>
   </session-config>
   <servlet>
     <servlet-name>springmvc</servlet-name>

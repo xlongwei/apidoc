@@ -1,5 +1,6 @@
 package com.dev.user.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.dev.base.enums.SuggestStatus;
@@ -11,7 +12,8 @@ import com.dev.base.enums.SuggestType;
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2015年9月16日下午1:45:47</p>
  */
-public class SuggestInfo {
+@SuppressWarnings("serial")
+public class SuggestInfo implements Serializable {
 	/** 记录id*/
 	private Long suggestId;
 	

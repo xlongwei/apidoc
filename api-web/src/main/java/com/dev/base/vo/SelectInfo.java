@@ -1,12 +1,15 @@
 package com.dev.base.vo;
 
+import java.io.Serializable;
+
 /**
  * 
 		* <p>Title: 前台,下拉框信息</p>
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2015年7月11日下午5:39:29</p>
  */
-public class SelectInfo {
+@SuppressWarnings("serial")
+public class SelectInfo implements Serializable {
 	/** 下拉框展示名称*/
 	private String name;
 	

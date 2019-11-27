@@ -281,7 +281,7 @@ public class DocBuildUtil {
 		SchemaType type = reqParam.getType();
 		CookieParameter cookieParameter = new CookieParameter();
 		cookieParameter.setDefaultValue(reqParam.getDefValue());
-		cookieParameter.setDescription(reqParam.getDescription());
+		cookieParameter.setDescription(StringUtils.isEmpty(reqParam.getDescription()) ? reqParam.getName() : reqParam.getDescription());
 		cookieParameter.setRequired(reqParam.isRequired());
 		cookieParameter.setType(type.getType());
 		cookieParameter.setFormat(type.getFormat());
@@ -301,7 +301,7 @@ public class DocBuildUtil {
 		formParameter.setName(reqParam.getCode());
 		formParameter.setType(type.getType());
 		formParameter.setFormat(type.getFormat());
-		formParameter.setDescription(reqParam.getDescription());
+		formParameter.setDescription(StringUtils.isEmpty(reqParam.getDescription()) ? reqParam.getName() : reqParam.getDescription());
 		formParameter.setRequired(reqParam.isRequired());
 		formParameter.setDefaultValue(reqParam.getDefValue());
 		
@@ -318,7 +318,7 @@ public class DocBuildUtil {
 		
 		HeaderParameter headerParameter = new HeaderParameter();
 		headerParameter.setDefaultValue(reqParam.getDefValue());
-		headerParameter.setDescription(reqParam.getDescription());
+		headerParameter.setDescription(StringUtils.isEmpty(reqParam.getDescription()) ? reqParam.getName() : reqParam.getDescription());
 		headerParameter.setFormat(type.getFormat());
 		headerParameter.setType(type.getType());
 		headerParameter.setName(reqParam.getCode());
@@ -337,7 +337,7 @@ public class DocBuildUtil {
 		
 		PathParameter pathParameter = new PathParameter();
 		pathParameter.setDefaultValue(reqParam.getDefValue());
-		pathParameter.setDescription(reqParam.getDescription());
+		pathParameter.setDescription(StringUtils.isEmpty(reqParam.getDescription()) ? reqParam.getName() : reqParam.getDescription());
 		pathParameter.setFormat(type.getFormat());
 		pathParameter.setType(type.getType());
 		pathParameter.setName(reqParam.getCode());
@@ -356,7 +356,7 @@ public class DocBuildUtil {
 		
 		QueryParameter queryParameter = new QueryParameter();
 		queryParameter.setDefaultValue(reqParam.getDefValue());
-		queryParameter.setDescription(reqParam.getDescription());
+		queryParameter.setDescription(StringUtils.isEmpty(reqParam.getDescription()) ? reqParam.getName() : reqParam.getDescription());
 		queryParameter.setFormat(type.getFormat());
 		queryParameter.setType(type.getType());
 		queryParameter.setName(reqParam.getCode());

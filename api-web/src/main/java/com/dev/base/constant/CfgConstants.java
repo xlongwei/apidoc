@@ -5,7 +5,6 @@ import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 
 import com.dev.base.utils.PropertiesUtils;
-import com.dev.base.utils.RandomUtils;
 
 /**
  * 
@@ -101,7 +100,7 @@ public class CfgConstants {
 	/**
 	 * 减少httpclient请求爬数据
 	 */
-	public static final String SYS_REQ_TOKEN = "" + RandomUtils.genRandomNum(1000, 1000000);
+	public static final String SYS_REQ_TOKEN = "xlongwei";
 	
 	public static Properties getCfgProperties() {
 		return cfgProperties;

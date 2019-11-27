@@ -1,5 +1,6 @@
 package com.dev.user.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
@@ -13,7 +14,8 @@ import com.dev.base.utils.MapUtils;
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2015年8月6日下午5:05:47</p>
  */
-public class UserInfo {
+@SuppressWarnings("serial")
+public class UserInfo implements Serializable {
 	/** 用户id*/
 	private Long userId;
 

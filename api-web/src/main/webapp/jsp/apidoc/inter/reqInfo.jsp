@@ -24,6 +24,7 @@
 			               	<tr>
 			                	<th class="col-lg-1">#</th>
 			                	<th class="col-lg-2">编码</th>
+			                	<th class="col-lg-2">名称</th>
 			                    <th class="col-lg-1 hidden">描述</th>
 			                    <th class="col-lg-2">参数位置</th>
 			                    <th class="col-lg-2">类型</th>
@@ -148,6 +149,9 @@
     	<td></td>
 		<td>
 			<input name="code" type="text" value="" class="form-control">
+		</td>
+    	<td>
+			<input name="name" type="text" value="" class="form-control">
 		</td>
     	<td class="hidden">
 			<input name="description" type="text" value="" class="form-control">

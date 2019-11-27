@@ -1,5 +1,6 @@
 package com.dev.proj.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,8 @@ import java.util.Date;
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2016年3月8日下午12:48:37</p>
  */
-public class ProjectLogInfo {
+@SuppressWarnings("serial")
+public class ProjectLogInfo implements Serializable {
 	/** 日志id */
 	private Long logId;	
 	

@@ -1,5 +1,6 @@
 package com.dev.proj.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.dev.base.enums.ProjectStatus;
@@ -11,7 +12,8 @@ import com.dev.base.enums.Role;
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2015年8月5日下午8:33:39</p>
  */
-public class ProjectInfo {
+@SuppressWarnings("serial")
+public class ProjectInfo implements Serializable {
 	/** 项目id*/
 	private Long projId;
 	
