@@ -13,6 +13,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.dev.base.constant.AppConstants;
 import com.dev.base.enums.LoginStatus;
+import com.dev.base.filter.AopCache;
 import com.dev.base.utils.DateUtil;
 import com.dev.user.entity.UserLogin;
 import com.dev.user.service.UserLoginService;
@@ -47,6 +48,9 @@ public class SessionListener implements HttpSessionListener,
 			userLogin.setLoginStatus(LoginStatus.offline);
 			userLoginService.update(userLogin);
 		}
+		if(AopCache.cacheManager!=null) {
+			AopCache.cacheManager.getCache(null).evict(event.getSession().getId());
+		}
 	}
 	
 	@Override
@@ -70,7 +74,8 @@ public class SessionListener implements HttpSessionListener,
 			*@Description  
 			*@CreateDate 2015年10月10日下午11:45:05
 	 */
-    private Object getBean(ServletContext servletContext,Class beanClass){  
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private Object getBean(ServletContext servletContext,Class beanClass){  
         //通过WebApplicationContextUtils 得到Spring容器的实例。  
         ApplicationContext application = WebApplicationContextUtils.getWebApplicationContext(servletContext);  
         

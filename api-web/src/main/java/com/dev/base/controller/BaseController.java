@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dev.base.constant.AppConstants;
@@ -22,6 +24,7 @@ import com.dev.user.vo.UserInfo;
 public class BaseController {
 	@Autowired
 	private AuthService authService;
+	protected Logger log = LoggerFactory.getLogger(getClass());
 	
 	/**
 	 * 

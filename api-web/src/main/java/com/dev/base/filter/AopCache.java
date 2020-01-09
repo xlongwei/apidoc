@@ -24,14 +24,14 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
 import org.springframework.cache.Cache;
 import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.cache.support.SimpleValueWrapper;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -45,15 +45,28 @@ import redis.clients.jedis.JedisPoolConfig;
 
 @Aspect
 @Component
-@Order(200)
-public class AopCache implements InitializingBean {
+public class AopCache implements ApplicationContextAware {
+	public static CacheManager cacheManager = null;
+	public static ApplicationContext springContext = null;
 	private static Logger log = LoggerFactory.getLogger(AopCache.class);
-	private @Autowired(required=false) CacheManager cacheManager;
 	private int cacheStatus = -1;//-1待初始化 0不可用 1可用
 	private String[] cacheMethods = {"list", "count", "get"};
 	private String[] evictMethods = {"add", "batchAdd", "update", "delete", "delBy"};
 	private Map<String, Boolean> classNames = new HashMap<>();
 	private Map<String, Class<?>> returnTypes = new HashMap<>();
+	
+	/**
+	 * 尝试获取bean，或者返回null
+	 * @param clazz
+	 * @return
+	 */
+	public static <T> T getBean(Class<T> clazz) {
+		try {
+			return springContext.getBean(clazz);
+		}catch(Exception e) {
+			return null;
+		}
+	}
 	
     @Pointcut("within(com.dev.base.mybatis.service.BaseMybatisService+)")
     public void cacheService(){}
@@ -108,7 +121,9 @@ public class AopCache implements InitializingBean {
     }
     
     @Override
-	public void afterPropertiesSet() throws Exception {
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    	springContext = applicationContext;
+		cacheManager = getBean(CacheManager.class);
     	initCacheManager();
 	}
 
@@ -204,7 +219,7 @@ public class AopCache implements InitializingBean {
 
 		@Override
 		public Cache getCache(String name) {
-			RedisCache redisCache = redisCaches.get(name);
+			RedisCache redisCache = redisCaches.get(name=StringUtils.trimToEmpty(name));
 			if(redisCache==null) {
 				redisCache = new RedisCache(this, name);
 				redisCaches.put(name, redisCache);
@@ -226,7 +241,7 @@ public class AopCache implements InitializingBean {
 		}
 		
 		public static byte[] byteKey(String cache, String key) {
-			return (cache+":"+key).getBytes(StandardCharsets.UTF_8);
+			return (StringUtils.isBlank(cache) ? key : cache+":"+key).getBytes(StandardCharsets.UTF_8);
 		}
 		
 		public static byte[] byteValue(Object value) {
@@ -334,7 +349,7 @@ public class AopCache implements InitializingBean {
 			});
 		}
 		private String keystr(Object key) {
-			return new StringBuilder(name).append(":").append(key).toString();
+			return StringUtils.isBlank(name) ? String.valueOf(key) : name+":"+String.valueOf(key);
 		}
 	}
 	

@@ -15,8 +15,6 @@ import com.dev.base.constant.AppConstants;
 import com.dev.base.constant.CfgConstants;
 import com.dev.base.controller.BaseController;
 import com.dev.base.enums.LoginType;
-import com.dev.base.exception.TipException;
-import com.dev.base.exception.ValidateException;
 import com.dev.base.exception.code.ErrorCode;
 import com.dev.base.json.JsonUtils;
 import com.dev.base.util.WebUtil;
@@ -81,13 +79,17 @@ public class LoginController extends BaseController{
 		paramInfo.setAutoLogin(autoLogin);
 		
 		UserInfo userInfo = null;
-		try {
-			ValidateUtils.isTrue(validCode.equals(WebUtil.getSessionAttr(request, AppConstants.CAPTCHA_LOGIN)), ErrorCode.LOGIN_003);
+//		try {
+			Object code = WebUtil.getSessionAttr(request, AppConstants.CAPTCHA_LOGIN);
+			boolean valid = validCode.equals(code);
+			log.info("validCode={}, code={}, valid={}", validCode, code, valid);
+//			if(valid==false) return "forward:/forwardLogin.htm";
+//			ValidateUtils.isTrue(valid, ErrorCode.LOGIN_003);
 			userInfo = loginService.loginByEmail(paramInfo);
-		} 
-		catch (ValidateException e) {
-			throw new TipException("forward:/forwardLogin.htm", e);
-		}
+//		} 
+//		catch (ValidateException e) {
+//			throw new TipException("forward:/forwardLogin.htm", e);
+//		}
 
 		//保存登陆用户信息
 		WebUtil.setSessionAttr(request, AppConstants.SESSION_KEY_USER, userInfo);
@@ -166,6 +168,7 @@ public class LoginController extends BaseController{
 			*@Description  
 			*@CreateDate 2015年8月22日下午2:58:59
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping("/json/sendResetCode.htm")
 	public @ResponseBody Map sendResetCode(HttpServletRequest request,String email){
 		ValidateUtils.isTrue(RegexUtil.isEmail(email), ErrorCode.SYS_001,"邮箱格式不正确");
