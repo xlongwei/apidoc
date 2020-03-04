@@ -29,7 +29,7 @@
 	<import resource="classpath:spring-mybatis.xml" />
 	
 	<!-- 引入quartz相关 -->
-	<import resource="classpath:spring-timer.xml" />
+	<!-- <import resource="classpath:spring-timer.xml" /> -->
 
 	<!-- 加载错误码 -->
 	<bean class="com.dev.base.exception.errorcode.ErrorCodePropertyConfigurer" lazy-init="false">

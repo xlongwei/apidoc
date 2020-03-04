@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -347,6 +348,37 @@ public class AopCache implements ApplicationContextAware {
 					return null;
 				}
 			});
+		}
+		@Override
+		@SuppressWarnings("unchecked")
+		public <T> T get(Object key, Callable<T> valueLoader) {
+			ValueWrapper valueWrapper = get(key);
+			if(valueWrapper!=null && valueWrapper.get()!=null) {
+				try {
+					return (T)valueWrapper.get();
+				}catch(Exception e) {
+					evict(key);
+				}
+			}
+			try{
+				T t = valueLoader.call();
+				if(t!=null) {
+					put(key, t);
+				}
+				return t;
+			}catch(Exception e) {
+				return null;
+			}
+		}
+		@Override
+		public ValueWrapper putIfAbsent(Object key, Object value) {
+			ValueWrapper valueWrapper = get(key);
+			if(valueWrapper==null||valueWrapper.get()==null) {
+				put(key, value);
+				return null;
+			}else {
+				return valueWrapper;
+			}
 		}
 		private String keystr(Object key) {
 			return StringUtils.isBlank(name) ? String.valueOf(key) : name+":"+String.valueOf(key);

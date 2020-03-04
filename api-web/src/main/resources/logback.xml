@@ -11,12 +11,16 @@
         </encoder>
     </appender>
     
-	<appender name="SOCKET" class="ch.qos.logback.classic.net.SocketAppender">
+	<!-- <appender name="SOCKET" class="ch.qos.logback.classic.net.SocketAppender">
 		<RemoteHost>logserver</RemoteHost>
 		<Port>6000</Port>
 		<ReconnectionDelay>10000</ReconnectionDelay>
 		<IncludeCallerData>false</IncludeCallerData>
 	</appender>
+	<appender name="ASYNC_SOCKET" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="SOCKET" />
+		<IncludeCallerData>true</IncludeCallerData>
+	</appender> -->
   
     <!-- <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logfile}</file>
@@ -45,7 +49,7 @@
 	<logger name="jdbc.sqltiming" level="warn"/>
 
 	<root level="${logLevel}">
-		<appender-ref ref="SOCKET" />
+		<!-- <appender-ref ref="ASYNC_SOCKET" /> -->
 		<!-- <appender-ref ref="ASYNC_FILE" /> -->
 		<appender-ref ref="STDOUT" />
 	</root>
