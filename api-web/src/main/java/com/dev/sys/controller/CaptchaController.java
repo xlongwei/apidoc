@@ -66,6 +66,7 @@ public class CaptchaController extends BaseController{
 		g.dispose();
 		
 		WebUtil.setSessionAttr(request, oper, sRand);
+		log.info("sid: {}, oper: {}, rand: {}", request.getSession().getId(), oper, sRand);
 
 		ImageIO.write(image, "JPEG", response.getOutputStream());
 	}

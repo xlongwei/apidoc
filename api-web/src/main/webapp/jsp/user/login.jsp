@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -118,7 +118,7 @@
 						<input type="password" name="confirmPasswd" placeholder="密码确认" class="form-control" />
 					</div>
 					
-					<div class="form-group" style="margin-top:-10px;">
+					<!-- <div class="form-group" style="margin-top:-10px;">
 						<div class="row">
 	        	        	<div class="col-lg-8">
 								<input type="text" name="validCode" placeholder="验证码" class="form-control"/>
@@ -127,7 +127,7 @@
 								<img id="registValidCodeImg" src="captcha/build.htm?oper=regist" title="看不清楚，换一张" align="middle" style="cursor:pointer;margin-top:12px;height:33px;"/>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					
 					<div class="form-group">
 						<button class="btn text-muted text-center btn-success" type="submit">注册</button>

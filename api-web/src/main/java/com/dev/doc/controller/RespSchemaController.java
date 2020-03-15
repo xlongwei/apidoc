@@ -68,7 +68,7 @@ public class RespSchemaController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/json/list.htm")
-	public @ResponseBody Map listJson(HttpServletRequest request,Long docId){
+	public @ResponseBody Map<String, Object> listJson(HttpServletRequest request,Long docId){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		
 		List<SelectInfo> result = respSchemaService.listSelectInfoByDocId(docId);
@@ -82,7 +82,7 @@ public class RespSchemaController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping(value = "/json/add.htm",method = RequestMethod.POST)
-	public @ResponseBody Map add(HttpServletRequest request,RespSchema schema){
+	public @ResponseBody Map<String, Object> add(HttpServletRequest request,RespSchema schema){
 		ValidateUtils.notNull(schema.getDocId(), ErrorCode.SYS_001,"文档id不能为空");
 		ValidateUtils.notNull(schema.getCode(), ErrorCode.SYS_001,"编码不能为空");
 		
@@ -97,7 +97,7 @@ public class RespSchemaController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/update.htm",method = RequestMethod.POST)
-	public @ResponseBody Map update(HttpServletRequest request,RespSchema schema,Long schemaId){
+	public @ResponseBody Map<String, Object> update(HttpServletRequest request,RespSchema schema,Long schemaId){
 		ValidateUtils.notNull(schema.getDocId(), ErrorCode.SYS_001,"文档id不能为空");
 		ValidateUtils.notNull(schemaId, ErrorCode.SYS_001,"数据结构id不能为空");
 		ValidateUtils.notNull(schema.getCode(), ErrorCode.SYS_001,"编码不能为空");
@@ -115,7 +115,7 @@ public class RespSchemaController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/del.htm")
-	public @ResponseBody Map del(HttpServletRequest request,Long docId,Long schemaId){
+	public @ResponseBody Map<String, Object> del(HttpServletRequest request,Long docId,Long schemaId){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		ValidateUtils.notNull(schemaId, ErrorCode.SYS_001,"结构id不能为空");
 		
@@ -131,7 +131,7 @@ public class RespSchemaController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/json/info.htm")
-	public @ResponseBody Map getInfo(Long docId,Long schemaId){
+	public @ResponseBody Map<String, Object> getInfo(Long docId,Long schemaId){
 		ValidateUtils.notNull(schemaId, ErrorCode.SYS_001,"结构id不能为空");
 		RespSchema schema = respSchemaService.getByDocId(docId,schemaId);
 		

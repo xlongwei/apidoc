@@ -71,7 +71,7 @@ public class UserController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/auth/user/json/update.htm")
-	public @ResponseBody Map update(HttpServletRequest request,String nickName){
+	public @ResponseBody Map<String, Object> update(HttpServletRequest request,String nickName){
 		ValidateUtils.notNull(nickName, ErrorCode.SYS_001,"用户昵称不能为空");
 		Long userId = getUserId(request);
 		
@@ -95,7 +95,7 @@ public class UserController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/auth/user/json/updatePasswd.htm",method = RequestMethod.POST)
-	public @ResponseBody Map updatePasswd(HttpServletRequest request,String oldPasswd,String newPasswd){
+	public @ResponseBody Map<String, Object> updatePasswd(HttpServletRequest request,String oldPasswd,String newPasswd){
 		ValidateUtils.notNull(oldPasswd, ErrorCode.SYS_001,"原密码不能为空");
 		ValidateUtils.notNull(newPasswd, ErrorCode.SYS_001,"新密码不能为空");
 		
@@ -112,7 +112,7 @@ public class UserController extends BaseController{
 			*@CreateDate 2015年8月22日下午2:58:59
 	 */
 	@RequestMapping("/auth/user/json/sendUpdateEmailCode.htm")
-	public @ResponseBody Map sendUpdateEmailCode(HttpServletRequest request,String passwd,String email){
+	public @ResponseBody Map<String, Object> sendUpdateEmailCode(HttpServletRequest request,String passwd,String email){
 		ValidateUtils.isTrue(RegexUtil.isEmail(email), ErrorCode.SYS_001,"邮箱格式不正确");
 		Long userId = getUserId(request);
 		userBasicService.sendUpdateEmailCode(userId, passwd, email);

@@ -37,7 +37,7 @@ public class DemoController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/user/simple/add.htm")
-	public @ResponseBody Map simpleAddUser(HttpServletRequest request,
+	public @ResponseBody Map<String, Object> simpleAddUser(HttpServletRequest request,
 			String email,String nickName,Integer age){
 		Map<String, Object> result = MapUtils.newMap();
 		result.put("userId", 123);
@@ -52,8 +52,8 @@ public class DemoController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/user/simple/list.htm")
-	public @ResponseBody List<Map> simpleListUser(HttpServletRequest request){
-		List<Map> result = new ArrayList<Map>();
+	public @ResponseBody List<Map<String, Object>> simpleListUser(HttpServletRequest request){
+		List<Map<String, Object>> result = new ArrayList<>();
 		for (int i = 1; i < 3; i++) {
 			Map<String, Object> info = MapUtils.newMap();
 			info.put("email", "邮箱" + i);
@@ -71,7 +71,7 @@ public class DemoController extends BaseController{
 		Pager pager = new Pager(pageNumber, pageSize);
 		if(totalCount<=0) pager.setTotalCount(123);
 		int start = pager.getStart();
-		List<Map> result = new ArrayList<Map>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		for (int i = 1; i <= pageSize; i++) {
 			int serial = start+i;
 			Map<String, Object> info = MapUtils.newMap();
@@ -131,7 +131,7 @@ public class DemoController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/user/complex/add.htm")
-	public @ResponseBody Map complexAddUser(HttpServletRequest request,@RequestBody SimpleUserInfo info) throws IOException{
+	public @ResponseBody Map<String, Object> complexAddUser(HttpServletRequest request,@RequestBody SimpleUserInfo info) throws IOException{
 //		String userInfo = IOUtils.toString(request.getInputStream(), "UTF-8");
 		
 		Map<String, Object> result = MapUtils.newMap();
@@ -147,7 +147,7 @@ public class DemoController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/user/complex/list.htm")
-	public @ResponseBody Map complexListUser(HttpServletRequest request){
+	public @ResponseBody Map<String, Object> complexListUser(HttpServletRequest request){
 		List<SimpleUserInfo> list = new ArrayList<SimpleUserInfo>();
 		for (int i = 1; i < 3; i++) {
 			SimpleUserInfo info = new SimpleUserInfo();
@@ -175,8 +175,8 @@ public class DemoController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/user/complex/{userId}/info.htm")
-	public @ResponseBody Map complexGetUser(HttpServletRequest request,@PathVariable("userId")Long userId){
-		List<Map> addressList = new ArrayList<Map>();
+	public @ResponseBody Map<String, Object> complexGetUser(HttpServletRequest request,@PathVariable("userId")Long userId){
+		List<Map<String, Object>> addressList = new ArrayList<>();
 		for (int i = 1; i < 3; i++) {
 			Map<String, Object> info = MapUtils.newMap();
 			info.put("street", "street" + i);
@@ -212,13 +212,13 @@ public class DemoController extends BaseController{
 			*@Description  
 			*@CreateDate 2015年10月15日下午11:03:06
 	 */
-	@RequestMapping(value = "/test.htm", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public Map<String, Object> uploadImg(HttpServletRequest request) throws Exception {
-		String apiDoc = request.getParameter("apiDoc");
-		String fileName = request.getParameter("fileName");
-		return JsonUtils.createSuccess();
-	}
+//	@RequestMapping(value = "/test.htm", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	@ResponseBody
+//	public Map<String, Object> uploadImg(HttpServletRequest request) throws Exception {
+//		String apiDoc = request.getParameter("apiDoc");
+//		String fileName = request.getParameter("fileName");
+//		return JsonUtils.createSuccess();
+//	}
 }
 
 class SimpleUserInfo {

@@ -50,7 +50,7 @@ public class SuggestController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/add.htm",method = RequestMethod.POST)
-	public @ResponseBody Map add(HttpServletRequest request,String title,String content,SuggestType type){
+	public @ResponseBody Map<String, Object> add(HttpServletRequest request,String title,String content,SuggestType type){
 		ValidateUtils.notNull(title, ErrorCode.SYS_001,"标题不能为空");
 		
 		Long userId = getUserId(request);

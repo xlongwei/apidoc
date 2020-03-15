@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dev.base.constant.AppConstants;
 import com.dev.base.controller.BaseController;
 import com.dev.base.enums.LoginType;
 import com.dev.base.exception.TipException;
@@ -101,7 +100,8 @@ public class RegistController extends BaseController{
 		paramInfo.setRegistIp(getClientIp(request));
 		
 		try {
-			ValidateUtils.isTrue(validCode.equals(WebUtil.getSessionAttr(request, AppConstants.CAPTCHA_REGIST)), ErrorCode.LOGIN_003);
+			//登录页面会同时请求login验证码和regist验证码，登录时总是验证码错误，因此暂且注释掉注册验证码
+//			ValidateUtils.isTrue(validCode.equals(WebUtil.getSessionAttr(request, AppConstants.CAPTCHA_REGIST)), ErrorCode.LOGIN_003);
 			registService.registByEmail(paramInfo);
 		} 
 		catch (ValidateException e) {
@@ -119,7 +119,7 @@ public class RegistController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/sendActiveCode.htm")
-	public @ResponseBody Map sendActiveCode(HttpServletRequest request,String email){
+	public @ResponseBody Map<String, Object> sendActiveCode(HttpServletRequest request,String email){
 		ValidateUtils.isTrue(RegexUtil.isEmail(email), ErrorCode.SYS_001,"邮箱格式错误");
 		
 		registService.sendActiveCode(email);

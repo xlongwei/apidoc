@@ -31,7 +31,7 @@ public interface ProjectMemberDao extends BaseMybatisDao<ProjectMember,Long> {
 			*@Description  
 			*@CreateDate 2015年8月7日下午6:06:44
 	 */
-	List<Map> listByProjId(@Param("projId")Long projId,@Param("role")Role role,
+	List<Map<String, Object>> listByProjId(@Param("projId")Long projId,@Param("role")Role role,
 							@Param("nickName")String nickName,@Param("email")String email,
 							@Param("pager")Pager pager);
 	
@@ -58,7 +58,7 @@ public interface ProjectMemberDao extends BaseMybatisDao<ProjectMember,Long> {
 			*@Description  
 			*@CreateDate 2015年8月29日下午3:11:35
 	 */
-	List<Map> listAuthProjectInfo(Long userId);
+	List<Map<String, Object>> listAuthProjectInfo(Long userId);
 	
 	/**
 	 * 
@@ -74,7 +74,7 @@ public interface ProjectMemberDao extends BaseMybatisDao<ProjectMember,Long> {
 			*@Description  
 			*@CreateDate 2015年9月8日下午11:16:44
 	 */
-	Map getByUserIdAndProjId(@Param("userId")Long userId,@Param("projId")Long projId);
+	Map<String, Object> getByUserIdAndProjId(@Param("userId")Long userId,@Param("projId")Long projId);
 	
 	/**
 	 * 
@@ -106,7 +106,7 @@ public interface ProjectMemberDao extends BaseMybatisDao<ProjectMember,Long> {
 			*@Description  
 			*@CreateDate 2015年11月28日下午5:04:42
 	 */
-	List<Map> listForAdd(@Param("userId")Long userId,@Param("projId")Long projId,@Param("pager")Pager pager);
+	List<Map<String, Object>> listForAdd(@Param("userId")Long userId,@Param("projId")Long projId,@Param("pager")Pager pager);
 	
 	/**
 	 * 

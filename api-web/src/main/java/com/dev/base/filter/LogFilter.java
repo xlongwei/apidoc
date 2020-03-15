@@ -37,7 +37,7 @@ public class LogFilter implements Filter{
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletResponse resp = (HttpServletResponse)response;
-//		resp.addHeader("Access-Control-Allow-Origin", "*");
+		resp.addHeader("Access-Control-Allow-Origin", "*");
 //		resp.addHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, "
 //				+ "If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, "
 //				+ "Content-Type, X-E4M-With");
@@ -46,12 +46,12 @@ public class LogFilter implements Filter{
 		
 		HttpServletRequest req = (HttpServletRequest) request;  
 		String uri = req.getRequestURI();
-		Enumeration<String> names = request.getParameterNames();
+		Enumeration<?> names = request.getParameterNames();
 		String key = "";
 		String value = "";
 		Map<String, String> paramMap = MapUtils.newMap();
 		while (names.hasMoreElements()) {
-			key = names.nextElement();
+			key = String.valueOf(names.nextElement());
 			value = request.getParameter(key);
 			paramMap.put(key, value);
 		}

@@ -148,7 +148,7 @@ public class SysMsgController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/json/del.htm")
-	public @ResponseBody Map delMsg(Long msgId){
+	public @ResponseBody Map<String, Object> delMsg(Long msgId){
 		ValidateUtils.notNull(msgId, ErrorCode.SYS_001,"系统消息id不能为空");
 		sysMsgService.deleteById(msgId);
 		

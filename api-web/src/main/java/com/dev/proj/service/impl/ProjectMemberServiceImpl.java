@@ -49,6 +49,7 @@ import com.dev.user.vo.UserInfo;
 		* <p>CreateDate: 2015年8月5日下午8:38:27</p>
  */
 @Service
+@SuppressWarnings({"unchecked", "unused"})
 public class ProjectMemberServiceImpl extends BaseMybatisServiceImpl<ProjectMember,Long,ProjectMemberDao>
 										implements ProjectMemberService{
 	@Autowired
@@ -69,10 +70,10 @@ public class ProjectMemberServiceImpl extends BaseMybatisServiceImpl<ProjectMemb
 		nickName = getLikeExpr(nickName);
 		email = getLikeExpr(email);
 		
-		List<Map> list = getMybatisDao().listByProjId(projId, role,nickName,email, pager);
+		List<Map<String, Object>> list = getMybatisDao().listByProjId(projId, role,nickName,email, pager);
 		
 		List<ProjectMemberInfo> result = new ArrayList<ProjectMemberInfo>();
-		for (Map info : list) {
+		for (Map<String, Object> info : list) {
 			result.add(parseMemberInfo(info));
 		}
 		
@@ -80,7 +81,7 @@ public class ProjectMemberServiceImpl extends BaseMybatisServiceImpl<ProjectMemb
 	}
 
 	//组装成员信息
-	private ProjectMemberInfo parseMemberInfo(Map info){
+	private ProjectMemberInfo parseMemberInfo(Map<String, Object> info){
 		ProjectMemberInfo result = new ProjectMemberInfo();
 		result.setCreateDate((Date)info.get("createDate"));
 		result.setEmail((String)info.get("email"));
@@ -173,9 +174,9 @@ public class ProjectMemberServiceImpl extends BaseMybatisServiceImpl<ProjectMemb
 	public List<ProjectInfo> listAuthProjectInfo(Long userId) {
 		List<ProjectInfo> result = new ArrayList<ProjectInfo>();
 		
-		List<Map> infoList = getMybatisDao().listAuthProjectInfo(userId);
+		List<Map<String, Object>> infoList = getMybatisDao().listAuthProjectInfo(userId);
 		ProjectInfo projectInfo = null;
-		for (Map info : infoList) {
+		for (Map<String, Object> info : infoList) {
 			projectInfo = new ProjectInfo();
 			projectInfo.setProjId((Long)info.get("projId"));
 			projectInfo.setDocId((Long)info.get("docId"));
@@ -200,7 +201,7 @@ public class ProjectMemberServiceImpl extends BaseMybatisServiceImpl<ProjectMemb
 	@Override
 	public ProjectMemberInfo getByUserIdAndProjId(Long userId, Long projId) {
 		ProjectMemberInfo result = new ProjectMemberInfo();
-		Map info = getMybatisDao().getByUserIdAndProjId(userId, projId);
+		Map<String, Object> info = getMybatisDao().getByUserIdAndProjId(userId, projId);
 		if (!CollectionUtils.isEmpty(info)) {
 			result = parseMemberInfo(info);
 		}
@@ -271,9 +272,9 @@ public class ProjectMemberServiceImpl extends BaseMybatisServiceImpl<ProjectMemb
 	public List<ProjectMemberInfo> listForAdd(Long userId, Long projId, Pager pager) {
 		List<ProjectMemberInfo> result = new ArrayList<ProjectMemberInfo>();
 
-		List<Map> list = getMybatisDao().listForAdd(userId, projId, pager);
+		List<Map<String, Object>> list = getMybatisDao().listForAdd(userId, projId, pager);
 		ProjectMemberInfo memberInfo = null;
-		for (Map info : list) {
+		for (Map<String, Object> info : list) {
 			memberInfo = new ProjectMemberInfo();
 			memberInfo.setNickName((String)info.get("nickName"));
 			memberInfo.setEmail((String)info.get("email"));

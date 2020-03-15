@@ -81,7 +81,7 @@ public class MsgController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/add.htm",method = RequestMethod.POST)
-	public @ResponseBody Map add(HttpServletRequest request,UserMsg userMsg){
+	public @ResponseBody Map<String, Object> add(HttpServletRequest request,UserMsg userMsg){
 		ValidateUtils.notNull(userMsg.getTitle(), ErrorCode.SYS_001,"消息标题不能为空");
 		ValidateUtils.notNull(userMsg.getReceiverId(), ErrorCode.SYS_001,"接收者用户id不能为空");
 		
@@ -99,7 +99,7 @@ public class MsgController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/json/setRead.htm")
-	public @ResponseBody Map setRead(HttpServletRequest request,Long msgId){
+	public @ResponseBody Map<String, Object> setRead(HttpServletRequest request,Long msgId){
 		ValidateUtils.notNull(msgId, ErrorCode.SYS_001,"消息id不能为空");
 		
 		Long userId = getUserId(request);
@@ -117,7 +117,7 @@ public class MsgController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/json/del.htm")
-	public @ResponseBody Map delMsg(HttpServletRequest request,Long msgId){
+	public @ResponseBody Map<String, Object> delMsg(HttpServletRequest request,Long msgId){
 		ValidateUtils.notNull(msgId, ErrorCode.SYS_001,"消息id不能为空");
 		
 		Long userId = getUserId(request);

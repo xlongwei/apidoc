@@ -64,7 +64,7 @@ public class ApiDocController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/update.htm",method = RequestMethod.POST)
-	public @ResponseBody Map update(HttpServletRequest request,ApiDoc apiDoc,Long docId){
+	public @ResponseBody Map<String, Object> update(HttpServletRequest request,ApiDoc apiDoc,Long docId){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		
 		apiDoc.setId(docId);

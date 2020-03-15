@@ -58,7 +58,7 @@ public class ProjController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/add.htm",method = RequestMethod.POST)
-	public @ResponseBody Map add(HttpServletRequest request,Project project){
+	public @ResponseBody Map<String, Object> add(HttpServletRequest request,Project project){
 		ValidateUtils.notNull(project.getCode(), ErrorCode.SYS_001,"项目编码不能为空");
 		
 		Long userId = getUserId(request);
@@ -77,7 +77,7 @@ public class ProjController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/copy.htm",method = RequestMethod.POST)
-	public @ResponseBody Map copy(HttpServletRequest request,Long projId){
+	public @ResponseBody Map<String, Object> copy(HttpServletRequest request,Long projId){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		
 		UserInfo userInfo = getUserInfo(request);
@@ -99,7 +99,7 @@ public class ProjController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/update.htm",method = RequestMethod.POST)
-	public @ResponseBody Map update(HttpServletRequest request,Project project,Long projId){
+	public @ResponseBody Map<String, Object> update(HttpServletRequest request,Project project,Long projId){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		
 		project.setId(projId);
@@ -115,7 +115,7 @@ public class ProjController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/del.htm")
-	public @ResponseBody Map update(HttpServletRequest request,Long projId){
+	public @ResponseBody Map<String, Object> update(HttpServletRequest request,Long projId){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		
 		projectService.deleteById(projId);
@@ -130,7 +130,7 @@ public class ProjController extends BaseController{
 			*@CreateDate 2015年8月22日下午2:07:39
 	 */
 	@RequestMapping("/json/quit.htm")
-	public @ResponseBody Map quit(HttpServletRequest request,Long projId){
+	public @ResponseBody Map<String, Object> quit(HttpServletRequest request,Long projId){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 
 		Long userId = getUserId(request);
@@ -194,6 +194,7 @@ public class ProjController extends BaseController{
 			*@Description  
 			*@CreateDate 2015年10月15日下午11:03:06
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/upload.htm", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public Map<String, Object> upload(HttpServletRequest request,@RequestParam(value = "file") MultipartFile file) {

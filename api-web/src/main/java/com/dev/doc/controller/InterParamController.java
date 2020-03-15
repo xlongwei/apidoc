@@ -42,7 +42,7 @@ public class InterParamController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/json/list.htm")
-	public @ResponseBody Map list(HttpServletRequest request,Long docId,Long interId){
+	public @ResponseBody Map<String, Object> list(HttpServletRequest request,Long docId,Long interId){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		ValidateUtils.notNull(interId, ErrorCode.SYS_001,"接口id不能为空");
 		
@@ -57,7 +57,7 @@ public class InterParamController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping(value = "/json/add.htm",method = RequestMethod.POST)
-	public @ResponseBody Map add(HttpServletRequest request,Long docId,Long interId,String reqParam){
+	public @ResponseBody Map<String, Object> add(HttpServletRequest request,Long docId,Long interId,String reqParam){
 		ValidateUtils.notNull(interId, ErrorCode.SYS_001,"接口id不能为空");
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		

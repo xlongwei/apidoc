@@ -103,7 +103,7 @@ public class AopCache implements ApplicationContextAware {
 	    			return ret;
 	    		}else {
 	    			cacheManager.getCache(className).clear();
-	    			log.info("evice cache {}", className);
+	    			log.info("evict cache {}", className);
 	    			return point.proceed();
 	    		}
     		}

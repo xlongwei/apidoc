@@ -120,7 +120,7 @@ public class AdminController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/user/json/update.htm",method = RequestMethod.POST)
-	public @ResponseBody Map updateUser(HttpServletRequest request,UserInfo userInfo,Long userId){
+	public @ResponseBody Map<String, Object> updateUser(HttpServletRequest request,UserInfo userInfo,Long userId){
 		ValidateUtils.notNull(userId, ErrorCode.SYS_001,"用户id不能为空");
 		
 		userInfo.setUserId(userId);
@@ -136,7 +136,7 @@ public class AdminController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/user/json/info.htm")
-	public @ResponseBody Map getUserInfo(Long userId){
+	public @ResponseBody Map<String, Object> getUserInfo(Long userId){
 		ValidateUtils.notNull(userId, ErrorCode.SYS_001,"用户id不能为空");
 		UserInfo userInfo = userDetailService.getDetailByUserId(userId);
 		return JsonUtils.createSuccess(userInfo);
@@ -180,7 +180,7 @@ public class AdminController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/suggest/json/deal.htm")
-	public @ResponseBody Map dealSuggest(Long suggestId){
+	public @ResponseBody Map<String, Object> dealSuggest(Long suggestId){
 		ValidateUtils.notNull(suggestId, ErrorCode.SYS_001,"意见建议id不能为空");
 		suggestService.dealSuggest(suggestId);
 		
@@ -194,7 +194,7 @@ public class AdminController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/suggest/json/del.htm")
-	public @ResponseBody Map delSuggest(Long suggestId){
+	public @ResponseBody Map<String, Object> delSuggest(Long suggestId){
 		ValidateUtils.notNull(suggestId, ErrorCode.SYS_001,"意见建议id不能为空");
 		suggestService.deleteById(suggestId);
 		
@@ -224,7 +224,7 @@ public class AdminController extends BaseController{
 			*@CreateDate 2015年8月22日下午2:07:39
 	 */
 	@RequestMapping("/suggest/json/reply.htm")
-	public @ResponseBody Map replySuggest(HttpServletRequest request,Long suggestId,String toEmail,String title,String content){
+	public @ResponseBody Map<String, Object> replySuggest(HttpServletRequest request,Long suggestId,String toEmail,String title,String content){
 		ValidateUtils.notNull(suggestId, ErrorCode.SYS_001,"意见建议id不能为空");
 		ValidateUtils.notNull(toEmail, ErrorCode.SYS_001,"收件人不能为空");
 		ValidateUtils.notNull(title, ErrorCode.SYS_001,"邮件标题不能为空");

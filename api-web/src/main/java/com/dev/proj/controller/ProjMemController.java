@@ -78,7 +78,7 @@ public class ProjMemController extends BaseController{
 			*@CreateDate 2015年8月22日下午2:07:39
 	 */
 	@RequestMapping("/json/invite.htm")
-	public @ResponseBody Map invite(HttpServletRequest request,Long projId,String invitedEmail){
+	public @ResponseBody Map<String, Object> invite(HttpServletRequest request,Long projId,String invitedEmail){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		ValidateUtils.notNull(RegexUtil.isEmail(invitedEmail), ErrorCode.SYS_001,"邮箱格式错误");
 		
@@ -116,7 +116,7 @@ public class ProjMemController extends BaseController{
 			*@CreateDate 2015年11月28日下午5:30:24
 	 */
 	@RequestMapping("/json/add.htm")
-	public @ResponseBody Map add(HttpServletRequest request,Long projId,Long userId,String role){
+	public @ResponseBody Map<String, Object> add(HttpServletRequest request,Long projId,Long userId,String role){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		ValidateUtils.notNull(userId, ErrorCode.SYS_001,"用户id不能为空");
 		
@@ -134,7 +134,7 @@ public class ProjMemController extends BaseController{
 			*@CreateDate 2015年8月22日下午2:07:39
 	 */
 	@RequestMapping("/json/del.htm")
-	public @ResponseBody Map delete(HttpServletRequest request,Long projId,Long userId){
+	public @ResponseBody Map<String, Object> delete(HttpServletRequest request,Long projId,Long userId){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		ValidateUtils.notNull(userId, ErrorCode.SYS_001,"用户id不能为空");
 		
@@ -151,7 +151,7 @@ public class ProjMemController extends BaseController{
 			*@CreateDate 2015年8月22日下午2:07:39
 	 */
 	@RequestMapping("/json/update.htm")
-	public @ResponseBody Map invite(HttpServletRequest request,Long projId,Long userId,Role role){
+	public @ResponseBody Map<String, Object> invite(HttpServletRequest request,Long projId,Long userId,Role role){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		ValidateUtils.notNull(userId, ErrorCode.SYS_001,"用户id不能为空");
 		
@@ -169,7 +169,7 @@ public class ProjMemController extends BaseController{
 
 	 */
 	@RequestMapping("/json/info.htm")
-	public @ResponseBody Map getInfo(Long projId,Long userId){
+	public @ResponseBody Map<String, Object> getInfo(Long projId,Long userId){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		ValidateUtils.notNull(userId, ErrorCode.SYS_001,"用户id不能为空");
 		
@@ -196,7 +196,7 @@ public class ProjMemController extends BaseController{
 			*@CreateDate 2015年8月22日下午2:07:39
 	 */
 	@RequestMapping("/json/sendNotice.htm")
-	public @ResponseBody Map sendNotice(HttpServletRequest request,Long projId,String title,
+	public @ResponseBody Map<String, Object> sendNotice(HttpServletRequest request,Long projId,String title,
 											String content,String receiverRole,String otherReceivers,
 											boolean addLog){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");

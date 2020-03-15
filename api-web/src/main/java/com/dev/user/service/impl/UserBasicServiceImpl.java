@@ -93,6 +93,7 @@ public class UserBasicServiceImpl extends BaseMybatisServiceImpl<UserBasic,Long,
 		MailUtil.send(email, MailConstants.SUB_EMAIL_UPDATE, MailConstants.TMPL_EMAIL_UPDATE, model);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void updateEmail(String code) {
 		Map<String, Object> updateInfo = JsonUtils.toObject(CryptUtil.decryptAES(code,AppConstants.DEFAULT_SECRET_KEY), HashMap.class);

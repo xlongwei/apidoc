@@ -2,7 +2,6 @@
 <configuration scan="false" scanPeriod="5 seconds" debug="false">
     <contextName>apidoc</contextName>
     <property name="logfile" value="logs/apidoc.log"/>
-    <property name="logLevel" value="DEBUG"/>
     <property name="logPattern" value="%cn %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger:%L %msg%n"/>
     
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -46,9 +45,11 @@
 	<logger name="jdbc.resultset" level="${log4jdbc.resultset.level}"/>
 	<logger name="jdbc.audit" level="${log4jdbc.audit.level}"/>
 	<logger name="jdbc.sqlonly" level="${log4jdbc.sqlonly.level}"/>
+	<logger name="com.dev.base.filter.AopCache" level="${com.dev.base.filter.AopCache.level}"/>
+	<logger name="com.dev.base.filter.AopLogger" level="${com.dev.base.filter.AopLogger.level}"/>
 	<logger name="jdbc.sqltiming" level="warn"/>
 
-	<root level="${logLevel}">
+	<root level="${root.logger.level}">
 		<!-- <appender-ref ref="ASYNC_SOCKET" /> -->
 		<!-- <appender-ref ref="ASYNC_FILE" /> -->
 		<appender-ref ref="STDOUT" />

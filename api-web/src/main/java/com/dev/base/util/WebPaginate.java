@@ -14,6 +14,7 @@ import com.dev.base.constant.CfgConstants;
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2015年8月6日下午6:35:28</p>
  */
+@SuppressWarnings({"unchecked", "unused"})
 public class WebPaginate {
 	/** 分页页码参数名称*/
 	private static String KEY_PAGE_NUMBER = "pageNumber";

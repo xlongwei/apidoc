@@ -66,7 +66,7 @@ public class ModuleController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/json/list.htm")
-	public @ResponseBody Map listJson(HttpServletRequest request,Long docId){
+	public @ResponseBody Map<String, Object> listJson(HttpServletRequest request,Long docId){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		
 		List<Module> list = moduleService.listAllByDocId(docId);
@@ -86,7 +86,7 @@ public class ModuleController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/add.htm",method = RequestMethod.POST)
-	public @ResponseBody Map add(HttpServletRequest request,Module module){
+	public @ResponseBody Map<String, Object> add(HttpServletRequest request,Module module){
 		ValidateUtils.notNull(module.getDocId(), ErrorCode.SYS_001,"文档id不能为空");
 		ValidateUtils.notNull(module.getName(), ErrorCode.SYS_001,"模块名称不能为空");
 		
@@ -102,7 +102,7 @@ public class ModuleController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/update.htm",method = RequestMethod.POST)
-	public @ResponseBody Map update(HttpServletRequest request,Module module,Long moduleId){
+	public @ResponseBody Map<String, Object> update(HttpServletRequest request,Module module,Long moduleId){
 		ValidateUtils.notNull(module.getDocId(), ErrorCode.SYS_001,"文档id不能为空");
 		ValidateUtils.notNull(moduleId, ErrorCode.SYS_001,"模块id不能为空");
 		ValidateUtils.notNull(module.getName(), ErrorCode.SYS_001,"模块名称不能为空");
@@ -120,7 +120,7 @@ public class ModuleController extends BaseController{
 			*@CreateDate 2015年8月6日下午5:14:18
 	 */
 	@RequestMapping(value = "/json/del.htm")
-	public @ResponseBody Map del(HttpServletRequest request,Long docId,Long moduleId){
+	public @ResponseBody Map<String, Object> del(HttpServletRequest request,Long docId,Long moduleId){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		ValidateUtils.notNull(moduleId, ErrorCode.SYS_001,"模块id不能为空");
 		
@@ -136,7 +136,7 @@ public class ModuleController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/json/info.htm")
-	public @ResponseBody Map getInfo(Long moduleId){
+	public @ResponseBody Map<String, Object> getInfo(Long moduleId){
 		ValidateUtils.notNull(moduleId, ErrorCode.SYS_001,"模块id不能为空");
 		Module module = moduleService.getById(moduleId);
 		

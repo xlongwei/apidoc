@@ -9,6 +9,7 @@ import java.util.List;
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2015年8月6日下午2:29:20</p>
  */
+@SuppressWarnings({"rawtypes", "unused"})
 public class Pager implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +32,7 @@ public class Pager implements Serializable{
     private int start;
     
     /** 记录列表*/
-    private List list;
+	private List list;
 
     public Pager(){
     	

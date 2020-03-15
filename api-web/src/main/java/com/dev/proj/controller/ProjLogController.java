@@ -16,9 +16,7 @@ import com.dev.base.exception.code.ErrorCode;
 import com.dev.base.json.JsonUtils;
 import com.dev.base.util.Pager;
 import com.dev.base.util.WebPaginate;
-import com.dev.base.utils.DateUtil;
 import com.dev.base.utils.ValidateUtils;
-import com.dev.proj.entity.ProjectLog;
 import com.dev.proj.service.ProjectLogService;
 import com.dev.proj.vo.ProjectLogInfo;
 
@@ -65,7 +63,7 @@ public class ProjLogController extends BaseController{
 			*@CreateDate 2015年11月28日下午5:30:24
 	 */
 	@RequestMapping("/json/add.htm")
-	public @ResponseBody Map add(HttpServletRequest request,Long projId,String title,String content){
+	public @ResponseBody Map<String, Object> add(HttpServletRequest request,Long projId,String title,String content){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		ValidateUtils.notNull(title, ErrorCode.SYS_001,"日志标题不能为空");
 		
@@ -82,7 +80,7 @@ public class ProjLogController extends BaseController{
 			*@CreateDate 2015年8月22日下午2:07:39
 	 */
 	@RequestMapping("/json/del.htm")
-	public @ResponseBody Map delete(HttpServletRequest request,Long projId,Long logId){
+	public @ResponseBody Map<String, Object> delete(HttpServletRequest request,Long projId,Long logId){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		ValidateUtils.notNull(logId, ErrorCode.SYS_001,"日志id不能为空");
 		

@@ -44,7 +44,7 @@ public class BaseExceptionHandler implements HandlerExceptionResolver {
 		result.setViewName(viewName);
 		result.addAllObjects(errorInfo);
 		
-		ex.printStackTrace();
+//		ex.printStackTrace();
 		
 		return result;
 	}

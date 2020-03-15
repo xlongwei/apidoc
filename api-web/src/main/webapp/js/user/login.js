@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
 	//初始化选项卡
 	initTab();
 	
