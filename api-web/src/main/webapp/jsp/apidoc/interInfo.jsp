@@ -79,6 +79,9 @@
                             <li class="">
                             	<a id="mockInfoTab" href="#mockInfo" data-toggle="tab">接口模拟</a>
                            	</li>
+                            <li class="">
+                            	<a id="caseInfoTab" href="#caseInfo" data-toggle="tab">测试案例</a>
+                           	</li>
                      	</ul>
                             
                       	<div class="tab-content">
@@ -96,6 +99,10 @@
                             
                            	<div class="tab-pane fade" id="mockInfo">
                             	<jsp:include page="/jsp/apidoc/inter/mockInfo.jsp"/>
+                           	</div>
+                            
+                           	<div class="tab-pane fade" id="caseInfo">
+                            	<jsp:include page="/jsp/apidoc/inter/caseInfo.jsp"/>
                            	</div>
                     	</div>
                 	</div>
@@ -116,6 +123,7 @@
     <script type="text/javascript" src="js/apidoc/inter/reqInfo.js?version=1.0.7"></script>
     <script type="text/javascript" src="js/apidoc/inter/respInfo.js?version=1.0.10"></script>
     <script type="text/javascript" src="js/apidoc/inter/mockInfo.js?version=1.0.1"></script>
+    <script type="text/javascript" src="js/apidoc/inter/caseInfo.js?version=1.0.1"></script>
     <script type="text/javascript" src="js/apidoc/interInfo.js?version=1.0.2"></script>
 	<!-- END PAGE LEVEL  SCRIPTS -->
 </body>

@@ -73,7 +73,10 @@ public class MockController extends BaseController {
 	public Object mock(HttpServletRequest request, HttpServletResponse response) {
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		String requestURI = request.getRequestURI(), referer = request.getHeader("referer");
-		String path = requestURI.substring(requestURI.indexOf(MOCK)+MOCK.length()), docId = UriComponentsBuilder.fromUriString(referer).build().getQueryParams().getFirst("doc");
+		String path = requestURI.substring(requestURI.indexOf(MOCK)+MOCK.length()), docId = request.getParameter("docId");
+		if(StringUtils.isBlank(docId)) {
+			docId = UriComponentsBuilder.fromUriString(referer).build().getQueryParams().getFirst("doc");
+		}
 		Inter inter = interService.getByMethodPath(docId, request.getMethod(), path);
 		if(inter!=null) {
 			Map<String, String> params = params(request, inter);

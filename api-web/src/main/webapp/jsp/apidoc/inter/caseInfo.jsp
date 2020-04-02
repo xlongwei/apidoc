@@ -2,8 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <div class="panel panel-default margin-top">
 	<div class="panel-heading">
-		<div class="text-muted bootstrap-admin-box-title">接口模拟</div>
+		<div class="text-muted bootstrap-admin-box-title">测试案例</div>
 		<div class="btn-group pull-right">
+			<a href="javascript:void(0);" class="text-muted" onclick="$('.oper-test').trigger('click')">测试</a>
+            <input type="checkbox" id="mock" title="mock" checked="checked">
      		<a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="排序权重值越小排的越前面。建议权重值间隔50，方便后续调整。" class="text-muted">
             	<i class="fa fa-info-circle"></i> 排序说明
             </a>
@@ -14,7 +16,7 @@
 		<!-- TABLE SECTION -->
 		<div class="row">
 			<div class="col-lg-12">
-				<table id="mockInfoTable" class="table table-hover table-bordered">
+				<table id="caseInfoTable" class="table table-hover table-bordered">
 					<thead>
                     	<tr>
                         	<th class="col-lg-1">#</th>
@@ -33,7 +35,7 @@
                     
 		<div class="row">
 			<div class="col-md-6" style="margin-top: 20px;">
-				<button id="addMockBtn" type="button" class="btn btn-warning" data-toggle="modal" data-target="#mockSchemaFormModal" data-form="mockCustSchemaForm">
+				<button id="addCaseBtn" type="button" class="btn btn-warning" data-toggle="modal" data-target="#caseSchemaFormModal" data-form="caseCustSchemaForm">
 					<i class="fa fa-plus"></i> 新增
 				</button>
 			</div>
@@ -43,19 +45,19 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<div class="modal fade" id="mockSchemaFormModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal fade" id="caseSchemaFormModal" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">接口模拟</h4>
+						<h4 class="modal-title">测试案例</h4>
 					</div>
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<form id="mockCustSchemaForm" role="form" class="form-horizontal">
+								<form id="caseCustSchemaForm" role="form" class="form-horizontal">
 									<input id="operTypeId" type="hidden" value="">
-									<input id="mockId" name="mockId" type="hidden" value="">
+									<input id="caseId" name="caseId" type="hidden" value="">
 									<input name="docId" type="hidden" value="${param.docId}">
 									<input name="interId" type="hidden" value="${param.interId}">
 									
@@ -97,12 +99,12 @@
 						<div class="row">
 							<div class="col-xs-3 text-left">
 							</div>
-							<div class="col-xs-6 text-left">
-								var res={};
-								<br>JSON.stringify(res)
+							<div class="col-xs-6 text-left" style="color:red">
+								assert(!!res,'res不能为空');
+								<br>expect(1,res.userId);
 							</div>
 							<div class="col-xs-3 text-right">
-								<button id="saveMockBtn" type="button" class="btn btn-success">保存</button>
+								<button id="saveCaseBtn" type="button" class="btn btn-success">保存</button>
 								<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 							</div>
 						</div>
@@ -113,7 +115,7 @@
 	</div>
 </div>
 <!-- END MODAL SECTION -->
-<script id="mockInfoTmpl" type="text/html">  
+<script id="caseInfoTmpl" type="text/html">  
 	<tr>
     	<td></td>
 		<td>
@@ -126,12 +128,16 @@
 			<textarea rows="2" class="form-control" name="respSchema" readonly></textarea>
 		</td>	
     	<td class="actions">
-			<button type="button" class="btn btn-sm btn-primary oper-update" data-toggle="modal" data-target="#mockSchemaFormModal">
+			<button type="button" class="btn btn-sm btn-primary oper-update" data-toggle="modal" data-target="#caseSchemaFormModal">
             	<i class="fa fa-pencil"></i> 编辑
 			</button>
 
 			<button type="button" class="btn btn-sm btn-danger oper-del">
 				<i class="fa fa-trash"></i>删除
+			</button>
+
+			<button type="button" class="btn btn-sm oper-test" style="margin-top:8px">
+				<i class="fa"></i>测试
 			</button>
 		</td>
     </tr>

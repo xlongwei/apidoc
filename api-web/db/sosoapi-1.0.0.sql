@@ -163,7 +163,7 @@ INSERT INTO `t_inter_resp` VALUES ('10', '2016-10-18 17:00:01', '2016-10-18 17:0
 INSERT INTO `t_inter_resp` VALUES ('11', '2016-10-18 17:00:02', '2016-10-18 17:00:02', '1', '8', 'default', null, '默认响应', 'sys_ref', '1', '0', '0', null, null, '0');
 INSERT INTO `t_inter_resp` VALUES ('12', '2019-11-12 10:58:38', '2019-11-12 11:13:00', '1', '10', 'default', NULL, '默认响应', 'sys_object', '1', '0', '0', '[{\"code\":\"totalCount\",\"description\":\"总条数\",\"type\":\"sys_integer_int32\",\"refSchemaId\":\"1\",\"nodeId\":\"13\",\"parentId\":null},{\"code\":\"list\",\"description\":\"分页数据\",\"type\":\"sys_array\",\"refSchemaId\":\"1\",\"nodeId\":\"14\",\"parentId\":null},{\"code\":\"userId\",\"description\":\"用户ID\",\"type\":\"sys_integer_int64\",\"refSchemaId\":\"1\",\"nodeId\":\"1410\",\"parentId\":\"14\"},{\"code\":\"nickName\",\"description\":\"用户昵称\",\"type\":\"sys_string\",\"refSchemaId\":\"1\",\"nodeId\":\"1411\",\"parentId\":\"14\"},{\"code\":\"email\",\"description\":\"用户邮箱\",\"type\":\"sys_string\",\"refSchemaId\":\"1\",\"nodeId\":\"1412\",\"parentId\":\"14\"}]', null, '0');
 
-
+DROP TABLE IF EXISTS `t_inter_mock`;
 CREATE TABLE `t_inter_mock` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `create_date` datetime DEFAULT NULL COMMENT '创建时间',
@@ -181,6 +181,27 @@ CREATE TABLE `t_inter_mock` (
 
 INSERT INTO `t_inter_mock` VALUES ('1', '2019-11-12 10:26:39', '2019-11-12 10:40:04', '1', '8', '更新用户', '{\"userId\":1}', 'var obj={};\nobj.nickName=req.nickName;\nobj.userId=req.userId;\nobj.msg=\'更新成功\';\nJSON.stringify(obj);', '0');
 INSERT INTO `t_inter_mock` VALUES ('2', '2019-11-12 11:23:18', '2019-11-12 11:34:36', '1', '10', '', NULL, 'obj={};\r\nobj.totalCount=123;\r\nobj.pageNumber=req.pageNumber<=0?1:req.pageNumber;\r\nobj.pageSize=Number(req.pageSize<=0?10:req.pageSize);\r\nobj.list=[];\r\nstart=(obj.pageNumber-1)*obj.pageSize;\r\nend=start+obj.pageSize;\r\nif(end>obj.totalCount)end=obj.totalCount;\r\nfor(i=start;i<end;i++){\r\nitem={};\r\nitem.userId=i;\r\nitem.nickName=\'nick-\'+i;\r\nitem.email=\'email-\'+i;\r\nobj.list.push(item);\r\n}\r\nJSON.stringify(obj);', '0');
+INSERT INTO `t_inter_mock` VALUES ('3', '2020-04-01 16:46:59', '2020-04-01 23:32:03', '1', '7', 'test', '{\"userId\":\"1\"}', '{\"age\":1}', '0');
+INSERT INTO `t_inter_mock` VALUES ('4', '2020-04-01 17:11:41', '2020-04-01 23:32:30', '1', '7', 'test2', '{\"userId\":\"2\"}', 'var res={};\nres.age=req.userId;\nJSON.stringify(res);', '0');
+
+DROP TABLE IF EXISTS `t_inter_case`;
+CREATE TABLE `t_inter_case` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `create_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_date` datetime DEFAULT NULL COMMENT '修改时间',
+  `doc_id` bigint(20) DEFAULT NULL,
+  `inter_id` bigint(20) DEFAULT NULL COMMENT '接口id',
+  `name` varchar(128) DEFAULT NULL,
+  `req_schema` text COMMENT '自定义结构体',
+  `resp_schema` text,
+  `sort_weight` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `idx_inter_id` (`inter_id`) USING BTREE,
+  KEY `idx_doc_id` (`doc_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='测试案例';
+
+INSERT INTO `t_inter_case` VALUES ('1', '2020-04-01 16:49:28', '2020-04-01 23:33:54', '1', '7', 'case1', '{\"userId\":\"1\"}', 'assert(!!res,\'res不能为空\');\nexpect(1,res.age);', '0');
+INSERT INTO `t_inter_case` VALUES ('2', '2020-04-01 23:33:15', '2020-04-01 23:33:15', '1', '7', 'case2', '{\"userId\":2}', 'assert(!!res,\'res不能为空\');\nexpect(\'2\',res.age);', '0');
 
 -- ----------------------------
 -- Table structure for t_module

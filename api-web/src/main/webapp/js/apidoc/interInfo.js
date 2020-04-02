@@ -23,4 +23,8 @@ function initTabBtn(){
 	$("#mockInfoTab").click(function(){
 		loadMockInfo();
 	});
+	
+	$("#caseInfoTab").click(function(){
+		loadCaseInfo();
+	});
 }

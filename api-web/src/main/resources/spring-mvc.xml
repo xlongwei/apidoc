@@ -70,6 +70,7 @@
 	<mvc:resources mapping="/js/**" location="/js/" cache-period="86400"/>
 	<mvc:resources mapping="/plugin/**" location="/plugin/" cache-period="604800"/>
 	<mvc:resources mapping="/swagger/**" location="/swagger/" cache-period="604800"/>
+	<mvc:resources mapping="/favicon.ico" location="/" cache-period="604800"/>
 	
     <!-- 上传图片控制 -->
 	<bean id="multipartResolver"  
