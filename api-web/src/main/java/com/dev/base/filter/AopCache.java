@@ -87,13 +87,13 @@ public class AopCache implements ApplicationContextAware {
 	    			Cache cache = cacheManager.getCache(className);
 	    			Class<?> methodReturn = returnTypes.get(typeKey);
 	    			if(methodReturn!=null && (ret=cachedObject(cache, cacheKey, methodReturn))!=null) {
-    					log.info("get from cache {}:{}", className, cacheKey);
+    					log.info("cache get {}:{}", className, cacheKey);
     					return ret;
 	    			}
 	    			if(ret==null) {
 	    				ret = point.proceed();
 	    				if(ret!=null) {
-	    					log.info("put to cache {}:{}", className, cacheKey);
+	    					log.info("cache key {}:{}", className, cacheKey);
 	    					cache.put(cacheKey, ret);
 	    					if(methodReturn==null) {
 	    						returnTypes.put(typeKey, ret.getClass());
@@ -103,7 +103,7 @@ public class AopCache implements ApplicationContextAware {
 	    			return ret;
 	    		}else {
 	    			cacheManager.getCache(className).clear();
-	    			log.info("evict cache {}", className);
+	    			log.info("cache clear {}", className);
 	    			return point.proceed();
 	    		}
     		}
@@ -185,13 +185,13 @@ public class AopCache implements ApplicationContextAware {
 		    			jedis.ping();
 		    			jedis.close();
 		    			cacheManager = new RedisCacheManager(jedisPool, expire);
-		    			log.info("using redis cache");
+		    			log.warn("using redis cache");
 	    			}
 	    		}catch(Exception e) {
 	    			log.warn(e.getMessage());
 	    		}
 	    		if(cacheManager==null) {
-	    			log.info("using guava cache");
+	    			log.warn("using guava cache");
 	    			GuavaCacheManager guavaCacheManager = new GuavaCacheManager();
 	    			CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
 	    			cacheBuilder.maximumSize(NumberUtils.toInt(CfgConstants.getProperty("guava.maximunSize", "1000")))
@@ -201,10 +201,10 @@ public class AopCache implements ApplicationContextAware {
 	    			cacheManager = guavaCacheManager;
 	    		}
     		}else {
-    			log.info("cache not enabled");
+    			log.warn("cache not enabled");
     		}
     	}else {
-    		log.info("cache manager: {}", cacheManager);
+    		log.warn("cache manager: {}", cacheManager);
     	}
     	cacheStatus = cacheManager==null ? 0 : 1;
     }

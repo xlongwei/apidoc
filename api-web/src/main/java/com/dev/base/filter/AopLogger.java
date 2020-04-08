@@ -2,6 +2,8 @@ package com.dev.base.filter;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,20 +15,21 @@ import org.springframework.stereotype.Component;
 
 import com.dev.base.json.JsonUtils;
 import com.dev.base.util.Pager;
+import com.dev.base.util.WebUtil;
 import com.dev.base.utils.DateUtil;
 
 /**
- * 使用AOP记日志并捕获异常
+ * 使用AOP记日志
  */
 @Aspect
 @Component
 @Order(100)
 public class AopLogger {
 	private static Logger log = LoggerFactory.getLogger(AopLogger.class);
+	
     @Pointcut("within(com.dev.base.mybatis.service.BaseMybatisService+)")
     public void logService(){}
     
-    /** 记录自定义service接口日志，如果要记录CoreService所有接口日志请仿照logMapper切面 */
     @Around("logService()")
     public Object service(ProceedingJoinPoint point) throws Throwable {
     	log.info("call {}.{}{}", point.getTarget().getClass().getSimpleName(), point.getSignature().getName(), toString(point.getArgs()));
@@ -39,6 +42,23 @@ public class AopLogger {
     	return result;
     }
     
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    public void logController(){}
+    
+    @Around("logController()")
+    public Object controller(ProceedingJoinPoint point) throws Throwable {
+    	HttpServletRequest httpServletRequest = WebUtil.getHttpServletRequest();
+    	log.info("{} {}", httpServletRequest.getMethod(), httpServletRequest.getRequestURI());
+    	log.info("{}.{}{}", point.getTarget().getClass().getSimpleName(), point.getSignature().getName(), toString(point.getArgs()));
+    	
+    	long beginTime = System.currentTimeMillis();
+    	Object result = point.proceed();
+    	long time = System.currentTimeMillis() - beginTime;
+    	
+    	log.info("END({}) {}", time, JsonUtils.toJson(result));
+    	return result;
+    }
+    
     public static String toString(Object[] a) {
     	if(a==null || a.length==0) {
     		return "()";
@@ -48,8 +68,9 @@ public class AopLogger {
     	b.append('(');
     	for (int i = 0; ; i++) {
             b.append(toString(a[i]));
-            if (i == iMax)
+            if (i == iMax) {
                 return b.append(')').toString();
+            }
             b.append(", ");
         }
     }
@@ -63,7 +84,14 @@ public class AopLogger {
     		Pager pager = (Pager)obj;
     		return new StringBuilder("pager.").append(pager.getPageNumber()).append(',').append(pager.getPageSize()).toString();
     	}else {
-    		return obj.toString();
+    		String toString = obj.toString();
+    		if(toString.contains("RequestFacade")) {
+    			return "request";
+    		}else if(toString.contains("ResponseFacade")) {
+    			return "response";
+    		}else {
+    			return toString;
+    		}
     	}
     }
 }

@@ -35,7 +35,7 @@
 	            	<!-- <li class="menuItem" data-menu="contact"><a href="#contact">联系我们</a></li> -->
 	            	<li class="menuItem" data-menu="faq"><a href="pass/faq/home.htm">常见问题</a></li>
 	            	<li class="menuItem" data-menu="quickStart"><a href="pass/faq/editWizard.htm">快速上手</a></li>
-	            	<li class="menuItem" data-menu="demo"><a href="pass/apidoc/demo.htm">Demo</a></li>
+	            	<!-- <li class="menuItem" data-menu="demo"><a href="pass/apidoc/demo.htm">Demo</a></li> -->
 	          	</ul>
 	          	<div class="navbar-right">
 					<c:choose>

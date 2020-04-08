@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -230,7 +229,9 @@ public class WebUtil {
 			
 			userInfo = loginService.loginByToken(loginParamInfo);
 			//保存登陆用户信息
-			WebUtil.setSessionAttr(request, AppConstants.SESSION_KEY_USER, userInfo);
+			if(userInfo != null) {
+				WebUtil.setSessionAttr(request, AppConstants.SESSION_KEY_USER, userInfo);
+			}
 		}
 		
 		return userInfo;
@@ -240,15 +241,8 @@ public class WebUtil {
 	 * proxy_set_header X-Forwarded-Proto https;
 	 */
 	public static ReqScheme getUrlScheme() {
-		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-		if(requestAttributes!=null && requestAttributes instanceof ServletRequestAttributes) {
-			ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes)requestAttributes;
-			HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
-			if("https".equalsIgnoreCase(httpServletRequest.getHeader("X-Forwarded-Proto"))){
-				return ReqScheme.HTTPS;
-			}
-		}
-		return ReqScheme.HTTP;
+		HttpServletRequest httpServletRequest = getHttpServletRequest();
+		return "https".equalsIgnoreCase(httpServletRequest.getHeader("X-Forwarded-Proto")) ? ReqScheme.HTTPS : ReqScheme.HTTP;
 	}
 	
 	/** ApiDoc.scheme=http,https */
@@ -260,5 +254,9 @@ public class WebUtil {
 			scheme = p==-1 ? scheme : scheme.substring(0, p);
 			return ReqScheme.valueOf(scheme.toUpperCase());
 		}
+	}
+	
+	public static HttpServletRequest getHttpServletRequest() {
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 	}
 }

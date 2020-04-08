@@ -97,7 +97,7 @@
 						<div class="row">
 							<div class="col-xs-3 text-left">
 							</div>
-							<div class="col-xs-6 text-left">
+							<div class="col-xs-6 text-left" style="color:red">
 								var res={};
 								<br>JSON.stringify(res)
 							</div>

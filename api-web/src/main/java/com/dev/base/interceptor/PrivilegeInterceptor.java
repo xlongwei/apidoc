@@ -4,8 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -29,7 +29,7 @@ import com.dev.user.vo.UserInfo;
 		* <p>CreateDate: 2015年7月11日下午2:00:35</p>
  */
 public class PrivilegeInterceptor extends HandlerInterceptorAdapter {
-	private static Logger logger = LogManager.getLogger(PrivilegeInterceptor.class);
+	private static Logger logger = LoggerFactory.getLogger(PrivilegeInterceptor.class);
 
 	@Autowired
 	private LoginService loginService;
@@ -43,7 +43,7 @@ public class PrivilegeInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 		String reqUri = request.getRequestURI();
-		logger.debug(reqUri);
+		//logger.info("{} {}", request.getMethod(), reqUri);
 		UserInfo userInfo = WebUtil.getUserInfo(request,loginService);
 		if (userInfo == null) {
 			throw new SessionTimeoutException();
@@ -61,10 +61,10 @@ public class PrivilegeInterceptor extends HandlerInterceptorAdapter {
 			}
 		}
 		
-		//TO-DO 网站稳定后需要屏蔽该功能
 		//管理员可对api文档预览和下载，方便帮用户排错
-		if (userInfo.getRole() == UserRole.admin 
-				&& handler instanceof HandlerMethod) {
+		if(userInfo.getRole() == UserRole.admin) {
+			return true;
+		}else if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod)handler;
 			String className = handlerMethod.getBean().getClass().getSimpleName();
 			if ("SwaggerController".equals(className)) {

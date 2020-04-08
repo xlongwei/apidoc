@@ -52,13 +52,6 @@ function initAddProj(){
                         message: '项目编码不能为空'
                     }
                 }
-			},
-			name:{
-                validators: {
-                    notEmpty: {
-                        message: '项目名称不能为空'
-                    }
-                }
 			}
 		}
 	});

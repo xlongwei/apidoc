@@ -31,7 +31,7 @@ CREATE TABLE `t_api_doc` (
   `version` varchar(16) DEFAULT NULL COMMENT '版本',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_proj_id` (`proj_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 COMMENT='api文档信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='api文档信息';
 
 -- ----------------------------
 -- Records of t_api_doc
@@ -61,7 +61,7 @@ CREATE TABLE `t_inter` (
   PRIMARY KEY (`id`),
   KEY `idx_doc_id` (`doc_id`) USING BTREE,
   KEY `idx_module_id` (`module_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 COMMENT='接口信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='接口信息';
 
 -- ----------------------------
 -- Records of t_inter
@@ -102,7 +102,7 @@ CREATE TABLE `t_inter_param` (
   PRIMARY KEY (`id`),
   KEY `idx_inter_id` (`inter_id`) USING BTREE,
   KEY `idx_doc_id` (`doc_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 COMMENT='接口参数';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='接口参数';
 
 -- ----------------------------
 -- Records of t_inter_param
@@ -145,7 +145,7 @@ CREATE TABLE `t_inter_resp` (
   PRIMARY KEY (`id`),
   KEY `idx_inter_id` (`inter_id`) USING BTREE,
   KEY `idx_doc_id` (`doc_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 COMMENT='接口响应';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='接口响应';
 
 -- ----------------------------
 -- Records of t_inter_resp
@@ -198,7 +198,7 @@ CREATE TABLE `t_inter_case` (
   PRIMARY KEY (`id`),
   KEY `idx_inter_id` (`inter_id`) USING BTREE,
   KEY `idx_doc_id` (`doc_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='测试案例';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='测试案例';
 
 INSERT INTO `t_inter_case` VALUES ('1', '2020-04-01 16:49:28', '2020-04-01 23:33:54', '1', '7', 'case1', '{\"userId\":\"1\"}', 'assert(!!res,\'res不能为空\');\nexpect(1,res.age);', '0');
 INSERT INTO `t_inter_case` VALUES ('2', '2020-04-01 23:33:15', '2020-04-01 23:33:15', '1', '7', 'case2', '{\"userId\":2}', 'assert(!!res,\'res不能为空\');\nexpect(\'2\',res.age);', '0');
@@ -218,7 +218,7 @@ CREATE TABLE `t_module` (
   `sort_weight` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_doc_id` (`doc_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 COMMENT='模块信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='模块信息';
 
 -- ----------------------------
 -- Records of t_module
@@ -240,7 +240,7 @@ CREATE TABLE `t_proj` (
   `description` text COMMENT '描述',
   `status` varchar(16) DEFAULT NULL COMMENT '项目状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 COMMENT='项目信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='项目信息';
 
 -- ----------------------------
 -- Records of t_proj
@@ -282,7 +282,7 @@ CREATE TABLE `t_proj_mem` (
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`) USING BTREE,
   KEY `idx_proj_id` (`proj_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 COMMENT='项目成员';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='项目成员';
 
 -- ----------------------------
 -- Records of t_proj_mem
@@ -362,7 +362,7 @@ CREATE TABLE `t_resp_schema` (
   PRIMARY KEY (`id`),
   KEY `idx_doc_id` (`doc_id`) USING BTREE,
   KEY `idx_module_id` (`module_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 COMMENT='响应数据结构';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='响应数据结构';
 
 -- ----------------------------
 -- Records of t_resp_schema
@@ -434,7 +434,7 @@ CREATE TABLE `t_user_basic` (
   `register_ip` varchar(32) DEFAULT NULL COMMENT '注册ip',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_email` (`email`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 COMMENT='用户基本信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='用户基本信息';
 
 -- ----------------------------
 -- Records of t_user_basic
@@ -483,7 +483,7 @@ CREATE TABLE `t_user_detail` (
   `university` varchar(32) DEFAULT NULL COMMENT '毕业院校',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 COMMENT='用户详细信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='用户详细信息';
 
 -- ----------------------------
 -- Records of t_user_detail
@@ -502,7 +502,7 @@ CREATE TABLE `t_user_ext` (
   `last_fetch_sys_msg_date` datetime DEFAULT NULL COMMENT '最后获取系统消息时间',
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 COMMENT='用户扩展信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='用户扩展信息';
 
 -- ----------------------------
 -- Records of t_user_ext
@@ -527,7 +527,7 @@ CREATE TABLE `t_user_login` (
   `auth_code` varchar(8) DEFAULT NULL COMMENT '登陆验证码',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 COMMENT='用户登陆信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='用户登陆信息';
 
 -- ----------------------------
 -- Records of t_user_login
@@ -574,7 +574,7 @@ CREATE TABLE `t_user_token` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_token` (`token`) USING BTREE,
   UNIQUE KEY `idx_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 COMMENT='登陆凭证';
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='登陆凭证';
 
 -- ----------------------------
 -- Records of t_user_token

@@ -23,6 +23,7 @@ apidoc接口文档编辑系统，支持可视化编辑、接口模拟响应、�
 3. 支持生成knife4j-front需要的group.json文件，[演示](https://api.xlongwei.com/swagger/doc.html?doc=1)，[模拟](https://api.xlongwei.com/swagger/doc.html?doc=1&mock=true)
 4. 安装writage插件可保存为PDF文档，操作见[文档](https://api.xlongwei.com/doku.php?id=tools:swagger)，示例：knife4j-front/sosoapi_demo.pdf
 5. 日志切换至logback，支持输出日志到[logserver](https://gitee.com/xlongwei/logserver)
+6. 支持测试案例：可以给接口添加多个[测试案例](https://api.xlongwei.com/apidoc/auth/doc/inter/forwardInfo.htm?projId=1&docId=1&interId=7)，支持批量执行测试案例和切换mock功能
 
 ##### 在线演示
 演示地址：
