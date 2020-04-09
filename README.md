@@ -6,6 +6,7 @@ apidoc接口文档编辑系统，支持可视化编辑、接口模拟响应、�
 ##### 特性说明
   - 可视化编辑：支持表单界面编辑接口，不必手动编辑swagger.json
   - 接口模拟响应：支持js动态生成模拟响应，实现前后端分离开发（后台还没有@Controller、@ApiOperation等）
+  - 支持测试案例：支持简单接口的测试案例，使用json配置请求参数，使用assert、expect的js方法验证结果
   - 动态预览及调试：接口修改后预览页面实时刷新，开启模拟时可以直接调试调用
   - 导出PDF文档：预览页面有“离线文档MD”菜单，安装writage插件可以手动导出PDF文档（有书签）
 
@@ -14,7 +15,7 @@ apidoc接口文档编辑系统，支持可视化编辑、接口模拟响应、�
 2. 修改配置：api-web项目里的 filter-dev-master.properties、mail-cfg.properties
 3. 构建项目：mvn install，mvn compile resources:resources war:exploded -f api-web/pom.xml
 4. 部署到tomcat：&lt;Context docBase="apidoc/api-web/target/apidoc" path="/apidoc" reloadable="true"/&gt;
-5. 访问：[http://localhost:8080/apidoc/](http://localhost:8080/apidoc/)，登录：admin@qq.com，密码：123456
+5. 访问：[http://localhost:8080/apidoc/](http://localhost:8080/apidoc/)，登录：admin@qq.com，密码：123456，[apidoc](https://api.xlongwei.com/apidoc/)
 6. 线上部署：sh deploy.sh，mvn compile resources:resources war:exploded -P env-aliyun-master -f api-web/pom.xml
 
 ##### 优化特性

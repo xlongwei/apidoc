@@ -175,6 +175,9 @@ public class AopCache implements ApplicationContextAware {
 	    			JedisPoolConfig poolConfig = new JedisPoolConfig();
 	    			String host = CfgConstants.getProperty("redis.host", null);
 	    			if(StringUtils.isNotBlank(host)) {
+	    				poolConfig.setMinIdle(NumberUtils.toInt(CfgConstants.getProperty("redis.minIdle", "1")));
+	    				poolConfig.setMaxIdle(NumberUtils.toInt(CfgConstants.getProperty("redis.maxIdle", "2")));
+	    				poolConfig.setMaxTotal(NumberUtils.toInt(CfgConstants.getProperty("redis.maxTotal", "4")));
 	    				String password = StringUtils.trimToNull(CfgConstants.getProperty("redis.password", null));
 		    			int port = NumberUtils.toInt(CfgConstants.getProperty("redis.port", "6379"));
 		    			int db = NumberUtils.toInt(CfgConstants.getProperty("redis.db", "0"));

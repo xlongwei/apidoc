@@ -154,12 +154,12 @@ public class LoginController extends BaseController{
 					userToken.setToken("invalid:" + userToken.getToken());
 					userTokenService.update(userToken);
 				}
-				
-				//删除cookie
-				WebUtil.delCookie(response, CfgConstants.COOKIE_TOKEN_NAME);
 			}
 		}
 		request.getSession().invalidate();
+		//删除cookie
+		WebUtil.delCookie(response, CfgConstants.COOKIE_TOKEN_NAME);
+		WebUtil.removeSessionAttr(request, AppConstants.SESSION_KEY_USER);
 		
 		return "redirect:/";
 	}
