@@ -3,6 +3,8 @@ package com.dev.base.filter;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -84,13 +86,14 @@ public class AopLogger {
     		Pager pager = (Pager)obj;
     		return new StringBuilder("pager.").append(pager.getPageNumber()).append(',').append(pager.getPageSize()).toString();
     	}else {
-    		String toString = obj.toString();
-    		if(toString.contains("RequestFacade")) {
+    		if(obj instanceof HttpServletRequest) {
     			return "request";
-    		}else if(toString.contains("ResponseFacade")) {
+    		}else if(obj instanceof HttpServletResponse) {
     			return "response";
+    		}else if(obj instanceof HttpSession){
+    			return "session";
     		}else {
-    			return toString;
+    			return obj.toString();
     		}
     	}
     }
