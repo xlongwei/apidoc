@@ -2,11 +2,17 @@ package com.dev.doc.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +26,9 @@ import com.dev.base.controller.BaseController;
 import com.dev.base.json.JsonUtils;
 import com.dev.base.util.Pager;
 import com.dev.base.utils.MapUtils;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 
 /**
  * 
@@ -206,6 +215,36 @@ public class DemoController extends BaseController{
 		return JsonUtils.createSuccess();
 	}
 	
+	@RequestMapping(value = "/log.htm", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public Object log(HttpServletRequest request, HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		String loggerName = request.getParameter("logger");
+		List<ch.qos.logback.classic.Logger> loggers = null;
+		if(!StringUtils.isBlank(loggerName)) {
+			ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(loggerName);
+			loggers = Arrays.asList(logger);
+			if(!loggers.isEmpty()) {
+				String levelName = request.getParameter("level");
+				Level level = Level.toLevel(levelName, null);
+				log.info("change logger:{} level from:{} to:{}", logger.getName(), logger.getLevel(), level);
+				logger.setLevel(level);
+			}
+		}
+		if(loggers == null) {
+			LoggerContext lc = (LoggerContext)LoggerFactory.getILoggerFactory();
+			loggers = lc.getLoggerList();
+		}
+		log.info("check logger level, loggers:{}", loggers.size());
+		List<Map<String, String>> list = new ArrayList<>();
+		for(ch.qos.logback.classic.Logger logger : loggers) {
+			HashMap<String, String> map = new HashMap<>();
+			map.put("logger", logger.getName());
+			map.put("level", Objects.toString(logger.getLevel(), ""));
+			list.add(map);
+		}
+		return MapUtils.getSingleMap("loggers", list);
+	}
 	/**
 	 * 
 			*@name 
