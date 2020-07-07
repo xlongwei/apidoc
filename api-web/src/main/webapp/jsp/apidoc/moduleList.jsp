@@ -122,7 +122,7 @@
 		                                 				<tr>
 				                                        	<td class="col-lg-1">${status.index + 1}</td>
 				                                        	<%-- <td>${moduleInfo.code}</td> --%>
-				                                         	<td class="col-lg-2">${moduleInfo.name}</td>
+				                                         	<td class="col-lg-2"><a href="auth/doc/inter/list.htm?projId=${param.projId}&docId=${param.docId}&moduleId=${moduleInfo.id}">${moduleInfo.name}</a></td>
 				                                         	<td class="col-lg-3">${moduleInfo.description}</td>
 				                                         	<td class="col-lg-1">${moduleInfo.sortWeight}</td>
 				                                         	<td class="col-lg-2">
