@@ -33,7 +33,7 @@
 		<property name="poolAvailabilityThreshold" value="${bonecp.poolAvailabilityThreshold}" />
 	</bean> -->
 	
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	<!-- <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="url" value="${jdbc.url}?useUnicode=true&amp;characterEncoding=UTF-8" />
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
 		<property name="username" value="${jdbc.username}" />
@@ -58,6 +58,16 @@
 		<property name="poolPreparedStatements" value="false" />
 		<property name="filters" value="stat" />
 		<property name="connectionProperties" value="druid.stat.slowSqlMillis=200;druid.stat.logSlowSql=false" />
+	</bean> -->
+	
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<property name="jdbcUrl" value="${jdbc.url}?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<property name="minimumIdle" value="1" />
+		<property name="maximumPoolSize" value="3" />
 	</bean>
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
