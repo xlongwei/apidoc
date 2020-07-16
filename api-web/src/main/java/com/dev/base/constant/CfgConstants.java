@@ -65,7 +65,7 @@ public class CfgConstants {
 	/**
 	 * 客户端保存token名称
 	 */
-	public static final String COOKIE_TOKEN_NAME = "token";
+	public static final String COOKIE_TOKEN_NAME = cfgProperties.getProperty("cookie.token", "token");
 	
 	/**
 	 * 客户端保存token有效期，单位秒

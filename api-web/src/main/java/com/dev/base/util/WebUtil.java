@@ -202,8 +202,11 @@ public class WebUtil {
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
 				if (name.equals(cookie.getName())) {
+					//token很容易重名，域名匹配时优先
+					if(CfgConstants.COOKIE_DOMAIN.equals(cookie.getDomain())) {
+						return cookie.getValue();
+					}
 					value = cookie.getValue();
-					break;
 				}
 			}
 		}
