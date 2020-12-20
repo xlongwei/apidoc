@@ -34,13 +34,13 @@ public class AopLogger {
     
     @Around("logService()")
     public Object service(ProceedingJoinPoint point) throws Throwable {
-    	log.info("call {}.{}{}", point.getTarget().getClass().getSimpleName(), point.getSignature().getName(), toString(point.getArgs()));
+    	log.debug("call {}.{}{}", point.getTarget().getClass().getSimpleName(), point.getSignature().getName(), toString(point.getArgs()));
     	
     	long beginTime = System.currentTimeMillis();
     	Object result = point.proceed();
     	long time = System.currentTimeMillis() - beginTime;
     	
-    	log.info("result({}) {}", time, JsonUtils.toJson(result));
+    	log.debug("result({}) {}", time, JsonUtils.toJson(result));
     	return result;
     }
     

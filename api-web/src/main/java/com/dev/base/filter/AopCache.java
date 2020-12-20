@@ -87,13 +87,13 @@ public class AopCache implements ApplicationContextAware {
 	    			Cache cache = cacheManager.getCache(className);
 	    			Class<?> methodReturn = returnTypes.get(typeKey);
 	    			if(methodReturn!=null && (ret=cachedObject(cache, cacheKey, methodReturn))!=null) {
-    					log.info("cache get {}:{}", className, cacheKey);
+    					log.debug("cache get {}:{}", className, cacheKey);
     					return ret;
 	    			}
 	    			if(ret==null) {
 	    				ret = point.proceed();
 	    				if(ret!=null) {
-	    					log.info("cache key {}:{}", className, cacheKey);
+	    					log.debug("cache key {}:{}", className, cacheKey);
 	    					cache.put(cacheKey, ret);
 	    					if(methodReturn==null) {
 	    						returnTypes.put(typeKey, ret.getClass());
@@ -103,7 +103,7 @@ public class AopCache implements ApplicationContextAware {
 	    			return ret;
 	    		}else {
 	    			cacheManager.getCache(className).clear();
-	    			log.info("cache clear {}", className);
+	    			log.debug("cache clear {}", className);
 	    			return point.proceed();
 	    		}
     		}

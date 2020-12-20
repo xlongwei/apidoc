@@ -74,7 +74,7 @@ public class MockController extends BaseController {
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		String requestURI = request.getRequestURI(), referer = request.getHeader("referer");
 		String path = requestURI.substring(requestURI.indexOf(MOCK)+MOCK.length()), docId = request.getParameter("docId");
-		if(StringUtils.isBlank(docId)) {
+		if(StringUtils.isBlank(docId) && StringUtils.isNotBlank(referer)) {
 			docId = UriComponentsBuilder.fromUriString(referer).build().getQueryParams().getFirst("doc");
 		}
 		Inter inter = interService.getByMethodPath(docId, request.getMethod(), path);
