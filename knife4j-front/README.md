@@ -1,8 +1,9 @@
 ### knife4j-front 配置说明
 
-获取 knife4j-front 前端代码，使用 knife4j-front 目录即可，并用此目录的 doc.html 覆盖 knife4j-front 目录下的同名文件
+获取 knife4j-front 前端代码，使用 knife4j-front 目录即可，并用此目录的 doc.html、cdao/swaggerbootstrapui.js 覆盖 knife4j-front 目录下的同名文件
 
 	git clone https://gitee.com/xiaoym/knife4j.git
+	git checkout 24b2ce6a6bc16162836820597369838a28aa65dc #apidoc使用的是2019-11-01时的版本，git log --before="2019-12-01" knife4j-front/
 	location /swagger/ {  #xlongwei.conf，https://api.xlongwei.com/swagger/，静态资源
 		alias D:/OpenSource/xiaoym/knife4j.git/knife4j-front/;
 	}
