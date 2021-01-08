@@ -92,13 +92,13 @@
 					});
 	
 			function addApiKeyAuthorization() {
-				var key = encodeURIComponent($('#input_apiKey')[0].value);
+				var key = $('#input_apiKey')[0].value;
 				if (key && key.trim() != "") {
 					var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(
-							"api_key", key, "query");
+							"Authorization", key, "header");
 					window.swaggerUi.api.clientAuthorizations.add("api_key",
 							apiKeyAuth);
-					log("added key " + key);
+					//log("added key " + key);
 				}
 			}
 	
@@ -137,7 +137,7 @@
 					<input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text" />
 				</div>
 				<div class='input'>
-					<input placeholder="api_key" id="input_apiKey" name="apiKey" type="text" />
+					<input placeholder="Authorization" id="input_apiKey" name="apiKey" type="text" />
 				</div>
 				<div class='input'>
 					<a id="explore" href="#" data-sw-translate>Explore</a>
