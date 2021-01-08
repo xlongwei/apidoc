@@ -2,6 +2,7 @@ package com.dev.doc.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,9 @@ import io.swagger.models.Operation;
 import io.swagger.models.Path;
 import io.swagger.models.Swagger;
 import io.swagger.models.Tag;
+import io.swagger.models.auth.ApiKeyAuthDefinition;
+import io.swagger.models.auth.In;
+import io.swagger.models.auth.SecuritySchemeDefinition;
 
 /**
  * 
@@ -89,6 +93,10 @@ public class SwaggerServiceImpl implements SwaggerService{
 		//创建方法
 		createPath(swagger,apiDoc,refSchemaMap,moduleMap);
 		
+		//创建token鉴权
+		Map<String, SecuritySchemeDefinition> securityDefinitions = new HashMap<>();
+		securityDefinitions.put("api_key", new ApiKeyAuthDefinition("Authorization", In.HEADER));
+		swagger.setSecurityDefinitions(securityDefinitions);
 		return swagger;
 	}
 	
