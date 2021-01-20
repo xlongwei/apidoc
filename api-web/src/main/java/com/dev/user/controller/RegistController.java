@@ -89,7 +89,7 @@ public class RegistController extends BaseController{
 		ValidateUtils.notNull(loginName, ErrorCode.SYS_001,"登录名不能为空");
 		ValidateUtils.notNull(passwd, ErrorCode.SYS_001,"密码不能为空");
 		ValidateUtils.notNull(nickName, ErrorCode.SYS_001,"昵称不能为空");
-		ValidateUtils.notNull(validCode, ErrorCode.SYS_001,"验证码不能为空");
+//		ValidateUtils.notNull(validCode, ErrorCode.SYS_001,"验证码不能为空");
 		
 		//目前默认为邮箱注册
 		RegistParamInfo paramInfo = new RegistParamInfo();
