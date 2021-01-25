@@ -51,8 +51,7 @@ public class AopCache implements ApplicationContextAware {
 	public static ApplicationContext springContext = null;
 	private static Logger log = LoggerFactory.getLogger(AopCache.class);
 	private int cacheStatus = -1;//-1待初始化 0不可用 1可用
-	private String[] cacheMethods = {"list", "count", "get"};
-	private String[] evictMethods = {"add", "batchAdd", "update", "delete", "delBy"};
+	private String[] cacheMethods = {"list", "count", "get"};//部分方法缓存，其他方法都清空缓存
 	private Map<String, Boolean> classNames = new HashMap<>();
 	private Map<String, Class<?>> returnTypes = new HashMap<>();
 	
@@ -134,14 +133,13 @@ public class AopCache implements ApplicationContextAware {
     		for(Method method : clazz.getDeclaredMethods()) {
     			if(Modifier.isPublic(method.getModifiers())) {
 	    			String methodName = method.getName();
-	    			if(supportMethod(cacheMethods, methodName)==false
-	    					&& supportMethod(evictMethods, methodName)==false) {
-	    				support = Boolean.FALSE;
+	    			if(supportMethod(cacheMethods, methodName)==true) {
+	    				support = Boolean.TRUE;
 	    				break;
 	    			}
     			}
     		}
-    		classNames.put(className, support==null ? (support=Boolean.TRUE) : support);
+    		classNames.put(className, support==null ? (support=Boolean.FALSE) : support);
     	}
 		return support.booleanValue();
 	}
