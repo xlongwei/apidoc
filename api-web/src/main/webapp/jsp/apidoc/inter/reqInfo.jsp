@@ -114,8 +114,8 @@
 												<label class="control-label col-lg-3">必输项</label> 
 												<div class="col-lg-6">
 													<select name="required" class="form-control">
-														<option value="true">是</option>
 														<option value="false">否</option>
+														<option value="true">是</option>
 													</select>
 												</div>
 											</div>
@@ -185,8 +185,8 @@
 		</td> 
     	<td class="hidden">
 			<select name="required" class="form-control">
-				<option value="true">是</option>
 				<option value="false">否</option>
+				<option value="true">是</option>
 			</select>
 		</td>
 		<td>
