@@ -617,7 +617,7 @@ public class DocBuildUtil {
 		List<Scheme> result = new ArrayList<Scheme>();
 		List<String> list = parseList(scheme);
 		for (String temp : list) {
-			result.add(Scheme.valueOf(temp));
+			result.add(Scheme.forValue(temp));
 		}
 		
 		return result;

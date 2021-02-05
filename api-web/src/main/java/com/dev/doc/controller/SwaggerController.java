@@ -1,13 +1,13 @@
 package com.dev.doc.controller;
 
-import io.swagger.models.Swagger;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,17 +20,25 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.dev.base.constant.CfgConstants;
 import com.dev.base.controller.BaseController;
 import com.dev.base.exception.code.ErrorCode;
 import com.dev.base.json.JsonUtils;
 import com.dev.base.util.FreeMarkerUtil;
+import com.dev.base.util.WebUtil;
 import com.dev.base.utils.MapUtils;
 import com.dev.base.utils.ValidateUtils;
 import com.dev.doc.entity.ApiDoc;
 import com.dev.doc.service.ApiDocService;
 import com.dev.doc.service.SwaggerService;
+
+import io.swagger.models.Operation;
+import io.swagger.models.Path;
+import io.swagger.models.Scheme;
+import io.swagger.models.Swagger;
 
 /**
  * 
@@ -39,7 +47,6 @@ import com.dev.doc.service.SwaggerService;
 		* <p>CreateDate: 2015年8月13日下午2:20:08</p>
  */
 @Controller
-@SuppressWarnings("unchecked")
 public class SwaggerController extends BaseController{
 	@Autowired
 	private SwaggerService swaggerService;
@@ -62,11 +69,35 @@ public class SwaggerController extends BaseController{
 		Long userId = getUserId(request);
 		Swagger swagger = swaggerService.buildApiDoc(userId, docId);
 		if(mock) {
-			swagger.setSchemes(Collections.EMPTY_LIST);
-			swagger.setHost("");
-			swagger.setBasePath("/apidoc/mock");
+			mockSwagger(request, swagger);
 		}
 		return swagger;
+	}
+
+	private void mockSwagger(HttpServletRequest request, Swagger swagger) {
+		String host = request.getHeader("Host");
+		List<Scheme> schemes = null;
+		if(StringUtils.hasText(host)) {
+			//nginx代理时有Host请求头，https时有X-Forwarded-Proto请求头
+			schemes = Arrays.asList(Scheme.forValue(WebUtil.getUrlScheme().name()));
+		}else {
+			//localhost访问时直接解析当前网址
+			String url = request.getRequestURL().toString();
+			schemes = Arrays.asList(Scheme.forValue(url.substring(0, url.indexOf(':'))));
+			UriComponents build = UriComponentsBuilder.fromUriString(url).build();
+			host = build.getHost() + (80==build.getPort() ? "" : ":" + build.getPort());
+		}
+		swagger.setSchemes(schemes);
+		swagger.setHost(host);
+		swagger.setBasePath("/apidoc/mock");
+		Map<String, Path> paths = swagger.getPaths();
+		if(paths != null) {
+			for(Path path : paths.values()) {
+				for(Operation op : path.getOperations()) {
+					op.setSchemes(schemes);
+				}
+			}
+		}
 	}
 	
 	/** 响应knife4j接口分组文件 */
@@ -88,9 +119,7 @@ public class SwaggerController extends BaseController{
 		Long userId = getUserId(request);
 		Swagger swagger = swaggerService.buildApiDoc(userId, docId);
 		if(mock) {
-			swagger.setSchemes(Collections.EMPTY_LIST);
-			swagger.setHost("");
-			swagger.setBasePath("/apidoc/mock");
+			mockSwagger(request, swagger);
 		}
 		return swagger;
 	}

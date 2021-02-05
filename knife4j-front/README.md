@@ -24,6 +24,7 @@
 	https://api.xlongwei.com/apidoc/pass/knife4j/group.htm?docId=2 #group.json
 	https://api.xlongwei.com/swagger/apidoc/pass/knife4j/swagger.htm?docId=2 #swagger.json
 	location /apidoc/ {  #xlongwei.com，转发请求至apidoc应用，以后从apidoc维护接口文档即可
+		proxy_set_header Host $host;
 		proxy_pass http://localhost:8080;
 	}
 
