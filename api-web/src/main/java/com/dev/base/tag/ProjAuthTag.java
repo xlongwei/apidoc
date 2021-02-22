@@ -8,6 +8,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.dev.base.constant.AppConstants;
 import com.dev.base.enums.Role;
+import com.dev.base.enums.UserRole;
 import com.dev.user.vo.UserInfo;
 
 /**
@@ -31,6 +32,9 @@ public class ProjAuthTag extends TagSupport{
 		HttpSession session = pageContext.getSession();  
         UserInfo userInfo = (UserInfo)session.getAttribute(AppConstants.SESSION_KEY_USER);
         if (userInfo != null) {
+    		if(UserRole.admin == userInfo.getRole()) {
+    			return EVAL_PAGE;//管理员权限
+    		}        	
         	Role role = null;
         	if (projId != null) {//验证项目权限
     			Map<Long, Role> projMap = userInfo.getProjMap();

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.dev.base.controller.BaseController;
 import com.dev.base.enums.ProjectStatus;
 import com.dev.base.enums.Role;
+import com.dev.base.enums.UserRole;
 import com.dev.base.exception.ValidateException;
 import com.dev.base.exception.code.ErrorCode;
 import com.dev.base.json.JsonUtils;
@@ -177,8 +178,11 @@ public class ProjController extends BaseController{
 	public String getInfo(HttpServletRequest request,Long projId,Model model){
 		ValidateUtils.notNull(projId, ErrorCode.SYS_001,"项目id不能为空");
 		
-		Long userId = getUserId(request);
-		ProjectInfo projectInfo = projectService.getInfo(userId, projId);
+		UserInfo userInfo = getUserInfo(request);
+		ProjectInfo projectInfo = projectService.getInfo(userInfo.getUserId(), projId);
+		if(projectInfo.getRole() == null && userInfo.getRole() == UserRole.admin) {
+			projectInfo.setRole(Role.admin);
+		}
 		model.addAttribute("projInfo", projectInfo);
 		
 		Map<Long, ProjectInfo> sessionMap = MapUtils.newMap();

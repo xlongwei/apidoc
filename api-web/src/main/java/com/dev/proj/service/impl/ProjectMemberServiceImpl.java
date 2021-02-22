@@ -217,7 +217,7 @@ public class ProjectMemberServiceImpl extends BaseMybatisServiceImpl<ProjectMemb
 	@Override
 	public Role getRole(Long userId, Long projId) {
 		String role = getMybatisDao().getRole(userId, projId);
-		return Role.valueOf(role);
+		return role==null ? null : Role.valueOf(role);
 	}
 
 	@Override
