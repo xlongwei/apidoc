@@ -108,7 +108,7 @@ public class SwaggerController extends BaseController{
 		Map<Object, Object> map = MapUtils.newMap();
 		map.put("name", apiDoc.getTitle());
 		map.put("swaggerVersion", "2.0");
-		map.put("url", CfgConstants.WEB_BASE_URL + "pass/knife4j/swagger.htm?docId=" + docId+(mock?"&mock=true":""));
+		map.put("url", CfgConstants.WEB_CONTEXT_PATH + "/pass/knife4j/swagger.htm?docId=" + docId+(mock?"&mock=true":""));
 		return Collections.singletonList(map);
 	}
 	

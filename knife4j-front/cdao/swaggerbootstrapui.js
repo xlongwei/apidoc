@@ -4928,7 +4928,9 @@
         var startApiTime=new Date().getTime();
         swpinfo.showUrl=newurl;
         //swpinfo.id="ApiInfo"+Math.round(Math.random()*1000000);
-        swpinfo.url=newurl;
+        let newscheme = apiInfo.schemes.length>0 ? apiInfo.schemes[0]+':' : location.protocol;
+        let newhost = that.currentInstance.host || location.host;
+        swpinfo.url=newscheme+'//'+newhost+newurl;
         swpinfo.originalUrl=newurl;
         swpinfo.basePathFlag=basePathFlag;
         swpinfo.methodType=mtype.toUpperCase();
