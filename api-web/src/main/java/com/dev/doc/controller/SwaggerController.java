@@ -123,7 +123,7 @@ public class SwaggerController extends BaseController{
 	
 	/** 响应knife4j接口分组文件 */
 	@RequestMapping("/pass/knife4j/group.htm")
-	public @ResponseBody Object buildGroup(HttpServletRequest request,@RequestParam(required=false)Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String jsonUrl) {
+	public @ResponseBody Object buildGroup(HttpServletRequest request,@RequestParam(required=false)Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl,@RequestParam(required=false) String jsonUrl) {
 		Map<Object, Object> map = MapUtils.newMap();
 		map.put("swaggerVersion", "2.0");
 		if(RegexUtil.isUrl(jsonUrl)) {
@@ -133,7 +133,7 @@ public class SwaggerController extends BaseController{
 			ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 			ApiDoc apiDoc = apiDocService.getById(docId);
 			map.put("name", apiDoc.getTitle());
-			map.put("url", CfgConstants.WEB_CONTEXT_PATH + "/pass/knife4j/swagger.htm?docId=" + docId+(mock?"&mock=true":""));
+			map.put("url", CfgConstants.WEB_CONTEXT_PATH + "/pass/knife4j/swagger.htm?docId=" + docId+(mock?"&mock=true":"")+(RegexUtil.isUrl(apiUrl)?"&apiUrl="+apiUrl:""));
 		}
 		return Collections.singletonList(map);
 	}
@@ -160,10 +160,14 @@ public class SwaggerController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/auth/apidoc/preview.htm")
-	public String preview(HttpServletRequest request,Model model,Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl){
-		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
-		String docUrl = CfgConstants.WEB_BASE_URL + "auth/apidoc/json/build.htm?docId=" + docId+(mock?"&mock=true":"")+(RegexUtil.isUrl(apiUrl)?"&apiUrl="+apiUrl:"");
-		model.addAttribute("docUrl", docUrl);
+	public String preview(HttpServletRequest request,Model model,Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl,@RequestParam(required=false) String jsonUrl){
+		if(RegexUtil.isUrl(jsonUrl)) {
+			model.addAttribute("docUrl", jsonUrl);
+		}else {
+			ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
+			String docUrl = CfgConstants.WEB_BASE_URL + "auth/apidoc/json/build.htm?docId=" + docId+(mock?"&mock=true":"")+(RegexUtil.isUrl(apiUrl)?"&apiUrl="+apiUrl:"");
+			model.addAttribute("docUrl", docUrl);
+		}
 		return "forward:/swagger/index.jsp";
 	}
 	
