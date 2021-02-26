@@ -123,19 +123,25 @@ public class SwaggerController extends BaseController{
 	
 	/** 响应knife4j接口分组文件 */
 	@RequestMapping("/pass/knife4j/group.htm")
-	public @ResponseBody Object buildGroup(HttpServletRequest request,Long docId,@RequestParam(defaultValue="false") boolean mock) {
-		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
-		ApiDoc apiDoc = apiDocService.getById(docId);
+	public @ResponseBody Object buildGroup(HttpServletRequest request,@RequestParam(required=false)Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String jsonUrl) {
 		Map<Object, Object> map = MapUtils.newMap();
-		map.put("name", apiDoc.getTitle());
 		map.put("swaggerVersion", "2.0");
-		map.put("url", CfgConstants.WEB_CONTEXT_PATH + "/pass/knife4j/swagger.htm?docId=" + docId+(mock?"&mock=true":""));
+		if(RegexUtil.isUrl(jsonUrl)) {
+			map.put("name", "");
+			map.put("url", jsonUrl);
+		}else {
+			ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
+			ApiDoc apiDoc = apiDocService.getById(docId);
+			map.put("name", apiDoc.getTitle());
+			map.put("url", CfgConstants.WEB_CONTEXT_PATH + "/pass/knife4j/swagger.htm?docId=" + docId+(mock?"&mock=true":""));
+		}
 		return Collections.singletonList(map);
 	}
 	
 	/** 响应knife4j接口定义文件 */
 	@RequestMapping("/pass/knife4j/swagger.htm")
-	public @ResponseBody Swagger buildSwagger(HttpServletRequest request,Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl){
+	public @ResponseBody Swagger buildSwagger(HttpServletRequest request,HttpServletResponse response,Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl){
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		Long userId = getUserId(request);
 		Swagger swagger = swaggerService.buildApiDoc(userId, docId);
