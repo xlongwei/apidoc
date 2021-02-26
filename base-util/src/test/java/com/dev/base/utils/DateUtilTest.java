@@ -8,7 +8,7 @@ public class DateUtilTest {
 
 	@Test
 	public void testGetDayStart() {
-		printDate(DateUtil.getDayStart(DateUtil.getNow()));
+		System.out.println(RegexUtil.isUrl("HTTP://localhost:8015/v2/api-docs"));
 	}
 
 	@Test
@@ -28,6 +28,6 @@ public class DateUtilTest {
 	}
 
 	private void printDate(Date date){
-		System.out.println(DateUtil.formatByLong(date));
+		System.out.println(RegexUtil.isUrl("http://localhost:8015/v2/api-docs"));
 	}
 }

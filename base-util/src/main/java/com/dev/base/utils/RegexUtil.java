@@ -15,7 +15,7 @@ public class RegexUtil {
 	private static final String REGEX_POST_CODE = "^[1-9]{1}\\d{5}$";
 	private static final String REGEX_ID_CARD = "^(\\d{14}|\\d{17})(\\d|[xX])$";
 	private static final String REGEX_MOBILE = "^(0)?[1]\\d{10}$";
-	private static final String REGEX_URL = "^([hH][tT][tT][pP]([sS]?)|[fF][tT][pP]|[fF][iI][lL][eE]):\\/\\/(\\S+\\.)+\\S{2,}$";
+	private static final String REGEX_URL = "^([hH][tT][tT][pP]([sS]?)|[fF][tT][pP]|[fF][iI][lL][eE])://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
 	/**
 	 * 验证邮箱格式

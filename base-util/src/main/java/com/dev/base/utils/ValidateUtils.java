@@ -1,6 +1,6 @@
 package com.dev.base.utils;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.dev.base.exception.ValidateException;
 
