@@ -21,13 +21,13 @@ function initSaveDocBtn(){
 //                    }
 //                }
 //			},
-			basePath:{
-                validators: {
-                    notEmpty: {
-                        message: '接口基路径不能为空'
-                    }
-                }
-			}
+//			basePath:{
+//                validators: {
+//                    notEmpty: {
+//                        message: '接口基路径不能为空'
+//                    }
+//                }
+//			}
 		}
 	});
 	

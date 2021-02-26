@@ -30,6 +30,7 @@ import com.dev.base.json.JsonUtils;
 import com.dev.base.util.FreeMarkerUtil;
 import com.dev.base.util.WebUtil;
 import com.dev.base.utils.MapUtils;
+import com.dev.base.utils.RegexUtil;
 import com.dev.base.utils.ValidateUtils;
 import com.dev.doc.entity.ApiDoc;
 import com.dev.doc.service.ApiDocService;
@@ -64,12 +65,14 @@ public class SwaggerController extends BaseController{
 			*@CreateDate 2015年8月13日下午2:24:29
 	 */
 	@RequestMapping("/auth/apidoc/json/build.htm")
-	public @ResponseBody Swagger buildApiDoc(HttpServletRequest request,Long docId,@RequestParam(defaultValue="false") boolean mock){
+	public @ResponseBody Swagger buildApiDoc(HttpServletRequest request,Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		Long userId = getUserId(request);
 		Swagger swagger = swaggerService.buildApiDoc(userId, docId);
 		if(mock) {
 			mockSwagger(request, swagger);
+		}else if(RegexUtil.isUrl(apiUrl)) {
+			mockUrl(swagger, apiUrl);
 		}
 		return swagger;
 	}
@@ -85,7 +88,7 @@ public class SwaggerController extends BaseController{
 			String url = request.getRequestURL().toString();
 			schemes = Arrays.asList(Scheme.forValue(url.substring(0, url.indexOf(':'))));
 			UriComponents build = UriComponentsBuilder.fromUriString(url).build();
-			host = build.getHost() + (80==build.getPort() ? "" : ":" + build.getPort());
+			host = build.getHost() + (80==build.getPort()||build.getPort()<0 ? "" : ":" + build.getPort());
 		}
 		swagger.setSchemes(schemes);
 		swagger.setHost(host);
@@ -98,6 +101,24 @@ public class SwaggerController extends BaseController{
 				}
 			}
 		}
+	}
+	
+	private void mockUrl(Swagger swagger, String url) {
+		List<Scheme> schemes = Arrays.asList(Scheme.forValue(url.substring(0, url.indexOf(':'))));
+		UriComponents build = UriComponentsBuilder.fromUriString(url).build();
+		String host = build.getHost() + (80==build.getPort()||build.getPort()<0 ? "" : ":" + build.getPort());
+		String basePath = build.getPath()==null ? "" : build.getPath();
+		swagger.setSchemes(schemes);
+		swagger.setHost(host);
+		swagger.setBasePath(basePath);
+		Map<String, Path> paths = swagger.getPaths();
+		if(paths != null) {
+			for(Path path : paths.values()) {
+				for(Operation op : path.getOperations()) {
+					op.setSchemes(schemes);
+				}
+			}
+		}		
 	}
 	
 	/** 响应knife4j接口分组文件 */
@@ -114,12 +135,14 @@ public class SwaggerController extends BaseController{
 	
 	/** 响应knife4j接口定义文件 */
 	@RequestMapping("/pass/knife4j/swagger.htm")
-	public @ResponseBody Swagger buildSwagger(HttpServletRequest request,Long docId,@RequestParam(defaultValue="false") boolean mock) {
+	public @ResponseBody Swagger buildSwagger(HttpServletRequest request,Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
 		Long userId = getUserId(request);
 		Swagger swagger = swaggerService.buildApiDoc(userId, docId);
 		if(mock) {
 			mockSwagger(request, swagger);
+		}else if(RegexUtil.isUrl(apiUrl)) {
+			mockUrl(swagger, apiUrl);
 		}
 		return swagger;
 	}
@@ -131,9 +154,9 @@ public class SwaggerController extends BaseController{
 			*@CreateDate 2015年7月11日下午2:05:24
 	 */
 	@RequestMapping("/auth/apidoc/preview.htm")
-	public String preview(HttpServletRequest request,Model model,Long docId,@RequestParam(defaultValue="false") boolean mock){
+	public String preview(HttpServletRequest request,Model model,Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl){
 		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
-		String docUrl = CfgConstants.WEB_BASE_URL + "auth/apidoc/json/build.htm?docId=" + docId+(mock?"&mock=true":"");
+		String docUrl = CfgConstants.WEB_BASE_URL + "auth/apidoc/json/build.htm?docId=" + docId+(mock?"&mock=true":"")+(RegexUtil.isUrl(apiUrl)?"&apiUrl="+apiUrl:"");
 		model.addAttribute("docUrl", docUrl);
 		return "forward:/swagger/index.jsp";
 	}

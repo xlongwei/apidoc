@@ -15,6 +15,7 @@ public class RegexUtil {
 	private static final String REGEX_POST_CODE = "^[1-9]{1}\\d{5}$";
 	private static final String REGEX_ID_CARD = "^(\\d{14}|\\d{17})(\\d|[xX])$";
 	private static final String REGEX_MOBILE = "^(0)?[1]\\d{10}$";
+	private static final String REGEX_URL = "^([hH][tT][tT][pP]([sS]?)|[fF][tT][pP]|[fF][iI][lL][eE]):\\/\\/(\\S+\\.)+\\S{2,}$";
 
 	/**
 	 * 验证邮箱格式
@@ -60,6 +61,10 @@ public class RegexUtil {
 	public static boolean isIdCard(String str) {
 		return regex(str, REGEX_ID_CARD);
 	}
+	
+	public static boolean isUrl(String str) {
+		return regex(str, REGEX_URL);
+	}
 
 	/**
 	 * 验证指定字符串是否匹配相应正则表达式
@@ -69,6 +74,9 @@ public class RegexUtil {
 	 * @throws Exception
 	 */
 	public static final boolean regex(String testStr, String regStr){
+		if(testStr==null || testStr.isEmpty()) {
+			return false;
+		}
 		Pattern p = Pattern.compile(regStr);
 		Matcher m = p.matcher(testStr);
 		return m.matches();
