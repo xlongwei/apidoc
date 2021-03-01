@@ -9,6 +9,7 @@ apidoc接口文档编辑系统，支持可视化编辑、接口模拟响应、�
   - 支持测试案例：支持简单接口的测试案例，使用json配置请求参数，使用assert、expect的js方法验证结果
   - 动态预览及调试：接口修改后预览页面实时刷新，开启模拟时可以直接调试调用
   - 导出PDF文档：预览页面有“离线文档MD”菜单，安装writage插件可以手动导出PDF文档（有书签）
+  - 本地调试：配合[nginx](https://api.xlongwei.com/doku.php?id=light4j:apidoc)可以调试本地接口，可以导入本地swagger并生成接口文档
 
 ##### 使用方法
 1. 创建数据库：apidoc（字符集utf8mb4或utf8），导入脚本：api-web/db/sosoapi-1.0.0.sql

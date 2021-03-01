@@ -1347,10 +1347,10 @@
             var $ = layui.$;
             var admin=layui.sbuadmin;
             var url = 'json/group.json', doc = /doc=(\d+)/.test(location.search) ? /doc=(\d+)/.exec(location.search)[1] : '';
-            var jsonUrl = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/.test(location.search) ? /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/.exec(location.search)[0] : '';
+            var jsonUrl = /jsonUrl=([^&]+)/.test(location.search) ? /jsonUrl=([^&]+)/.exec(location.search)[1] : '';
             if(doc){
            		url = '/apidoc/pass/knife4j/group.htm?docId='+doc;
-            }else if(jsonUrl){
+            }else if(jsonUrl && /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/.test(jsonUrl)){
            		url = '/apidoc/pass/knife4j/group.htm?jsonUrl='+jsonUrl;
             }
             admin.run({
