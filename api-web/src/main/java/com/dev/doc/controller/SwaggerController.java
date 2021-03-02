@@ -3,6 +3,7 @@ package com.dev.doc.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -17,11 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.swagger2html.Swagger2Html;
 
 import com.dev.base.constant.CfgConstants;
 import com.dev.base.controller.BaseController;
@@ -40,6 +44,7 @@ import io.swagger.models.Operation;
 import io.swagger.models.Path;
 import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
+import io.swagger.parser.SwaggerParser;
 
 /**
  * 
@@ -169,6 +174,25 @@ public class SwaggerController extends BaseController{
 			model.addAttribute("docUrl", docUrl);
 		}
 		return "forward:/swagger/index.jsp";
+	}
+	
+	@RequestMapping(value = "/pass/swagger2html.htm", produces = "text/html;charset=UTF-8")
+	public @ResponseBody String swagger2html(@RequestParam(required=false) String jsonUrl, @RequestParam(required=false) MultipartFile jsonFile, @RequestBody(required=false) String json) throws Exception {
+		Swagger2Html s2h = new Swagger2Html();
+		Writer writer = new StringWriter();
+		if(RegexUtil.isUrl(jsonUrl)) {
+			s2h.toHtml(jsonUrl, writer);
+		}else {
+			if(jsonFile != null) {
+				json = new String(jsonFile.getBytes(),"UTF-8");
+			}
+			if(StringUtils.hasText(json)) {
+				SwaggerParser swaggerParser = new SwaggerParser();
+				Swagger swagger = swaggerParser.parse(json);
+				s2h.toHtml(swagger, null, writer);
+			}
+		}
+		return writer.toString();
 	}
 	
 	/**

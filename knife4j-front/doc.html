@@ -1350,7 +1350,7 @@
             var jsonUrl = /jsonUrl=([^&]+)/.test(location.search) ? /jsonUrl=([^&]+)/.exec(location.search)[1] : '';
             if(doc){
            		url = '/apidoc/pass/knife4j/group.htm?docId='+doc;
-            }else if(jsonUrl && /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/.test(jsonUrl)){
+            }else if(jsonUrl && /(https?|ftp|file):\/\/[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]/.test(jsonUrl)){
            		url = '/apidoc/pass/knife4j/group.htm?jsonUrl='+jsonUrl;
             }
             admin.run({
