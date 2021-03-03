@@ -26,6 +26,7 @@ public class CfgConstants {
 	 * /api-web
 	 */
 	public static String WEB_CONTEXT_PATH = "";
+	public static String WEB_ROOT_PATH = "";
 	
 	/**
 	 * 分页展示页码数

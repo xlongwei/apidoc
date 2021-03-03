@@ -1,11 +1,13 @@
 package com.dev.doc.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -190,6 +193,9 @@ public class SwaggerController extends BaseController{
 				SwaggerParser swaggerParser = new SwaggerParser();
 				Swagger swagger = swaggerParser.parse(json);
 				s2h.toHtml(swagger, null, writer);
+			}else {
+				String html = FileUtils.readFileToString(new File(CfgConstants.WEB_ROOT_PATH, "swagger/swagger2html.html"), StandardCharsets.UTF_8);
+				writer.write(html);
 			}
 		}
 		return writer.toString();

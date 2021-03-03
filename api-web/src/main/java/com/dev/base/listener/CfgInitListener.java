@@ -42,6 +42,7 @@ public class CfgInitListener implements ServletContextListener{
 	private void setCfg(ServletContext application){
 		//初始化contextPath
 		CfgConstants.WEB_CONTEXT_PATH = application.getContextPath();
+		CfgConstants.WEB_ROOT_PATH = application.getRealPath("");
 		
 		Map<String, String> cfgMap = new HashMap<String, String>();
 		cfgMap.put("WEB_BASE_URL", CfgConstants.WEB_BASE_URL);
