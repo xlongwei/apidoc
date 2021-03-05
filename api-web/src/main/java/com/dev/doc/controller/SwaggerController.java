@@ -8,14 +8,17 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,6 +50,7 @@ import io.swagger.models.Operation;
 import io.swagger.models.Path;
 import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
+import io.swagger.models.Tag;
 import io.swagger.parser.SwaggerParser;
 
 /**
@@ -148,11 +152,18 @@ public class SwaggerController extends BaseController{
 	
 	/** 响应knife4j接口定义文件 */
 	@RequestMapping("/pass/knife4j/swagger.htm")
-	public @ResponseBody Swagger buildSwagger(HttpServletRequest request,HttpServletResponse response,Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl){
+	public @ResponseBody Swagger buildSwagger(HttpServletRequest request,HttpServletResponse response,Long docId,@RequestParam(defaultValue="false") boolean mock,@RequestParam(required=false) String apiUrl, String jsonUrl, String tags){
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
-		Long userId = getUserId(request);
-		Swagger swagger = swaggerService.buildApiDoc(userId, docId);
+		Swagger swagger = null;
+		if(RegexUtil.isUrl(jsonUrl)) {
+			SwaggerParser swaggerParser = new SwaggerParser();
+			swagger = swaggerParser.read(jsonUrl);
+		}else {
+			ValidateUtils.notNull(docId, ErrorCode.SYS_001,"文档id不能为空");
+			Long userId = getUserId(request);
+			swagger = swaggerService.buildApiDoc(userId, docId);
+		}
+		tagsSwagger(swagger, tags);
 		if(mock) {
 			mockSwagger(request, swagger);
 		}else if(RegexUtil.isUrl(apiUrl)) {
@@ -180,25 +191,59 @@ public class SwaggerController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/pass/swagger2html.htm", produces = "text/html;charset=UTF-8")
-	public @ResponseBody String swagger2html(@RequestParam(required=false) String jsonUrl, @RequestParam(required=false) MultipartFile jsonFile, @RequestBody(required=false) String json) throws Exception {
-		Swagger2Html s2h = new Swagger2Html();
+	public @ResponseBody String swagger2html(@RequestParam(required=false) String jsonUrl, @RequestParam(required=false) MultipartFile jsonFile, @RequestBody(required=false) String json, String tags) throws Exception {
+		SwaggerParser swaggerParser = new SwaggerParser();
 		Writer writer = new StringWriter();
+		Swagger swagger = null;
 		if(RegexUtil.isUrl(jsonUrl)) {
-			s2h.toHtml(jsonUrl, writer);
+			swagger = swaggerParser.read(jsonUrl);
 		}else {
 			if(jsonFile != null) {
 				json = new String(jsonFile.getBytes(),"UTF-8");
 			}
 			if(StringUtils.hasText(json)) {
-				SwaggerParser swaggerParser = new SwaggerParser();
-				Swagger swagger = swaggerParser.parse(json);
-				s2h.toHtml(swagger, null, writer);
-			}else {
-				String html = FileUtils.readFileToString(new File(CfgConstants.WEB_ROOT_PATH, "swagger/swagger2html.html"), StandardCharsets.UTF_8);
-				writer.write(html);
+				swagger = swaggerParser.parse(json);
 			}
 		}
+		if(swagger != null) {
+			tagsSwagger(swagger, tags);
+			Swagger2Html s2h = new Swagger2Html();
+			s2h.toHtml(swagger, null, writer);
+		}else {
+			String html = FileUtils.readFileToString(new File(CfgConstants.WEB_ROOT_PATH, "swagger/swagger2html.html"), StandardCharsets.UTF_8);
+			writer.write(html);
+		}
 		return writer.toString();
+	}
+
+	private void tagsSwagger(Swagger swagger, String tags) {
+		if(StringUtils.hasText(tags)) {
+			List<String> myTags = Arrays.asList(tags.split(","));
+			Map<String, Path> paths = new HashMap<>();
+			for(Map.Entry<String, Path> entry : swagger.getPaths().entrySet()) {
+				Path path = entry.getValue();
+				boolean myPath = false;
+				for(Operation op : path.getOperations()) {
+					boolean containsAny = CollectionUtils.containsAny(op.getTags(), myTags);
+					if(containsAny) {
+						myPath = true;
+						break;
+					}
+				}
+				if(myPath) {
+					paths.put(entry.getKey(), path);
+				}
+			}
+			swagger.setPaths(paths);
+			//处理tags
+			List<Tag> tagList = new ArrayList<>();
+			for(Tag tag : swagger.getTags()) {
+				if(myTags.contains(tag.getName())) {
+					tagList.add(tag);
+				}
+			}
+			swagger.setTags(tagList);
+		}
 	}
 	
 	/**

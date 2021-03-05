@@ -1349,9 +1349,14 @@
             var url = 'json/group.json', doc = /doc=(\d+)/.test(location.search) ? /doc=(\d+)/.exec(location.search)[1] : '';
             var jsonUrl = /jsonUrl=([^&]+)/.test(location.search) ? /jsonUrl=([^&]+)/.exec(location.search)[1] : '';
             if(doc){
-           		url = '/apidoc/pass/knife4j/group.htm?docId='+doc;
+           		url = '/apidoc/pass/knife4j/group.htm'+location.search;
             }else if(jsonUrl && /(https?|ftp|file):\/\/[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]/.test(jsonUrl)){
-           		url = '/apidoc/pass/knife4j/group.htm?jsonUrl='+jsonUrl;
+            	var tags = /tags=([^&]+)/.test(location.search) ? /tags=([^&]+)/.exec(location.search)[1] : '';
+            	if(tags){
+	           		url = '/apidoc/pass/knife4j/group.htm?jsonUrl='+encodeURIComponent(location.protocol+'//'+location.host+'/apidoc/pass/knife4j/swagger.htm'+location.search);
+            	}else{
+	           		url = '/apidoc/pass/knife4j/group.htm'+location.search;
+            	}
             }
             admin.run({
                 ace:ace,
