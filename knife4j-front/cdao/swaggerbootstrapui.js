@@ -5083,7 +5083,18 @@
                                     if (schemaObject.hasOwnProperty("type")){
                                         minfo.type=schemaObject["type"];
                                     }
-                                    minfo.value="";
+                                    if (schemaObject.hasOwnProperty("properties")){
+                                    	minfo.value={}
+                                    	var properties = schemaObject['properties']
+                                    	for(name in properties){
+                                    		var property = properties[name]
+                                    		minfo.value[name]=property.type+' '+property.description
+                                    	}
+                                    }else if(schemaObject.hasOwnProperty("content")) {
+                                    	minfo.value = JSON.parse(schemaObject['content'])
+                                    }else{
+                                    	minfo.value="";
+                                    }
                                 }
                             }
                         }
@@ -5120,7 +5131,7 @@
                             minfo.txtValue=JSON.stringify(txtArr,null,"\t")
                         }else{
                             //引用类型
-                            if(!$.checkIsBasicType(minfo.type)){
+                            if(!$.checkIsBasicType(minfo.type) || 'object'==minfo.type || 'cust'==minfo.type){
                                 minfo.txtValue=JSON.stringify(minfo.value,null,"\t");
                             }
                         }
