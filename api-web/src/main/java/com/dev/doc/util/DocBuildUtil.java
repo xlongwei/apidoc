@@ -273,6 +273,14 @@ public class DocBuildUtil {
 			bodyParameter.setSchema(model);
 		}
 		
+		if(type == SchemaType.sys_object || type == SchemaType.sys_array) {
+			RespSchema respSchema = new RespSchema();
+			respSchema.setType(type);
+			respSchema.setCode(type.getCode());
+			respSchema.setCustSchema(reqParam.getCustSchema());
+			bodyParameter.setSchema(buildModel(respSchema, refSchemaMap));
+		}
+		
 		return bodyParameter;
 	}
 	

@@ -732,7 +732,7 @@
                                         <%if(param.in=="body"){  %>
                                         <textarea class="form-control p-value sbu-debug-input-<%=param.require%>"  tabindex="<%=tabIndex%>" style="font-size: 16px;" rows="10" data-in="<%=param.in%>" data-apiUrl="<%=url%>"
                                                   name="<%=param.name%>" data-name="<%=param.name%>"
-                                                  placeholder="<%=param.description%>"><%=param.txtValue%></textarea>
+                                                  placeholder="<%=param.description%>"><%=param.value%></textarea>
                                         <%}else {%>
                                         <input class="form-control p-value p-<%=param.in%> sbu-debug-input-<%=param.require%>"  tabindex="<%=tabIndex%>" name="<%=param.name%>"  data-in="<%=param.in%>" data-apiurl="<%=url%>"
                                                data-name="<%=param.name%>" placeholder="<%=param.description%>" value="<%=param.txtValue%>"/>
@@ -1349,7 +1349,7 @@
             var url = 'json/group.json', doc = /doc=(\d+)/.test(location.search) ? /doc=(\d+)/.exec(location.search)[1] : '';
             var jsonUrl = /jsonUrl=([^&]+)/.test(location.search) ? /jsonUrl=([^&]+)/.exec(location.search)[1] : '';
             if(doc){
-           		url = '/apidoc/pass/knife4j/group.htm'+location.search;
+           		url = '/apidoc/pass/knife4j/group.htm'+location.search.replace('doc=','docId=');
             }else if(jsonUrl && /(https?|ftp|file):\/\/[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]/.test(jsonUrl)){
             	var tags = /tags=([^&]+)/.test(location.search) ? /tags=([^&]+)/.exec(location.search)[1] : '';
             	if(tags){
