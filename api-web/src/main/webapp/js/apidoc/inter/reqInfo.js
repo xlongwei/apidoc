@@ -10,6 +10,9 @@ $(function() {
 	
 	//初始化弹出框的确认btn
 	initSaveMoreBtn();
+	
+	//初始化自定义结构表格
+	initReqCustSchemaTable();
 });
 
 //初始化请求数据类型下拉框
@@ -107,6 +110,34 @@ function initMoreBtn(row){
 		var rowData = $(row).find("*").getFieldsValue();
 		$("#moreForm").find("*").setFieldsValue(rowData);
 		
+		if('sys_object'==rowData.type || 'sys_array'==rowData.type){
+			$('.req-object-array').show();
+			$('.req-basic-ref').hide();			
+			$("#reqCustSchemaTable").treegrid("clear");
+			var rowList = JSON.parse(rowData.custSchema||'{}');
+			var rowData;
+			var nodeObj;
+			var nodeObjCache = new Object();
+			for(var i = 0;i < rowList.length; i ++){
+				nodeObj = getTmpl("#custSchemaTmpl");
+				rowData = rowList[i];
+				if(isNull(rowData.parentId)){
+					$("#reqCustSchemaTable").treegrid("addRootNode",nodeObj,rowData.nodeId);
+				}
+				else{
+					nodeObjCache[rowData.parentId].treegrid("addChildNode",nodeObj,rowData.nodeId,rowData.parentId);
+				}
+				nodeObj.find("*").setFieldsValue(rowData);
+				//填充值后初始化引用下拉框
+				nodeObj.find(".cust-schema-type").trigger("change");
+				
+				nodeObjCache[rowData.nodeId] = nodeObj;
+			}
+		}else{
+			$('.req-object-array').hide();
+			$('.req-basic-ref').show();
+		}
+		
 		$("#moreModal").modal("show");
 	});
 }
@@ -116,7 +147,34 @@ function initSaveMoreBtn(){
 	$("#saveMoreBtn").click(function(){
 		var $row = $("#moreModal").data("row");
 		var moreData = $("#moreForm").find("*").getFieldsValue();
-		$row.find("*").setFieldsValue(moreData);
+		//$row.find("*").setFieldsValue(moreData);
+		var type = $row.find('select[name=type]').val()
+		if(type=='sys_object' || type=='sys_array'){
+			var nodeArray = new Array();
+			var valid = true;
+			$("#reqCustSchemaTable").treegrid("getAllNodes").each(function(index,element){
+				var $element = $(element);
+				var rowData = $element.find("*").getFieldsValue();
+				if(isNull(rowData.code)){
+					valid = false;
+				}
+				
+				rowData.nodeId = $element.treegrid("getNodeId");
+				rowData.parentId = $element.treegrid("getParentNodeId");
+				
+				nodeArray[index] = rowData;
+			});
+			
+			var custSchema = JSON.stringify(nodeArray);
+			if(valid){
+				$row.find('input[name=custSchema]').val(custSchema)
+				$row.find('input[name=description]').val($("#moreForm").find('textarea[name=description]').val())
+			}
+		}else{
+			$row.find('input[name=defValue]').val(moreData.defValue)
+			$row.find('input[name=required]').val(moreData.required)
+			$row.find('input[name=description]').val(moreData.description)
+		}
 		
 		//清空
 		$("#moreModal").data("row",null);
@@ -290,4 +348,39 @@ function initRowAfterAdded(row,initIndex){
 		//初始化序号
 		initRowIndex("#reqParamTable tbody");
 	}
+}
+
+//初始化自定义结构表格
+function initReqCustSchemaTable(){
+	$("#reqCustSchemaTable").treegrid({
+		onAdded:function(row){
+			var $row = $(row);
+			
+			//初始化右键菜单
+			initRespContextMenu($row);
+			
+			//初始化引用的schema下拉框
+			var refSchema = $row.find(".cust-ref-schema");
+			$row.find(".cust-schema-type").change(function(){
+				if($(this).val() == "sys_ref"){
+					refSchema.show();
+				}
+				else{
+					refSchema.hide();
+				}
+			});
+			
+			//初始化引用下拉框
+			$row.find(".cust-schema-type").trigger("change");
+		}
+	});
+	
+	//初始化表格右键菜单
+	initRespContextMenu("#reqCustSchemaTable tbody tr");
+	
+	//新增根节点
+	$("#addReqCustSchemaRootNodeBtn").click(function(){
+		var nodeObje = getTmpl("#custSchemaTmpl");
+		$("#reqCustSchemaTable").treegrid("addRootNode",nodeObje);
+	});
 }

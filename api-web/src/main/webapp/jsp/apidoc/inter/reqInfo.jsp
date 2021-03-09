@@ -94,7 +94,7 @@
 			<div class="col-lg-12">
 				<div class="modal fade" id="moreModal" tabindex="-1" role="dialog" aria-hidden="true">
 					<div class="modal-dialog">
-						<div class="modal-content">
+						<div class="modal-content" style="width:800px">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								<h4 class="modal-title">更多选项</h4>
@@ -103,14 +103,14 @@
 								<div class="row">
 									<div class="col-lg-12">
 										<form id="moreForm" role="form" class="form-horizontal">
-											<div class="form-group">
+											<div class="form-group req-basic-ref">
 												<label class="control-label col-lg-3">默认值</label> 
 												<div class="col-lg-6">
 													<input name="defValue" type="text" value="" class="form-control">
 												</div>
 											</div>
 											
-											<div class="form-group">
+											<div class="form-group req-basic-ref">
 												<label class="control-label col-lg-3">必输项</label> 
 												<div class="col-lg-6">
 													<select name="required" class="form-control">
@@ -126,14 +126,36 @@
 							                        <textarea name="description" class="form-control"></textarea>
 							                    </div>
 							                </div>
+							                
+											<div class="form-group req-object-array" style="display:none">
+												<div class="col-lg-12">
+													<table id="reqCustSchemaTable" class="tree table table-hover">
+														<thead>
+															<tr>
+						                                    	<th class="col-xs-3">编码</th>
+						                                        <th class="col-xs-2">描述</th>
+						                                        <th class="col-xs-2">类型</th>
+						                                        <th class="col-xs-3">引用</th>
+						                                    </tr>
+														</thead>
+													</table>
+												</div>
+											</div>
 										</form>
 									</div>
 								</div>
 							</div>
 							
 							<div class="modal-footer">
-								<button id="saveMoreBtn" type="button" class="btn btn-success">确定</button>
-								<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+								<div class="row">
+									<div class="col-xs-3 text-left">
+										<button id="addReqCustSchemaRootNodeBtn" type="button" class="btn btn-warning req-object-array" style="display:none">新增根节点</button>
+									</div>
+									<div class="col-xs-9 text-right">
+										<button id="saveMoreBtn" type="button" class="btn btn-success">确定</button>
+										<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -177,6 +199,8 @@
 				<option value="sys_number_decimal">decimal</option>
 				<option value="sys_file">file</option>
 				<option value="sys_ref">ref</option>
+				<option value="sys_object">object</option>
+				<option value="sys_array">array</option>
 				<option value="cust_json">自定义</option>
 			</select>
 		</td>
@@ -200,6 +224,7 @@
 		</td>
 		<td>
 			<input name="extSchema" type="hidden">
+			<input name="custSchema" type="hidden">
             <button class="btn ext-schema-btn" type="button">
             	<i class="fa fa-ellipsis-h"></i>
             </button>

@@ -92,6 +92,7 @@ public class InterParamController extends BaseController{
 			interParam.setRequired(Boolean.parseBoolean(paramMap.get("required")));
 			interParam.setType(SchemaType.valueOf(paramMap.get("type")));
 			interParam.setExtSchema(paramMap.get("extSchema"));
+			interParam.setCustSchema(paramMap.get("custSchema"));
 			
 			refSchemaIdStr = paramMap.get("refSchemaId");
 			if (!StringUtils.isEmpty(refSchemaIdStr)) {

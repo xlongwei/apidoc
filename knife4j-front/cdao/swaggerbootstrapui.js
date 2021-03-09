@@ -5024,6 +5024,18 @@
                                         minfo.value=0;
                                     }
                                 }
+                                if(schItem['title'] && schItem['title']=='array'){
+                                    if (schItem.hasOwnProperty("properties")){
+                                    	minfo.value={}
+                                    	var properties = schItem['properties']
+                                    	for(name in properties){
+                                    		var property = properties[name]
+                                    		minfo.value[name]=property.type+' '+property.description
+                                    	}
+                                    }else if(schItem.hasOwnProperty("content")) {
+                                    	minfo.value = JSON.parse(schItem['content'])
+                                    }
+                                }
                             }
                         }else{
                             if (schemaObject.hasOwnProperty("$ref")){

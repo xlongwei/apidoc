@@ -455,9 +455,9 @@ public class DocBuildUtil {
 			model.setItems(new ObjectProperty());
 		}
 		else if (childSize == 1) {
-			model.setItems(parseProperty(nodeInfo.getChildList().get(0),refSchemaMap));
-		}
-		else if (childSize > 1) {
+//			model.setItems(parseProperty(nodeInfo.getChildList().get(0),refSchemaMap));
+//		}
+//		else if (childSize > 1) {
 			NestProperty nestProperty = new NestProperty();
 			nestProperty.setTitle(nodeInfo.getCode());
 			List<SchemaNodeInfo> childList = nodeInfo.getChildList();
