@@ -92,6 +92,7 @@ public class RegistController extends BaseController{
 //		ValidateUtils.notNull(validCode, ErrorCode.SYS_001,"验证码不能为空");
 		
 		//目前默认为邮箱注册
+		ValidateUtils.isTrue(RegexUtil.isEmail(loginName), ErrorCode.SYS_001,"邮箱格式错误");
 		RegistParamInfo paramInfo = new RegistParamInfo();
 		paramInfo.setLoginType(LoginType.email);
 		paramInfo.setEmail(loginName);
