@@ -1,5 +1,25 @@
 package com.dev.doc.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.springframework.util.StringUtils;
+
+import com.dev.base.enums.ReqMethod;
+import com.dev.base.enums.SchemaType;
+import com.dev.base.json.JsonUtils;
+import com.dev.base.utils.MapUtils;
+import com.dev.doc.entity.Inter;
+import com.dev.doc.entity.InterParam;
+import com.dev.doc.entity.InterResp;
+import com.dev.doc.entity.RespSchema;
+import com.dev.doc.vo.SchemaNodeInfo;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import io.swagger.models.ArrayModel;
 import io.swagger.models.CustModel;
 import io.swagger.models.Model;
@@ -23,23 +43,6 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.PropertyBuilder;
 import io.swagger.models.properties.PropertyBuilder.PropertyId;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.util.StringUtils;
-
-import com.dev.base.enums.ReqMethod;
-import com.dev.base.enums.SchemaType;
-import com.dev.base.json.JsonUtils;
-import com.dev.base.utils.MapUtils;
-import com.dev.doc.entity.Inter;
-import com.dev.doc.entity.InterParam;
-import com.dev.doc.entity.InterResp;
-import com.dev.doc.entity.RespSchema;
-import com.dev.doc.vo.SchemaNodeInfo;
-import com.fasterxml.jackson.core.type.TypeReference;
-
 /**
  * 
 		* <p>Title: api文档生成工具类</p>
@@ -49,6 +52,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 public class DocBuildUtil {
 	//空json对象
 	private static final String EMPTY_JSON = "{}";
+	//存放公用数据结构
+	public static final ThreadLocal<MutablePair<Boolean, Map<String, SchemaNodeInfo>>> DEFINITIONS = ThreadLocal.withInitial(new Supplier<MutablePair<Boolean, Map<String, SchemaNodeInfo>>>() {
+		@Override
+		public MutablePair<Boolean, Map<String, SchemaNodeInfo>> get() {
+			Map<String, SchemaNodeInfo> definitions = new HashMap<String, SchemaNodeInfo>();
+			return MutablePair.of(Boolean.FALSE, definitions);
+		}
+	});
 	
 	/**
 	 * 
@@ -128,7 +139,10 @@ public class DocBuildUtil {
 		tree.setName(respSchema.getName());
 		tree.setDescription(respSchema.getDescription());
 		tree.setRefSchemaId(respSchema.getRefSchemaId());
-
+		MutablePair<Boolean, Map<String, SchemaNodeInfo>> pair = DocBuildUtil.DEFINITIONS.get();
+		if(pair.getLeft()) {//处理公用数据结构的标记
+			pair.getRight().put(respSchema.getCode(), tree);
+		}
 		return parseModel(tree,refSchemaMap);
 	}
 	
@@ -145,8 +159,57 @@ public class DocBuildUtil {
 		if (SchemaType.cust_json == type) {
 			tree.setExtSchema(getCustJsonSchema(interResp.getExtSchema()));
 		}
+		
+		//sys_object.description可以指向泛型结构，示例：Result、Result.PageInfo
+		if(SchemaType.sys_object == type && StringUtils.hasText(interResp.getDescription()) && StringUtils.hasText(interResp.getCode())) {
+			String[] refStrs = interResp.getDescription().split("[.]");
+			String[] codeStrs = interResp.getCode().split("[.]");
+			boolean generic = refStrs.length == codeStrs.length;
+			for(String name : refStrs) {
+				if(!refSchemaMap.containsValue(name)) {
+					generic = false;
+				}
+			}
+			if(generic) {
+				Map<String, SchemaNodeInfo> definitions = DEFINITIONS.get().getRight();
+				if(refStrs.length==1) {
+					SchemaNodeInfo temp = copyOf(definitions.get(refStrs[0]));
+					temp.getChildList().add(tree);
+					tree = temp;
+				}else if(refStrs.length==2) {
+					interResp.setCode(codeStrs[0]);
+					SchemaNodeInfo result = copyOf(definitions.get(refStrs[0]));
+					SchemaNodeInfo pageInfo = copyOf(definitions.get(refStrs[1]));
+					pageInfo.setCode(codeStrs[0]);
+					result.getChildList().add(pageInfo);//Result.data
+					tree.setCode(codeStrs[1]);
+					pageInfo.getChildList().add(tree);//PageInfo.list
+					tree = result;
+				}
+			}
+		}
 
 		return parseProperty(tree,refSchemaMap);
+	}
+	
+	public static SchemaNodeInfo copyOf(SchemaNodeInfo node) {
+		SchemaNodeInfo copy = new SchemaNodeInfo();
+		List<SchemaNodeInfo> childList = new ArrayList<>();
+		if(node.getChildList()!=null) {
+			for(SchemaNodeInfo child : node.getChildList()) {
+				childList.add(copyOf(child));
+			}
+		}
+		copy.setChildList(childList);
+		copy.setCode(node.getCode());
+		copy.setDescription(node.getDescription());
+		copy.setExtSchema(node.getExtSchema());
+		copy.setName(node.getName());
+		copy.setNodeId(node.getNodeId());
+		copy.setParentId(node.getParentId());
+		copy.setRefSchemaId(node.getRefSchemaId());
+		copy.setType(node.getType());
+		return copy;
 	}
 	
 	/**

@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ import com.dev.doc.service.RespSchemaService;
 import com.dev.doc.service.SwaggerService;
 import com.dev.doc.util.DocBuildUtil;
 import com.dev.doc.util.DocExportUtil;
+import com.dev.doc.vo.SchemaNodeInfo;
 
 import io.swagger.models.Info;
 import io.swagger.models.Model;
@@ -135,10 +137,13 @@ public class SwaggerServiceImpl implements SwaggerService{
 		List<RespSchema> schemaList = respSchemaService.listAllByDocId(docId);
 		Map<String, Model> definitionMap = MapUtils.newMap();
 		Model model = null;
+		MutablePair<Boolean, Map<String, SchemaNodeInfo>> pair = DocBuildUtil.DEFINITIONS.get();
+		pair.setLeft(Boolean.TRUE);//处理公用数据结构的标记
 		for (RespSchema respSchema : schemaList) {
 			model = DocBuildUtil.buildModel(respSchema,refSchemaMap);
 			definitionMap.put(respSchema.getCode(), model);
 		}
+		pair.setLeft(Boolean.FALSE);
 
 		swagger.setDefinitions(definitionMap);
 	}
@@ -162,8 +167,8 @@ public class SwaggerServiceImpl implements SwaggerService{
 		for (Inter inter : interList) {
 			scheme = schemeInter(apiDoc, scheme, inter);
 			interId = inter.getId();
-			reqParamList = paramInfoMap.containsKey(interId) ? paramInfoMap.get(interId) : Collections.EMPTY_LIST;
-			respList = respInfoMap.containsKey(interId) ? respInfoMap.get(interId) : Collections.EMPTY_LIST;
+			reqParamList = paramInfoMap.containsKey(interId) ? paramInfoMap.get(interId) : Collections.<InterParam>emptyList();
+			respList = respInfoMap.containsKey(interId) ? respInfoMap.get(interId) : Collections.<InterResp>emptyList();
 			
 			operation = DocBuildUtil.buildOperation(inter, reqParamList, respList, moduleMap,refSchemaMap);
 			path = DocBuildUtil.buildPath(pathMap.get(inter.getPath()),inter.getMethod(),operation);

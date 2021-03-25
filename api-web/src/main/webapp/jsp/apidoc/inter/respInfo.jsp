@@ -63,7 +63,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-3">编码</label> 
 										<div class="col-lg-6" data-toggle="popover" data-content="若为默认响应信息则编码为'default'">
-											<input name="code" class="form-control" />
+											<input name="code" class="form-control" placeholder="支持data或data.list配置泛型"/>
 										</div>
 									</div>
 									
@@ -77,7 +77,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-3">描述</label> 
 										<div class="col-lg-6">
-											<input name="description" class="form-control" />
+											<input name="description" class="form-control" placeholder="支持Result或Result.PageInfo配置泛型"/>
 										</div>
 									</div>
 				                	
