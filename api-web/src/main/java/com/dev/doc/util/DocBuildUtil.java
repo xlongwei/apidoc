@@ -13,10 +13,12 @@ import com.dev.base.enums.ReqMethod;
 import com.dev.base.enums.SchemaType;
 import com.dev.base.json.JsonUtils;
 import com.dev.base.utils.MapUtils;
+import com.dev.base.utils.SpringContextUtils;
 import com.dev.doc.entity.Inter;
 import com.dev.doc.entity.InterParam;
 import com.dev.doc.entity.InterResp;
 import com.dev.doc.entity.RespSchema;
+import com.dev.doc.service.RespSchemaService;
 import com.dev.doc.vo.SchemaNodeInfo;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -279,10 +281,26 @@ public class DocBuildUtil {
 	private static List<Parameter> parseParameter(List<InterParam> reqParamList,Map<Long, String> refSchemaMap){
 		List<Parameter> result = new ArrayList<Parameter>();
 		Parameter parameter = null;
+		RespSchema respSchema = null;
 		for (InterParam reqParam : reqParamList) {
 			switch (reqParam.getPosition()) {
 				case body:
 					parameter = parseBodyParameter(reqParam,refSchemaMap);
+					if(reqParam.getType() == SchemaType.sys_object || reqParam.getType() == SchemaType.sys_array) {
+						if(StringUtils.hasText(reqParam.getDescription())) {
+							String[] refStrs = reqParam.getDescription().split("[.]");
+							if(refStrs.length==2 && refSchemaMap.containsValue(refStrs[0]) && "query".equals(refStrs[1])) {
+								Long schemaId = null;//PageParam在url里面，query参数提供
+								for(Long key : refSchemaMap.keySet()) {
+									if(refStrs[0].equals(refSchemaMap.get(key))) {
+										schemaId = key;
+									}
+								}
+								RespSchemaService respSchemaService = SpringContextUtils.getBean(RespSchemaService.class);
+								respSchema = respSchemaService.getByDocId(reqParam.getDocId(), schemaId);
+							}
+						}
+					}
 					break;
 					
 				case cookie:
@@ -312,6 +330,21 @@ public class DocBuildUtil {
 			result.add(parameter);
 		}
 		
+		if(respSchema != null) {//PageParam在url里面，query参数提供
+			List<Map<String,String>> pageParams = JsonUtils.toObject(respSchema.getCustSchema(), new TypeReference<List<Map<String,String>>>() {});
+			for(Map<String,String> map : pageParams) {
+				QueryParameter queryParameter = new QueryParameter();
+				for(SchemaType schemaType : SchemaType.values()) {
+					if(map.get("type").contains(schemaType.getType()) && (StringUtils.isEmpty(schemaType.getFormat()) || map.get("type").contains(schemaType.getFormat()))) {
+						queryParameter.setType(schemaType.getType());
+						queryParameter.setFormat(schemaType.getFormat());
+					}
+				}
+				queryParameter.setName(map.get("code"));
+				queryParameter.setDescription(map.get("description"));
+				result.add(queryParameter);
+			}
+		}
 		return result;
 	}
 	
@@ -337,10 +370,32 @@ public class DocBuildUtil {
 		}
 		
 		if(type == SchemaType.sys_object || type == SchemaType.sys_array) {
+			String custSchema = reqParam.getCustSchema();
+			if(StringUtils.hasText(reqParam.getDescription())) {
+				String[] refStrs = reqParam.getDescription().split("[.]");
+				if(refStrs.length==2 && refSchemaMap.containsValue(refStrs[0]) && "body".equals(refStrs[1])) {
+					Long schemaId = null;
+					for(Long key : refSchemaMap.keySet()) {
+						if(refStrs[0].equals(refSchemaMap.get(key))) {
+							schemaId = key;
+						}
+					}
+					RespSchemaService respSchemaService = SpringContextUtils.getBean(RespSchemaService.class);
+					RespSchema respSchema = respSchemaService.getByDocId(reqParam.getDocId(), schemaId);
+					if(StringUtils.hasText(respSchema.getCustSchema())) {
+						if(StringUtils.hasText(custSchema)) {
+							String respCustSchema = respSchema.getCustSchema();
+							custSchema = new StringBuilder(respCustSchema).deleteCharAt(respCustSchema.length()-1).append(",").append(custSchema.substring(1)).toString();
+						}else {
+							custSchema = respSchema.getCustSchema();
+						}
+					}
+				}
+			}
 			RespSchema respSchema = new RespSchema();
 			respSchema.setType(type);
 			respSchema.setCode(type.getCode());
-			respSchema.setCustSchema(reqParam.getCustSchema());
+			respSchema.setCustSchema(custSchema);
 			bodyParameter.setSchema(buildModel(respSchema, refSchemaMap));
 		}
 		
