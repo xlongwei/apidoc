@@ -246,10 +246,101 @@ public class MockController extends BaseController {
 			return interResp(custSchema);
 		}else if(SchemaType.sys_array==interResp.getType()) {
 			List<Map<String, Object>> custSchema = custSchema(interResp.getCustSchema());
-			return Collections.singletonList(interResp(custSchema));
+			List<Map<String, Object>> list = Collections.singletonList(interResp(custSchema));
+			if(StringUtils.isNoneBlank(interResp.getDescription(), interResp.getCode())) {
+				//sys_object.description可以指向泛型结构，示例：Result、Result.PageInfo
+				String[] refStrs = interResp.getDescription().split("[.]");
+				//sys_object.code可以定义泛型数据，示例：data、data.list
+				String[] codeStrs = interResp.getCode().split("[.]");
+				boolean generic = refStrs.length == codeStrs.length;
+				Map<Long, String> refSchemaMap = respSchemaService.getAllByDocId(interResp.getDocId());
+				for(String name : refStrs) {
+					if(!refSchemaMap.containsValue(name)) {
+						generic = false;
+					}
+				}
+				if(generic) {
+					if(refStrs.length==1) {
+						Long schemaId = null;//Result
+						for(Long key : refSchemaMap.keySet()) {
+							if(refStrs[0].equals(refSchemaMap.get(key))) {
+								schemaId = key;
+							}
+						}
+						RespSchema respSchema = respSchemaService.getByDocId(interResp.getDocId(), schemaId);
+						String respSchemaStr = respSchema.getCustSchema();
+						Map<String, Object> respSchemaMap = interResp(custSchema(respSchemaStr));
+						respSchemaMap.put(codeStrs[0], list);
+						return respSchemaMap;
+					}else if(refStrs.length==2) {
+						Long schemaIdResult = null, schemaIdPageInfo = null;//Result.PageInfo
+						for(Long key : refSchemaMap.keySet()) {
+							if(refStrs[0].equals(refSchemaMap.get(key))) {
+								schemaIdResult = key;
+							}else if(refStrs[1].equals(refSchemaMap.get(key))) {
+								schemaIdPageInfo = key;
+							}
+						}
+						RespSchema respSchemaResult = respSchemaService.getByDocId(interResp.getDocId(), schemaIdResult);
+						RespSchema respSchemaPageInfo = respSchemaService.getByDocId(interResp.getDocId(), schemaIdPageInfo);
+						Map<String, Object> respSchemaResultMap = interResp(custSchema(respSchemaResult.getCustSchema()));
+						Map<String, Object> respSchemaPageInfoMap = interResp(custSchema(respSchemaPageInfo.getCustSchema()));
+						respSchemaResultMap.put(codeStrs[0], respSchemaPageInfoMap);
+						respSchemaPageInfoMap.put(codeStrs[1], list);
+						return respSchemaResultMap;
+					}
+				}
+			}
+			return list;
 		}else if(SchemaType.sys_object==interResp.getType()){
-			List<Map<String, Object>> custSchema = custSchema(interResp.getCustSchema());
-			return interResp(custSchema);
+			String custSchemaStr = interResp.getCustSchema();
+			List<Map<String, Object>> custSchema = custSchema(custSchemaStr);
+			Map<String, Object> resp = interResp(custSchema);
+			if(StringUtils.isNoneBlank(interResp.getDescription(), interResp.getCode())) {
+				//sys_object.description可以指向泛型结构，示例：Result、Result.PageInfo
+				String[] refStrs = interResp.getDescription().split("[.]");
+				//sys_object.code可以定义泛型数据，示例：data、data.list
+				String[] codeStrs = interResp.getCode().split("[.]");
+				boolean generic = refStrs.length == codeStrs.length;
+				Map<Long, String> refSchemaMap = respSchemaService.getAllByDocId(interResp.getDocId());
+				for(String name : refStrs) {
+					if(!refSchemaMap.containsValue(name)) {
+						generic = false;
+					}
+				}
+				if(generic) {
+					if(refStrs.length==1) {
+						Long schemaId = null;//Result
+						for(Long key : refSchemaMap.keySet()) {
+							if(refStrs[0].equals(refSchemaMap.get(key))) {
+								schemaId = key;
+							}
+						}
+						RespSchema respSchema = respSchemaService.getByDocId(interResp.getDocId(), schemaId);
+						String respSchemaStr = respSchema.getCustSchema();
+						Map<String, Object> respSchemaMap = interResp(custSchema(respSchemaStr));
+						respSchemaMap.put(codeStrs[0], resp);
+						resp = respSchemaMap;
+					}else if(refStrs.length==2) {
+						Long schemaIdResult = null, schemaIdPageInfo = null;//Result.PageInfo
+						for(Long key : refSchemaMap.keySet()) {
+							if(refStrs[0].equals(refSchemaMap.get(key))) {
+								schemaIdResult = key;
+							}else if(refStrs[1].equals(refSchemaMap.get(key))) {
+								schemaIdPageInfo = key;
+							}
+						}
+						RespSchema respSchemaResult = respSchemaService.getByDocId(interResp.getDocId(), schemaIdResult);
+						RespSchema respSchemaPageInfo = respSchemaService.getByDocId(interResp.getDocId(), schemaIdPageInfo);
+						Map<String, Object> respSchemaResultMap = interResp(custSchema(respSchemaResult.getCustSchema()));
+						Map<String, Object> respSchemaPageInfoMap = interResp(custSchema(respSchemaPageInfo.getCustSchema()));
+						respSchemaResultMap.put(codeStrs[0], respSchemaPageInfoMap);
+						respSchemaPageInfoMap.put(codeStrs[1], resp);
+						resp = respSchemaResultMap;
+					}
+				}
+			}
+			return resp;
 		}else {
 			return MapUtils.getSingleMap(interResp.getCode(), interResp.getDescription());
 		}

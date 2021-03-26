@@ -163,7 +163,7 @@ public class DocBuildUtil {
 		}
 		
 		//sys_object.description可以指向泛型结构，示例：Result、Result.PageInfo
-		if(SchemaType.sys_object == type && StringUtils.hasText(interResp.getDescription()) && StringUtils.hasText(interResp.getCode())) {
+		if((SchemaType.sys_object == type || SchemaType.sys_array == type) && StringUtils.hasText(interResp.getDescription()) && StringUtils.hasText(interResp.getCode())) {
 			String[] refStrs = interResp.getDescription().split("[.]");
 			String[] codeStrs = interResp.getCode().split("[.]");
 			boolean generic = refStrs.length == codeStrs.length;

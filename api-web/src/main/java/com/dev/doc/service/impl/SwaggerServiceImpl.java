@@ -99,6 +99,8 @@ public class SwaggerServiceImpl implements SwaggerService{
 		Map<String, SecuritySchemeDefinition> securityDefinitions = new HashMap<>();
 		securityDefinitions.put("api_key", new ApiKeyAuthDefinition("Authorization", In.HEADER));
 		swagger.setSecurityDefinitions(securityDefinitions);
+		//清理线程本地对象
+		DocBuildUtil.DEFINITIONS.remove();
 		return swagger;
 	}
 	

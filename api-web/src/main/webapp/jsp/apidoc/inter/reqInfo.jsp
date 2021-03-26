@@ -123,7 +123,7 @@
 						                	<div class="form-group">
 							                    <label class="control-label col-lg-3">描述</label>
 							                    <div class="col-lg-6">
-							                        <textarea name="description" class="form-control"></textarea>
+							                        <textarea name="description" class="form-control" placeholder="支持PageParam.query或PageParam.body配置分页"></textarea>
 							                    </div>
 							                </div>
 							                

@@ -7,6 +7,12 @@
 	<a href="auth/apidoc/preview.htm?docId=${param.docId}" target="_bank" class="btn btn-sm btn-success">
 		<i class="fa fa-eye"></i> 预览
 	</a>
+	<a href="auth/apidoc/preview.htm?docId=${param.docId}&mock=true" target="_bank" class="btn btn-sm btn-info">
+		<i class="fa fa-eye"></i> 模拟
+	</a>
+	<a href="javascript:void(window.open('pass/swagger2html.htm?jsonUrl='+location.protocol+'//'+location.host+'${Cfg.WEB_BASE_URL}pass/knife4j/swagger.htm?docId=${param.docId}'))" class="btn btn-sm btn-primary">
+		<i class="fa fa-eye"></i> 文档
+	</a>
                  	
 	<c:if test='${projTempMap["" + param.projId + ""].role == "admin"}'>
 		<a href="auth/proj/mem/forwardSendNotice.htm?projId=${param.projId}&docId=${param.docId}" class="btn btn-sm btn-warning">
