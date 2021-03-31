@@ -66,12 +66,9 @@
         	</p> -->
         	<ul class="masthead-links">
           		<li>
-            		<a href="pass/apidoc/demo.htm?doc=1" target="_blank" role="button" >demo1</a>
-            		<a href="pass/apidoc/demo.htm?doc=1&mock=true" target="_blank" role="button" >mock1</a>
-          		</li>
-          		<li>
-            		<a href="/swagger/doc.html?doc=1" target="_blank" role="button" >demo2</a>
-            		<a href="/swagger/doc.html?doc=1&mock=true" target="_blank" role="button" >mock2</a>
+            		<a href="pass/apidoc/demo.htm?doc=1" target="_blank" role="button" >swagger</a>
+            		<a href="pass/apidoc/demo.htm?doc=1&mock=true" target="_blank" role="button" >mock</a>
+            		<a href="javascript:void(window.open('pass/swagger2html.htm?jsonUrl='+('${Cfg.WEB_BASE_URL}'.startsWith('http')?'${Cfg.WEB_BASE_URL}':location.protocol+'//'+location.host+'${Cfg.WEB_BASE_URL}')+'pass/knife4j/swagger.htm?docId=1'))" role="button" >html</a>
           		</li>
         	</ul>
       	</div>
