@@ -42,6 +42,8 @@ function initSchemaTypeSelect(){
 			$("#custSchemaTable").hide();
 			$("#addCustSchemaRootNodeBtn").hide();
 		}
+		$('#respCustSchemaForm').find('input[name=code]').attr('placeholder', type == "sys_object" ? '支持data配置泛型' : (type == "sys_array" ? '支持data.list配置泛型' : ''));
+		$('#respCustSchemaForm').find('input[name=description]').attr('placeholder', type == "sys_object" ? '支持Result配置泛型' : (type == "sys_array" ? '支持Result.PageInfo配置泛型' : ''));
 		
 		//处理选择已有结构
 		if(type == 'sys_ref'){

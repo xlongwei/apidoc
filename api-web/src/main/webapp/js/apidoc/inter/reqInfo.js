@@ -109,6 +109,8 @@ function initMoreBtn(row){
 		//填充数据
 		var rowData = $(row).find("*").getFieldsValue();
 		$("#moreForm").find("*").setFieldsValue(rowData);
+		var bodySysObject = 'body'==rowData.position && 'sys_object'==rowData.type;
+		$('#moreForm').find('textarea[name=description]').attr('placeholder', bodySysObject ? '支持PageParam.query或PageParam.body配置分页' : '');
 		
 		if('sys_object'==rowData.type || 'sys_array'==rowData.type){
 			$('.req-object-array').show();
