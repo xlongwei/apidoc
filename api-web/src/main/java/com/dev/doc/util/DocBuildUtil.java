@@ -383,9 +383,11 @@ public class DocBuildUtil {
 					RespSchemaService respSchemaService = SpringContextUtils.getBean(RespSchemaService.class);
 					RespSchema respSchema = respSchemaService.getByDocId(reqParam.getDocId(), schemaId);
 					if(StringUtils.hasText(respSchema.getCustSchema())) {
-						if(StringUtils.hasText(custSchema)) {
+						if(StringUtils.hasText(custSchema) && custSchema.length()>4) {
 							String respCustSchema = respSchema.getCustSchema();
-							custSchema = new StringBuilder(respCustSchema).deleteCharAt(respCustSchema.length()-1).append(",").append(custSchema.substring(1)).toString();
+							if(StringUtils.hasText(respCustSchema) && respCustSchema.length()>4) {
+								custSchema = new StringBuilder(respCustSchema).deleteCharAt(respCustSchema.length()-1).append(",").append(custSchema.substring(1)).toString();
+							}
 						}else {
 							custSchema = respSchema.getCustSchema();
 						}
