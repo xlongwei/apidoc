@@ -29,6 +29,7 @@ local.properties
 .classpath
 .project
 .class
+.history
 
 # External tool builders
 .externalToolBuilders/

@@ -10,6 +10,33 @@
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function upload() {
+		if($('#jsonFile')[0].files.length==0){
+			return;
+		}
+		var form = new FormData();
+		form.append('file', $('#jsonFile')[0].files[0]);
+		form.append('type', 'file');
+		jQuery.ajax({
+			url: 'https://api.xlongwei.com/service/upload',
+			type: 'POST',
+			data: form,
+			processData: false,
+			contentType: false,
+			success: function(res) {
+				console.log(res)
+				var url = res.url || res.domain + res.path;
+				if(url && url.endsWith('.json')) {
+					url = 'http://api.xlongwei.com/swagger/doc.html?jsonUrl=' + url;
+					console.log(url)
+					$('#swagger2md').attr('href', url).show();
+				}
+			}
+		});
+	}
+</script>
 </head>
 <body>
 	<div class="container">
@@ -22,9 +49,13 @@
 			</div>
 			<div class="form-group row">
 				<label for="jsonFile" class="col-sm-2 col-form-label">jsonFile</label>
-				<div class="col-sm-10">
+				<div class="col-sm-7">
 					<input name="jsonFile" id="jsonFile" type="file"
 						class="form-control-file">
+				</div>
+				<div class="col-sm-3">
+					<button type="button" onclick="upload()" class="btn btn-primary">Upload</button>
+					<a id="swagger2md" class="form-control-inline" style="display:none">swagger2md</a>
 				</div>
 			</div>
 			<div class="form-group row">
