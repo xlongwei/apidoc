@@ -622,6 +622,15 @@
                     }
                     that.log("响应分组json数据");
                     that.log(groupData);
+                    //直接加载swagger.json，跳过group.json
+                    if (typeof groupData.length == 'undefined') {
+                        groupData = []
+                        groupData.push({
+                            name: 'swagger',
+                            swaggerVersion: '2.0',
+                            url: that.url
+                        })
+                    }
                     $.each(groupData,function (i, group) {
                         var g=new SwaggerBootstrapUiInstance(group.name,group.location,group.swaggerVersion);
                         g.url=group.url;

@@ -29,7 +29,7 @@
 				console.log(res)
 				var url = res.url || res.domain + res.path;
 				if(url && url.endsWith('.json')) {
-					url = 'http://api.xlongwei.com/swagger/doc.html?jsonUrl=' + url;
+					url = 'https://api.xlongwei.com/swagger/doc.html?jsonUrl=' + url.replace('http://s.','https://t.');
 					console.log(url)
 					$('#swagger2md').attr('href', url).show();
 				}

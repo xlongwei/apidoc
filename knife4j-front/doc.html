@@ -1354,9 +1354,11 @@
             	var tags = /tags=([^&]+)/.test(location.search) ? /tags=([^&]+)/.exec(location.search)[1] : '';
             	if(tags){
 	           		url = '/apidoc/pass/knife4j/group.htm?jsonUrl='+encodeURIComponent(location.protocol+'//'+location.host+'/apidoc/pass/knife4j/swagger.htm'+location.search);
-            	}else{
+            	}else if(location.search.indexOf('apiUrl')>-1 || location.search.indexOf('mock')>-1){
 	           		url = '/apidoc/pass/knife4j/group.htm'+location.search;
-            	}
+            	}else{
+                    url = jsonUrl;
+                }
             }
             admin.run({
                 ace:ace,
