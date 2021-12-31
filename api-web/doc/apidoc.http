@@ -1,0 +1,13 @@
+@apidoc=http://localhost:8080/apidoc
+# @apidoc=http://api.xlongwei.com/apidoc
+# @apidoc=https://api.xlongwei.com/apidoc
+### html
+{{apidoc}}/pass/swagger2html.htm?jsonUrl={{apidoc}}/pass/knife4j/swagger.htm?docId=1
+### mock
+{{apidoc}}/pass/apidoc/demo.htm?doc=1&mock=true
+### swagger mock
+{{apidoc}}/pass/knife4j/swagger.htm?docId=1&mock=true
+### mock pager
+{{apidoc}}/mock/user/simple/pager.htm?pageNumber=1&pageSize=10
+### get pager
+{{apidoc}}/demo/user/simple/pager.htm?pageNumber=1&pageSize=10

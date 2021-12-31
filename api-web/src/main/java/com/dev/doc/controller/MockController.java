@@ -1,5 +1,7 @@
 package com.dev.doc.controller;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -203,8 +205,8 @@ public class MockController extends BaseController {
 						}
 					}
 				}else if(ParamPosition.body==position) {
-					try{
-						String body = IOUtils.toString(request.getInputStream());
+					try(InputStream in = request.getInputStream()){
+						String body = IOUtils.toString(in, StandardCharsets.UTF_8);
 						if(StringUtils.isNotBlank(body) && '{'==body.charAt(0)) {
 							List<String> names = new ArrayList<>();
 							if(SchemaType.cust_json==interParam.getType()) {
