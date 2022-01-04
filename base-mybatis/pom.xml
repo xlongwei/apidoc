@@ -34,11 +34,11 @@
 			<version>3.2.8</version>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp-spring</artifactId>
 			<version>0.8.0.RELEASE</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
