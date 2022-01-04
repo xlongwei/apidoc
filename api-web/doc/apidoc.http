@@ -11,3 +11,14 @@
 {{apidoc}}/mock/user/simple/pager.htm?pageNumber=1&pageSize=10
 ### get pager
 {{apidoc}}/demo/user/simple/pager.htm?pageNumber=1&pageSize=10
+### tomcat/bin/catalina.sh
+-Xms74m
+-Xmx74m
+-Xmn10m
+-Xss228k
+-server
+-XX:SurvivorRatio=8
+-Djava.awt.headless=true
+-Djava.compiler=none
+-Duser.timezone=GMT+8
+-Dcom.mysql.cj.disableAbandonedConnectionCleanup=true
